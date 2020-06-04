@@ -11,60 +11,11 @@ import {
 } from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 
-const DeviceList = [
-  {
-    deviceID: '01',
-    deviceType: 'Light',
-    deviceState: false,
-    deviceRoom: '101',
-  },
-  {
-    deviceID: '02',
-    deviceType: 'Light',
-    deviceState: false,
-    deviceRoom: '101',
-  },
-  {
-    deviceID: '03',
-    deviceType: 'Light',
-    deviceState: false,
-    deviceRoom: '101',
-  },
-  {
-    deviceID: '04',
-    deviceType: 'Light',
-    deviceState: false,
-    deviceRoom: '101',
-  },
-  {
-    deviceID: '05',
-    deviceType: 'Light',
-    deviceState: false,
-    deviceRoom: '101',
-  },
-  {
-    deviceID: '06',
-    deviceType: 'Light',
-    deviceState: false,
-    deviceRoom: '101',
-  },
-];
+var currentButton = '';
 
-class deviceScreen extends React.Component {
-  renderItem = ({item}) => {
-    const {navigation} = this.props.navigation;
-    return (
-      <TouchableOpacity
-        style={styles.item}
-        onPress={() => this.props.navigation.navigate('Device')}>
-        <View style={styles.item}>
-          <Text style={styles.title}>
-            {item.deviceType} {item.deviceID}
-          </Text>
-          {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
-        </View>
-      </TouchableOpacity>
-    );
+class defaultScreen extends React.Component {
+  state = {
+    selectedButton: currentButton,
   };
 
   render = () => {
@@ -73,16 +24,15 @@ class deviceScreen extends React.Component {
         <View style={styles.headContainer}>
           <Button title="Action" />
         </View>
-        <FlatList
-          data={DeviceList}
-          renderItem={this.renderItem}
-          keyExtractor={item => item.deviceID}
-        />
         <View style={styles.bottomContainer}>
           <View style={styles.bottomButtonContainer}>
             <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('Setting')}>
+              style={styles.bottomButton1}
+              onPress={
+                (() => this.props.navigation.navigate('Setting'),
+                this.setState({selectedButton: 'button1'}),
+                (currentButton = this.state.selectedButton))
+              }>
               <Image
                 source={require('../icons/settingIcon.png')}
                 style={styles.image}
@@ -91,8 +41,13 @@ class deviceScreen extends React.Component {
           </View>
           <View style={styles.bottomButtonContainer}>
             <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('Adding')}>
+              style={styles.bottomButton2}
+              onPress={
+                (() => this.props.navigation.navigate('Adding'),
+                this.setState({selectedButton: 'button2'})(
+                  (currentButton = this.state.selectedButton),
+                ))
+              }>
               <Image
                 source={require('../icons/addingIcon.png')}
                 style={styles.image}
@@ -101,8 +56,13 @@ class deviceScreen extends React.Component {
           </View>
           <View style={styles.bottomButtonContainer}>
             <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('History')}>
+              style={styles.bottomButton3}
+              onPress={
+                (() => this.props.navigation.navigate('History'),
+                this.setState({selectedButton: 'button3'})(
+                  (currentButton = this.state.selectedButton),
+                ))
+              }>
               <Image
                 source={require('../icons/historyIcon.png')}
                 style={styles.image}
@@ -111,8 +71,13 @@ class deviceScreen extends React.Component {
           </View>
           <View style={styles.bottomButtonContainer}>
             <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('Timer')}>
+              style={styles.bottomButton4}
+              onPress={
+                (() => this.props.navigation.navigate('Timer'),
+                this.setState({selectedButton: 'button4'})(
+                  (currentButton = this.state.selectedButton),
+                ))
+              }>
               <Image
                 source={require('../icons/timerIcon.png')}
                 style={styles.image}
@@ -164,10 +129,22 @@ const styles = StyleSheet.create({
     height: '100%',
     resizeMode: 'contain',
   },
-  bottomButton: {
+  bottomButton1: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: currentButton === 'button1' ? '#2095f3' : 'white',
+  },
+  bottomButton2: {
+    flex: 1,
+    backgroundColor: currentButton === 'button2' ? '#2095f3' : 'white',
+  },
+  bottomButton3: {
+    flex: 1,
+    backgroundColor: currentButton === 'button3' ? '#2095f3' : 'white',
+  },
+  bottomButton4: {
+    flex: 1,
+    backgroundColor: currentButton === 'button4' ? '#2095f3' : 'white',
   },
 });
 
-export default deviceScreen;
+export default defaultScreen;
