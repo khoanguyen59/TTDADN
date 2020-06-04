@@ -17,47 +17,36 @@ const DeviceList = [
     deviceRoom: '101',
   },
   {
-    deviceID: '01',
+    deviceID: '02',
     deviceType: 'Light',
     deviceState: false,
     deviceRoom: '101',
   },
   {
-    deviceID: '01',
+    deviceID: '03',
     deviceType: 'Light',
     deviceState: false,
     deviceRoom: '101',
   },
   {
-    deviceID: '01',
+    deviceID: '04',
     deviceType: 'Light',
     deviceState: false,
     deviceRoom: '101',
   },
   {
-    deviceID: '01',
+    deviceID: '05',
     deviceType: 'Light',
     deviceState: false,
     deviceRoom: '101',
   },
   {
-    deviceID: '01',
+    deviceID: '06',
     deviceType: 'Light',
     deviceState: false,
     deviceRoom: '101',
   },
 ];
-
-function Item({title}) {
-  return (
-    <View style={styles.item}>
-      <Text style={styles.title}>
-        {title.deviceType} + " + {title.deviceID}
-      </Text>
-      {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
-    </View>
-  );
-}
 
 class deviceScreen extends React.Component {
   renderItem = ({item}) => {
@@ -68,7 +57,7 @@ class deviceScreen extends React.Component {
         onPress={() => this.props.navigation.navigate('Device')}>
         <View style={styles.item}>
           <Text style={styles.title}>
-            {item.deviceType} + " + {item.deviceID}
+            {item.deviceType} {item.deviceID}
           </Text>
           {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
         </View>
@@ -79,32 +68,43 @@ class deviceScreen extends React.Component {
   render = () => {
     return (
       <View>
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.headContainer}>
           <Button title="Action" />
-          <Button title="List" />
         </View>
         <FlatList
           data={DeviceList}
           renderItem={this.renderItem}
           keyExtractor={item => item.deviceID}
         />
-        <View style={styles.bottomButton}>
-          <Button
-            title="Setting"
-            onPress={() => this.props.navigation.navigate('Setting')}
-          />
-          <Button
-            title="Adding"
-            onPress={() => this.props.navigation.navigate('Adding')}
-          />
-          <Button
-            title="History"
-            onPress={() => this.props.navigation.navigate('History')}
-          />
-          <Button
-            title="Timer"
-            onPress={() => this.props.navigation.navigate('Timer')}
-          />
+        <View style={styles.bottomContainer}>
+          <View style={styles.bottomButtonContainer}>
+            <Button
+              title="Setting"
+              style={styles.bottomButton}
+              onPress={() => this.props.navigation.navigate('Setting')}
+            />
+          </View>
+          <View style={styles.bottomButtonContainer}>
+            <Button
+              title="Adding"
+              style={styles.bottomButton}
+              onPress={() => this.props.navigation.navigate('Adding')}
+            />
+          </View>
+          <View style={styles.bottomButtonContainer}>
+            <Button
+              title="History"
+              style={styles.bottomButton}
+              onPress={() => this.props.navigation.navigate('History')}
+            />
+          </View>
+          <View style={styles.bottomButtonContainer}>
+            <Button
+              title="Timer"
+              style={styles.bottomButton}
+              onPress={() => this.props.navigation.navigate('Timer')}
+            />
+          </View>
         </View>
       </View>
     );
@@ -112,12 +112,16 @@ class deviceScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  headContainer: {
     flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
   },
   item: {
     backgroundColor: '#f9c2ff',
-    padding: 20,
+    padding: 15,
     marginVertical: 8,
     marginHorizontal: 16,
   },
@@ -127,11 +131,23 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
   },
-  bottomButton: {
+  bottomContainer: {
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
     left: 0,
+    height: 36,
+    width: '100%',
+    maxWidth: 450,
+    backgroundColor: 'blue',
+    marginBottom: 10,
+  },
+  bottomButtonContainer: {
+    flex: 1,
+  },
+  bottomButton: {
+    flex: 1,
+    backgroundColor: 'blue',
   },
 });
 
