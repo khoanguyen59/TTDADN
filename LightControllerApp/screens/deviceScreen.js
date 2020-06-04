@@ -6,52 +6,109 @@ import {
   StyleSheet,
   Text,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 
-const RoomList = [
+const DeviceList = [
   {
-    roomID: '101',
-    roomName: 'Technical Room',
+    deviceID: '01',
+    deviceType: 'Light',
+    deviceState: false,
+    deviceRoom: '101',
   },
   {
-    roomID: '102',
-    roomName: 'Business',
+    deviceID: '01',
+    deviceType: 'Light',
+    deviceState: false,
+    deviceRoom: '101',
   },
   {
-    roomID: '103',
-    roomName: 'Sales',
+    deviceID: '01',
+    deviceType: 'Light',
+    deviceState: false,
+    deviceRoom: '101',
   },
   {
-    roomID: '201',
-    roomName: 'Finance',
+    deviceID: '01',
+    deviceType: 'Light',
+    deviceState: false,
+    deviceRoom: '101',
   },
   {
-    roomID: '202',
-    roomName: 'Human Resources',
+    deviceID: '01',
+    deviceType: 'Light',
+    deviceState: false,
+    deviceRoom: '101',
   },
   {
-    roomID: '301',
-    roomName: 'Rest Room',
+    deviceID: '01',
+    deviceType: 'Light',
+    deviceState: false,
+    deviceRoom: '101',
   },
 ];
 
 function Item({title}) {
   return (
     <View style={styles.item}>
-      <Text style={styles.title}>{title.roomID}</Text>
-      <Text style={styles.name}>{title.roomName}</Text>
+      <Text style={styles.title}>
+        {title.deviceType} + " + {title.deviceID}
+      </Text>
+      {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
     </View>
   );
 }
 
 class deviceScreen extends React.Component {
-  render() {
+  renderItem = ({item}) => {
+    const {navigation} = this.props.navigation;
     return (
-      <SafeAreaView style={styles.container}>
-        <Button title="Action" />
-      </SafeAreaView>
+      <TouchableOpacity
+        style={styles.item}
+        onPress={() => this.props.navigation.navigate('Device')}>
+        <View style={styles.item}>
+          <Text style={styles.title}>
+            {item.deviceType} + " + {item.deviceID}
+          </Text>
+          {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
+        </View>
+      </TouchableOpacity>
     );
-  }
+  };
+
+  render = () => {
+    return (
+      <View>
+        <View style={{flexDirection: 'row'}}>
+          <Button title="Action" />
+          <Button title="List" />
+        </View>
+        <FlatList
+          data={DeviceList}
+          renderItem={this.renderItem}
+          keyExtractor={item => item.deviceID}
+        />
+        <View style={styles.bottomButton}>
+          <Button
+            title="Setting"
+            onPress={() => this.props.navigation.navigate('Setting')}
+          />
+          <Button
+            title="Adding"
+            onPress={() => this.props.navigation.navigate('Adding')}
+          />
+          <Button
+            title="History"
+            onPress={() => this.props.navigation.navigate('History')}
+          />
+          <Button
+            title="Timer"
+            onPress={() => this.props.navigation.navigate('Timer')}
+          />
+        </View>
+      </View>
+    );
+  };
 }
 
 const styles = StyleSheet.create({
@@ -69,6 +126,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
+  },
+  bottomButton: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
   },
 });
 
