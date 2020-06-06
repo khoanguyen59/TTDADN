@@ -1,17 +1,16 @@
 import React from 'react';
 import {
-  SafeAreaView,
   View,
   FlatList,
   StyleSheet,
-  Text,
   Button,
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {TouchableHighlight} from 'react-native-gesture-handler';
 
-const DeviceList = [
+import FlatListComponent from '../components/deviceItem.js';
+
+var DeviceList = [
   {
     deviceID: '01',
     deviceType: 'Light',
@@ -21,13 +20,13 @@ const DeviceList = [
   {
     deviceID: '02',
     deviceType: 'Light',
-    deviceState: false,
+    deviceState: true,
     deviceRoom: '101',
   },
   {
     deviceID: '03',
     deviceType: 'Light',
-    deviceState: false,
+    deviceState: true,
     deviceRoom: '101',
   },
   {
@@ -38,7 +37,7 @@ const DeviceList = [
   },
   {
     deviceID: '05',
-    deviceType: 'Light',
+    deviceType: 'Sensor',
     deviceState: false,
     deviceRoom: '101',
   },
@@ -48,43 +47,86 @@ const DeviceList = [
     deviceState: false,
     deviceRoom: '101',
   },
+  {
+    deviceID: '07',
+    deviceType: 'Sensor',
+    deviceState: false,
+    deviceRoom: '101',
+  },
 ];
 
+export var selectedList = [];
+
 class deviceScreen extends React.Component {
-  renderItem = ({item}) => {
-    const {navigation} = this.props.navigation;
-    return (
-      <TouchableOpacity
-        style={styles.item}
-        onPress={() => this.props.navigation.navigate('Device')}>
-        <View style={styles.item}>
-          <Text style={styles.title}>
-            {item.deviceType} {item.deviceID}
-          </Text>
-          {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
+  state = {
+    showControlMode: false,
+  };
+
+  toggleControl = () => {
+    this.setState({
+      showControlMode: !this.state.showControlMode,
+    });
+  };
+
+  renderControlButton = () => {
+    if (this.state.showControlMode) {
+      return (
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={styles.manualButton}
+            onPress={() => this.props.navigation.navigate('Setting')}>
+            <Image
+              source={require('../icons/manualIcon.png')}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.timerButton}
+            onPress={() => this.props.navigation.navigate('SetTimer')}>
+            <Image
+              source={require('../icons/timerIcon.png')}
+              style={styles.image}
+            />
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
-    );
+      );
+    } else {
+      return null;
+    }
   };
 
   render = () => {
     return (
       <View>
         <View style={styles.headContainer}>
-          <Button title="Action" />
+          <View style={styles.headButton}>
+            <Button title="Action" />
+          </View>
         </View>
         <FlatList
           data={DeviceList}
-          renderItem={this.renderItem}
           keyExtractor={item => item.deviceID}
+          style={{marginBottom: 50}}
+          renderItem={({item}) => {
+            return <FlatListComponent {...item} />;
+          }}
         />
+        {this.renderControlButton()}
+        <View>
+          <TouchableOpacity
+            style={styles.toolButton}
+            onPress={() => this.toggleControl()}>
+            <Image
+              source={require('../icons/toolIcon.png')}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.bottomContainer}>
           <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('Setting')}>
+            <TouchableOpacity style={styles.bottomButtonOn}>
               <Image
-                source={require('../icons/settingIcon.png')}
+                source={require('../icons/deviceIcon.png')}
                 style={styles.image}
               />
             </TouchableOpacity>
@@ -126,12 +168,17 @@ class deviceScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  headContainer: {
+  container: {
     flex: 1,
+    justifyContent: 'space-between',
+  },
+  headContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
+  },
+  headButton: {
+    flex: 1,
     justifyContent: 'center',
-    marginTop: 10,
+    backgroundColor: '#2095f3',
   },
   item: {
     backgroundColor: '#f9c2ff',
@@ -145,6 +192,39 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
   },
+  manualButton: {
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    position: 'absolute',
+    right: 15,
+    bottom: 200,
+    width: 45,
+    height: 45,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+  },
+  timerButton: {
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    position: 'absolute',
+    right: 15,
+    bottom: 150,
+    width: 45,
+    height: 45,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+  },
+  toolButton: {
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    position: 'absolute',
+    right: 15,
+    bottom: 80,
+    width: 60,
+    height: 60,
+    backgroundColor: '#fff',
+    borderRadius: 50,
+  },
   bottomContainer: {
     flexDirection: 'row',
     position: 'absolute',
@@ -153,7 +233,7 @@ const styles = StyleSheet.create({
     height: 36,
     width: '100%',
     maxWidth: 450,
-    marginBottom: 10,
+    marginBottom: 35,
   },
   bottomButtonContainer: {
     flex: 1,
@@ -163,6 +243,10 @@ const styles = StyleSheet.create({
     width: 'auto',
     height: '100%',
     resizeMode: 'contain',
+  },
+  bottomButtonOn: {
+    flex: 1,
+    backgroundColor: '#2095f3',
   },
   bottomButton: {
     flex: 1,
