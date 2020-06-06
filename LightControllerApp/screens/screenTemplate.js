@@ -13,30 +13,29 @@ import {
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import NavigationTab from '../custom_components/navigationTab';
 
-export default function ScreenTemplate({ navigation, headComponents }) {
+export default function ScreenTemplate({ navigation, headComponents, bodyComponents }) {
     const tabInfos = [
-      { tabName: 'Setting', imageSrc: require('../icons/settingIcon.png'), key: '1'},
-      { tabName: 'Adding',  imageSrc: require('../icons/addingIcon.png'), key: '2'},
-      { tabName: 'History', imageSrc: require('../icons/historyIcon.png'), key: '3'},
-      { tabName: 'Timer',   imageSrc: require('../icons/timerIcon.png'), key: '4'}
+      { tabName: 'Setting', imageSrc: require('../icons/settingIcon.png'),  key: '1'},
+      { tabName: 'Adding',  imageSrc: require('../icons/addingIcon.png'),   key: '2'},
+      { tabName: 'History', imageSrc: require('../icons/historyIcon.png'),  key: '3'},
+      { tabName: 'Timer',   imageSrc: require('../icons/timerIcon.png'),    key: '4'}
     ];
 
     const tabPressHandler = (tabToNav) => () => navigation.navigate(tabToNav);
 
-    const displayTabs = () => tabInfos.map(info => {
-      return (
+    const displayTabs = tabInfos.map(info => (
         <NavigationTab
           pressHandler={ tabPressHandler(info.tabName) }
           imageSrc={ info.imageSrc } />
-      );
-    });
+      ));
 
     return (
       <View style={styles.parentContainer}>
         <View style={styles.headContainer}>
-          { headComponents() }
+          { headComponents }
         </View>
-        <View style={styles.listContainer}>
+        <View style={styles.bodyContainer}>
+          { bodyComponents }
         </View>
         <View style={styles.bottomContainer}>
           { /*legacy code*/
@@ -50,7 +49,7 @@ export default function ScreenTemplate({ navigation, headComponents }) {
               />
             </TouchableOpacity>
           </View>*/}
-          { displayTabs() }
+          { displayTabs }
         </View>
       </View>
     );
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'center',
   },
-  listContainer: {
+  bodyContainer: {
     flex: 8
   },
   bottomContainer: {

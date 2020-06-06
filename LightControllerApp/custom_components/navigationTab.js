@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 
-export default function NavigationTab({ pressHandler, tabName, imageSrc }) {
+export default function NavigationTab({ pressHandler, imageSrc }) {
   return (
     <View style={styles.bottomButtonContainer}>
       <TouchableOpacity
