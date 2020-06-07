@@ -1,21 +1,23 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+import { globalStyles } from '../styles/global';
 
 const daysOfWeek = ['2', '3', '4', '5', '6', '7', 'S'];
 
 export default function TimerItem({ deviceName, setTime, setDates }) {
-
-
   return (
     <View style={styles.timerItemContainer}>
       <View style={styles.itemContainer}>
-        <Text style={styles.textStyle}>{deviceName}</Text>
-        <Text style={styles.boldTextStyle}>{setTime}</Text>
+        <Text style={globalStyles.title}>{deviceName}</Text>
+        <Text style={styles.boldText}>{setTime}</Text>
         </View>
       <View style={styles.datesContainer}>
-        {
-          setDates.map((date, index) =>
-            <Text style={styles.underlinedTextStyle}>{date? daysOfWeek[index] + ' ' : '  '}</Text>
+        { setDates.map((date, index) =>
+            <Text
+              key={index}
+              style={styles.borderText}>
+                {date? daysOfWeek[index] : '  '}
+            </Text>
         )}
       </View>
     </View>
@@ -31,21 +33,20 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10
   },
-  textStyle: {
-    fontSize: 32,
-  },
-  boldTextStyle: {
+  boldText: {
     fontSize: 32,
     fontWeight: 'bold',
   },
-  underlinedTextStyle: {
-    fontSize: 32,
+  borderText: {
+    fontSize: 16,
     fontWeight: 'bold',
-    textDecorationLine: 'underline'
+    borderWidth: 2,
+    borderRadius: 20,
+    margin: 3,
+    padding: 3
   },
   itemContainer: {
     margin: 5,
-    //backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center'
   },
