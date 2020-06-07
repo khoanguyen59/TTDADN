@@ -13,7 +13,19 @@ const testDeviceList = [
   },
   {
     deviceID: '09',
+    deviceType: 'Sensor',
+    deviceState: false,
+    deviceRoom: '101',
+  },
+  {
+    deviceID: '12',
     deviceType: 'Light',
+    deviceState: false,
+    deviceRoom: '101',
+  },
+  {
+    deviceID: '19',
+    deviceType: 'Sensor',
     deviceState: false,
     deviceRoom: '101',
   },

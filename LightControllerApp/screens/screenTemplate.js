@@ -25,6 +25,7 @@ export default function ScreenTemplate({ navigation, headComponents, bodyCompone
 
     const displayTabs = tabInfos.map(info => (
         <NavigationTab
+          key={info.key}
           pressHandler={ tabPressHandler(info.tabName) }
           imageSrc={ info.imageSrc } />
       ));
