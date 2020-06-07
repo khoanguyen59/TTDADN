@@ -13,9 +13,9 @@ import {
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import NavigationTab from '../custom_components/navigationTab';
 
-export default function ScreenTemplate({ navigation, headComponents, bodyComponents }) {
+export default function ScreenTemplate({ screenIndex, navigation, headComponents, bodyComponents }) {
     const tabInfos = [
-      { tabName: 'Setting', imageSrc: require('../icons/settingIcon.png'),  key: '1'},
+      { tabName: 'Device',  imageSrc: require('../icons/deviceIcon.png'),   key: '1'},
       { tabName: 'Adding',  imageSrc: require('../icons/addingIcon.png'),   key: '2'},
       { tabName: 'History', imageSrc: require('../icons/historyIcon.png'),  key: '3'},
       { tabName: 'Timer',   imageSrc: require('../icons/timerIcon.png'),    key: '4'}
@@ -26,6 +26,7 @@ export default function ScreenTemplate({ navigation, headComponents, bodyCompone
     const displayTabs = tabInfos.map(info => (
         <NavigationTab
           key={info.key}
+          selected={screenIndex == info.key}
           pressHandler={ tabPressHandler(info.tabName) }
           imageSrc={ info.imageSrc } />
       ));

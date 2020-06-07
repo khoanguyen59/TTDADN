@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, TextInput, View, FlatList, ToastAndroid } from 'react-native';
+import { StyleSheet, TextInput, View, FlatList, TouchableOpacity, Image, ToastAndroid } from 'react-native';
 import ScreenTemplate from './screenTemplate';
 import NavigationTab from '../custom_components/navigationTab';
 import DeviceListItem from '../custom_components/deviceListItem';
 
+const screenIdx = 2;
 const testDeviceList = [
   {
     deviceID: '08',
@@ -33,7 +34,7 @@ const testDeviceList = [
 
 export default function addingScreen({ navigation }) {
   //TODO
-  const searchDevice = () => () => ToastAndroid.show("Search button pressed!", ToastAndroid.LONG);
+  const searchDevice = () => ToastAndroid.show("Search button pressed!", ToastAndroid.LONG);
 
   const searchBar = (
       <View style={styles.searchContainer}>
@@ -44,10 +45,13 @@ export default function addingScreen({ navigation }) {
           />
         </View>
         <View style={styles.searchIconContainer}>
-          <NavigationTab
-            pressHandler={searchDevice}
-            imageSrc={require('../icons/searchIcon.png')}
-          />
+          <TouchableOpacity
+            onPress={searchDevice}>
+            <Image
+              style={styles.image}
+              source={require('../icons/searchIcon.png')}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -64,6 +68,7 @@ export default function addingScreen({ navigation }) {
 
   return (
     <ScreenTemplate
+      screenIndex={ screenIdx }
       navigation={ navigation }
       headComponents={ searchBar }
       bodyComponents={ deviceList }
@@ -81,13 +86,18 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   textInput: {
-    backgroundColor: 'rgb(199, 234, 247)',
-    borderWidth: 2,
-    borderColor: '#fff',
-    borderRadius: 6
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'black',
+    borderRadius: 10
   },
   searchIconContainer: {
     flex: 1,
     padding: 10
-  }
+  },
+  image: {
+    width: 'auto',
+    height: '100%',
+    resizeMode: 'contain',
+  },
 });

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
 
-export default function NavigationTab({ pressHandler, imageSrc }) {
+export default function NavigationTab({ selected, pressHandler, imageSrc }) {
   return (
     <View style={styles.bottomButtonContainer}>
       <TouchableOpacity
-        style={styles.bottomButton}
+        style={selected? styles.bottomButtonSelected : styles.bottomButton}
         onPress={() => pressHandler()}>
         <Image
-          source={imageSrc}
           style={styles.image}
+          source={imageSrc}
         />
       </TouchableOpacity>
     </View>
@@ -18,7 +18,7 @@ export default function NavigationTab({ pressHandler, imageSrc }) {
 
 const styles = StyleSheet.create({
   bottomButtonContainer: {
-    flex: 1,
+    flex: 1
   },
   image: {
     width: 'auto',
@@ -30,5 +30,11 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     paddingBottom: 2,
     backgroundColor: 'white',
+  },
+  bottomButtonSelected: {
+    flex: 1,
+    paddingTop: 2,
+    paddingBottom: 2,
+    backgroundColor: '#2095f3',
   },
 });
