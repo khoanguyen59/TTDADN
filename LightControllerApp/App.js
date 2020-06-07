@@ -7,9 +7,8 @@ import deviceScreen from './screens/deviceScreen';
 import settingScreen from './screens/settingScreen';
 import setTimerScreen from './screens/setTimerScreen';
 import historyScreen from './screens/historyScreen';
-/*import addingScreen from './screens/addingScreen';
-
-import timerScreen from './screens/timerScreen';*/
+import addingScreen from './screens/addingScreen';
+import timerScreen from './screens/timerScreen';
 
 const AppNavigator = createStackNavigator();
 
@@ -22,9 +21,8 @@ const App = () => {
         <AppNavigator.Screen name="Setting" component={settingScreen} />
         <AppNavigator.Screen name="SetTimer" component={setTimerScreen} />
         <AppNavigator.Screen name="History" component={historyScreen} />
-        {/*<AppNavigator.Screen name="Adding" component={addingScreen} />
-
-  <AppNavigator.Screen name="Timer" component={timerScreen} />*/}
+        <AppNavigator.Screen name="Adding" component={addingScreen} />
+        <AppNavigator.Screen name="Timer" component={timerScreen} />
       </AppNavigator.Navigator>
     </NavigationContainer>
   );
