@@ -27,7 +27,7 @@ export default function TimerItem({ deviceName, setTime, setDates }) {
 const styles = StyleSheet.create({
   timerItemContainer: {
     flexDirection: 'row',
-    backgroundColor: 'rgb(238, 219, 117)',
+    backgroundColor: 'rgb(172, 213, 56)',
     justifyContent: 'space-around',
     height: 100,
     margin: 10,

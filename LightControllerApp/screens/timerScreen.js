@@ -1,25 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, ScrollView, VirtualizedList, FlatList } from 'react-native';
 import ScreenTemplate from './screenTemplate';
 import { globalStyles } from '../styles/global';
 import TimersDropdown from '../components/timer_components/timersDropdown';
 
 const screenIdx = 4;
-
-const timerItemsTest = [
-  {
-    deviceID: '69',
-    deviceType: 'Light',
-    setTime: '9:00',
-    setDates: [true, true, false, true, true, true, false]
-  },
-  {
-    deviceID: '43',
-    deviceType: 'Light',
-    setTime: '21:00',
-    setDates: [true, false, false, true, false, true, false]
-  }
-];
 
 const timerDataList = [
   {
@@ -103,37 +88,18 @@ const timerDataList = [
 ]
 
 export default function timerScreen({ navigation }) {
-  /*const timersDropdowns = (
-    <View>
+  const timersDropdowns = (
       <FlatList
         data={timerDataList}
-        renderItem={({item}) => {
-            <TimersDropdown timerData={item} />
-          }
-        }
+        renderItem={({item}) => <TimersDropdown key={item.key} timerData={item} />}
       />
-    </View>
-  );*/
-
-  const timersDropdowns = (
-    <View>
-      {timerDataList.map((item) => <TimersDropdown timerData={item}/>)}
-    </View>
   );
 
   return (
     <ScreenTemplate
       screenIndex={ screenIdx }
       navigation={ navigation }
-      bodyComponents={
-        timersDropdowns
-      }
+      bodyComponents={ timersDropdowns }
     />
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-})
