@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TextInput, View, FlatList, TouchableOpacity, Image, ToastAndroid } from 'react-native';
 import ScreenTemplate from './screenTemplate';
-import NavigationTab from '../custom_components/navigationTab';
+import NavigationTab from '../components/navigationTab';
 import DeviceListItem from '../custom_components/deviceListItem';
 
 const screenIdx = 2;

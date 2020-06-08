@@ -11,7 +11,7 @@ import {
   ToastAndroid
 } from 'react-native';
 import {TouchableHighlight} from 'react-native-gesture-handler';
-import NavigationTab from '../custom_components/navigationTab';
+import NavigationTab from '../components/navigationTab';
 
 export default function ScreenTemplate({ screenIndex, navigation, headComponents, bodyComponents }) {
     const tabInfos = [
