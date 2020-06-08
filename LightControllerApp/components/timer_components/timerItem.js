@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { globalStyles } from '../styles/global';
+import { globalStyles } from '../../styles/global';
 
 const daysOfWeek = ['2', '3', '4', '5', '6', '7', 'S'];
 
