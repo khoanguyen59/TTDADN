@@ -1,5 +1,13 @@
 import React from 'react';
-import { StyleSheet, TextInput, View, FlatList, TouchableOpacity, Image, ToastAndroid } from 'react-native';
+import {
+  StyleSheet,
+  TextInput,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Image,
+  ToastAndroid,
+} from 'react-native';
 import ScreenTemplate from './screenTemplate';
 import NavigationTab from '../components/navigationTab';
 import DeviceListItem from '../custom_components/deviceListItem';
@@ -30,56 +38,54 @@ const testDeviceList = [
     deviceState: false,
     deviceRoom: '101',
   },
-]
+];
 
-export default function addingScreen({ navigation }) {
+export default function addingScreen({navigation}) {
   //TODO
-  const searchDevice = () => ToastAndroid.show("Search button pressed!", ToastAndroid.LONG);
+  const searchDevice = () =>
+    ToastAndroid.show('Search button pressed!', ToastAndroid.LONG);
 
   const searchBar = (
-      <View style={styles.searchContainer}>
-        <View style={styles.textInputContainer}>
-          <TextInput
-            style={styles.textInput}
-            placeHolder='Search for a device...'
-          />
-        </View>
-        <View style={styles.searchIconContainer}>
-          <TouchableOpacity
-            onPress={searchDevice}>
-            <Image
-              style={styles.image}
-              source={require('../icons/searchIcon.png')}
-            />
-          </TouchableOpacity>
-        </View>
+    <View style={styles.searchContainer}>
+      <View style={styles.textInputContainer}>
+        <TextInput
+          style={styles.textInput}
+          placeHolder="Search for a device..."
+        />
       </View>
-    );
+      <View style={styles.searchIconContainer}>
+        <TouchableOpacity onPress={searchDevice}>
+          <Image
+            style={styles.image}
+            source={require('../icons/searchIcon.png')}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   const deviceList = (
     <FlatList
-      keyExtractor={(item) => item.deviceID}
+      keyExtractor={item => item.deviceID}
       data={testDeviceList}
-      renderItem={({item}) =>
-        <DeviceListItem item={item} />
-      }
+      renderItem={({item}) => <DeviceListItem item={item} />}
     />
   );
 
   return (
     <ScreenTemplate
-      screenIndex={ screenIdx }
-      navigation={ navigation }
-      headComponents={ searchBar }
-      bodyComponents={ deviceList }
+      screenIndex={screenIdx}
+      navigation={navigation}
+      headComponents={searchBar}
+      bodyComponents={deviceList}
     />
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   searchContainer: {
     flex: 1,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   textInputContainer: {
     flex: 9,
@@ -89,11 +95,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'black',
-    borderRadius: 10
+    borderRadius: 10,
   },
   searchIconContainer: {
     flex: 1,
-    padding: 10
+    padding: 10,
   },
   image: {
     width: 'auto',

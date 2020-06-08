@@ -10,9 +10,35 @@ import historyScreen from './screens/historyScreen';
 import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
 
+import * as firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
+  authDomain: 'lightappdemo-dc252.firebaseapp.com',
+  databaseURL: 'https://lightappdemo-dc252.firebaseio.com',
+  projectId: 'lightappdemo-dc252',
+  storageBucket: 'lightappdemo-dc252.appspot.com',
+  messagingSenderId: '670980151251',
+  appId: '1:670980151251:web:245ac428bec24de86a0126',
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+function readUserData() {
+  firebase
+    .database()
+    .ref('deviceList/Bedroom/0')
+    .once('value', function(snapshot) {
+      console.log(snapshot.val());
+    });
+}
+
 const AppNavigator = createStackNavigator();
 
 const App = () => {
+  readUserData();
   return (
     <NavigationContainer>
       <AppNavigator.Navigator>
