@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
 import {Image, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
-<<<<<<< Updated upstream
-import {selectedList} from '../screens/deviceScreen.js';
-=======
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
 
@@ -73,7 +70,6 @@ export async function toggleState() {
     currentCount += 1;
   }
 }
->>>>>>> Stashed changes
 
 //as props strictly reference to class Device Screen
 function escapeStrict(arr, obj) {

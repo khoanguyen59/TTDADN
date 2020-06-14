@@ -8,46 +8,50 @@ import {
   Image,
   Switch,
 } from 'react-native';
+import {selectedList, toggleState} from '../components/deviceItem.js';
 
 class settingScreen extends React.Component {
   state = {
     switchVal1: false,
     switchVal2: false,
   };
-<<<<<<< Updated upstream
-=======
 
   onConfirm = () => {
     if (this.state.switchVal2) {
-      toggleState();
+      toggleState(selectedList);
       this.props.navigation.navigate('Device');
     }
   };
 
->>>>>>> Stashed changes
   render = () => {
+    console.log(selectedList);
     return (
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <Button title="Control Mode" />
         </View>
         <View style={styles.switchContainer}>
-          <View style={styles.switchContainer2}>
+          {/*<View style={styles.switchContainer2}>
             <Switch
               style={styles.switch}
               onValueChange={value => this.setState({switchVal1: value})}
               value={this.state.switchVal1}
             />
             <Text style={styles.textStyle}>Auto/Manual</Text>
-          </View>
+          </View>*/}
           <View style={styles.switchContainer2}>
             <Switch
               style={styles.switch}
               onValueChange={value => this.setState({switchVal2: value})}
               value={this.state.switchVal2}
             />
-            <Text style={styles.textStyle}>On/Off</Text>
+            <Text style={styles.textStyle}>Change State</Text>
           </View>
+          <TouchableOpacity style={styles.saveButton}>
+            <Text style={styles.saveText} onPress={() => this.onConfirm()}>
+              Confirm
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.bottomButtonContainer}>
@@ -120,6 +124,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginLeft: 20,
     fontSize: 20,
+  },
+  saveButton: {
+    backgroundColor: '#2095f3',
+    position: 'absolute',
+    height: 50,
+    width: 120,
+    alignSelf: 'center',
+    marginTop: 140,
+    borderRadius: 10,
+  },
+  saveText: {
+    fontSize: 25,
+    alignSelf: 'center',
+    color: 'white',
   },
   bottomContainer: {
     flexDirection: 'row',

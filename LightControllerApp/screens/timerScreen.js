@@ -9,10 +9,24 @@ import {
 import ScreenTemplate from './screenTemplate';
 import {globalStyles} from '../styles/global';
 import TimersDropdown from '../components/timer_components/timersDropdown';
+import * as firebase from 'firebase';
 
 const screenIdx = 4;
 
-const timerDataList = [
+const firebaseConfig = {
+  apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
+  authDomain: 'lightappdemo-dc252.firebaseapp.com',
+  databaseURL: 'https://lightappdemo-dc252.firebaseio.com',
+  projectId: 'lightappdemo-dc252',
+  storageBucket: 'lightappdemo-dc252.appspot.com',
+  messagingSenderId: '670980151251',
+  appId: '1:670980151251:web:245ac428bec24de86a0126',
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+/*const timerDataList = [
   {
     key: '1',
     location: 'Room 101',
@@ -31,74 +45,36 @@ const timerDataList = [
       },
     ],
   },
-  {
-    key: '2',
-    location: 'Room 102',
-    timerItems: [
-      {
-        deviceID: '23',
-        deviceType: 'Light',
-        setTime: '06:00',
-        setDates: [false, true, true, true, true, true, true],
-      },
-      {
-        deviceID: '25',
-        deviceType: 'Light',
-        setTime: '21:00',
-        setDates: [true, true, true, true, true, true, true],
-      },
-    ],
-  },
-  {
-    key: '3',
-    location: 'Room 201',
-    timerItems: [
-      {
-        deviceID: '77',
-        deviceType: 'Light',
-        setTime: '16:00',
-        setDates: [false, false, false, false, false, true, false],
-      },
-      {
-        deviceID: '56',
-        deviceType: 'Light',
-        setTime: '22:00',
-        setDates: [true, false, true, true, false, true, false],
-      },
-    ],
-  },
-  {
-    key: '4',
-    location: 'Room 202',
-    timerItems: [
-      {
-        deviceID: '22',
-        deviceType: 'Light',
-        setTime: '07:00',
-        setDates: [false, true, true, true, true, true, true],
-      },
-      {
-        deviceID: '66',
-        deviceType: 'Light',
-        setTime: '21:00',
-        setDates: [true, true, true, true, true, true, true],
-      },
-      {
-        deviceID: '72',
-        deviceType: 'Light',
-        setTime: '15:00',
-        setDates: [false, true, true, false, true, true, true],
-      },
-    ],
-  },
-];
+];*/
+var timerDataList;
+
+async function readTimerData() {
+  var snapshot = await firebase
+    .database()
+    .ref('/timingList')
+    .once('value');
+  return snapshot.val();
+}
+timerDataList = readTimerData();
 
 export default function timerScreen({navigation}) {
+  var customizedList = [];
+  for (let element of Object.keys(timerDataList._55)) {
+    timerDataList._55[element] = timerDataList._55[element].filter(function(x) {
+      return x !== undefined;
+    });
+    timerDataList._55[element].map(e => {
+      e.room = element;
+    });
+    customizedList.push(timerDataList._55[element]);
+  }
+
   const timersDropdowns = (
     <FlatList
-      data={timerDataList}
+      style={{marginBottom: 50, marginTop: -50}}
+      data={customizedList}
       renderItem={({item}) => (
-        <TimersDropdown key={item.key} timerData={item} />
+        <TimersDropdown key={item[0].deviceID} timerData={item} />
       )}
     />
   );

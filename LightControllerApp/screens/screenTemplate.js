@@ -1,6 +1,16 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-//import {TouchableHighlight} from 'react-native-gesture-handler';
+import React, {useState} from 'react';
+import {
+  SafeAreaView,
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  Button,
+  TouchableOpacity,
+  Image,
+  ToastAndroid,
+} from 'react-native';
+import {TouchableHighlight} from 'react-native-gesture-handler';
 import NavigationTab from '../components/navigationTab';
 
 export default function ScreenTemplate({

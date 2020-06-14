@@ -1,37 +1,8 @@
 import React from 'react';
-import {SafeAreaView, Button, FlatList, StyleSheet, Text} from 'react-native';
+import {View, FlatList, StyleSheet, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import AppNavigator from '../App';
-
-<<<<<<< Updated upstream
-const RoomList = [
-  {
-    roomID: '101',
-    roomName: 'Technical Room',
-  },
-  {
-    roomID: '102',
-    roomName: 'Business',
-  },
-  {
-    roomID: '103',
-    roomName: 'Sales',
-  },
-  {
-    roomID: '201',
-    roomName: 'Finance',
-  },
-  {
-    roomID: '202',
-    roomName: 'Human Resources',
-  },
-  {
-    roomID: '301',
-    roomName: 'Rest Room',
-  },
-];
-=======
-import {eraseList} from '../components/deviceItem';
+import * as firebase from 'firebase';
+import {eraseList} from '../components/deviceItem.js';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -48,19 +19,28 @@ if (!firebase.apps.length) {
 }
 
 export var selectedRoom;
->>>>>>> Stashed changes
 
 class homeScreen extends React.Component {
+  state = {
+    RoomList: [],
+  };
+
+  readRoomData = () => {
+    firebase
+      .database()
+      .ref('roomList')
+      .once('value')
+      .then(snapshot => {
+        this.setState({RoomList: snapshot.val()});
+      });
+  };
+
   renderItem = ({item}) => {
     const {navigation} = this.props.navigation;
     return (
       <TouchableOpacity
+        pointerEvents="none"
         style={styles.item}
-<<<<<<< Updated upstream
-        onPress={() => this.props.navigation.navigate('Device')}>
-        <Text style={styles.title}>{item.roomID}</Text>
-        <Text style={styles.name}>{item.roomName}</Text>
-=======
         onPress={() => {
           selectedRoom = item.roomName;
           this.props.navigation.navigate('Device');
@@ -72,22 +52,23 @@ class homeScreen extends React.Component {
         <Text style={styles.name} pointerEvents="none">
           {item.roomName}
         </Text>
->>>>>>> Stashed changes
       </TouchableOpacity>
     );
   };
 
   render = () => {
+    this.readRoomData();
     const {navigation} = this.props.navigation;
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container} pointerEvents="box-none">
         <FlatList
+          pointerEvents="none"
           navigation={navigation}
-          data={RoomList}
+          data={this.state.RoomList}
           renderItem={this.renderItem}
           keyExtractor={item => item.roomID}
         />
-      </SafeAreaView>
+      </View>
     );
   };
 }
