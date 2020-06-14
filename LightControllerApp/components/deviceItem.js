@@ -1,17 +1,94 @@
 import React, {Component} from 'react';
 import {Image, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+<<<<<<< Updated upstream
 import {selectedList} from '../screens/deviceScreen.js';
+=======
+import {selectedRoom} from '../screens/homeScreen.js';
+import * as firebase from 'firebase';
 
-function removeA(arr) {
-  var what,
-    a = arguments,
-    L = a.length,
-    ax;
-  while (L > 1 && arr.length) {
-    what = a[--L];
-    while ((ax = arr.indexOf(what)) !== -1) {
-      arr.splice(ax, 1);
+const firebaseConfig = {
+  apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
+  authDomain: 'lightappdemo-dc252.firebaseapp.com',
+  databaseURL: 'https://lightappdemo-dc252.firebaseio.com',
+  projectId: 'lightappdemo-dc252',
+  storageBucket: 'lightappdemo-dc252.appspot.com',
+  messagingSenderId: '670980151251',
+  appId: '1:670980151251:web:245ac428bec24de86a0126',
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+export var selectedList = [];
+
+export function eraseList() {
+  selectedList = [];
+}
+
+async function numChildCount(date) {
+  const snapshot = await firebase
+    .database()
+    .ref('/logList/' + date)
+    .once('value');
+  return snapshot.numChildren();
+}
+
+export async function toggleState() {
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+  var hh = today.getHours();
+  var min = today.getMinutes();
+  var formattedDate = dd + '-' + mm + '-' + yyyy;
+  var formattedTime = hh + ':' + min;
+  var currentCount = await numChildCount(formattedDate);
+
+  for (let element of selectedList) {
+    firebase
+      .database()
+      .ref('deviceList/' + selectedRoom)
+      .child(element.deviceID - 1)
+      .update({
+        deviceID: element.deviceID,
+        deviceName: element.deviceName,
+        deviceState: !element.deviceState,
+        deviceType: element.deviceType,
+      });
+    console.log(element);
+    console.log(element.deviceState);
+    firebase
+      .database()
+      .ref('logList/' + formattedDate)
+      .child(currentCount)
+      .set({
+        action: element.deviceState ? 'off' : 'on',
+        autoControlled: false,
+        deviceID: element.deviceID,
+        deviceName: element.deviceName,
+        room: selectedRoom,
+        time: formattedTime,
+      });
+    currentCount += 1;
+  }
+}
+>>>>>>> Stashed changes
+
+//as props strictly reference to class Device Screen
+function escapeStrict(arr, obj) {
+  for (let element of arr) {
+    if (JSON.stringify(obj) === JSON.stringify(element)) {
+      return element;
     }
+  }
+  return -1;
+}
+
+function removeA(arr, what) {
+  var ax;
+  if ((ax = arr.indexOf(what)) !== -1) {
+    arr.splice(ax, 1);
   }
   return arr;
 }
@@ -29,7 +106,7 @@ class FlatListComponent extends Component {
       if (!this.state.selected) {
         selectedList.push(this.props);
       } else {
-        removeA(selectedList, this.props);
+        removeA(selectedList, escapeStrict(selectedList, this.props));
       }
     }
     console.log(selectedList);

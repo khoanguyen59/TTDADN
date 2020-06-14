@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, FlatList, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View, Text, TouchableOpacity} from 'react-native';
 import TimerItem from './timerItem';
-import { globalStyles } from '../../styles/global';
+import {globalStyles} from '../../styles/global';
 
-export default function TimersDropdown({ timerData }) {
+export default function TimersDropdown({timerData}) {
   const [timerItems, setTimerItems] = useState([]);
 
   const locationTab = (
     <TouchableOpacity
       style={styles.locationTab}
-      onPress={() => setTimerItems(timerItems.length == 0? timerData.timerItems : [])}>
+      onPress={() =>
+        setTimerItems(timerItems.length == 0 ? timerData.timerItems : [])
+      }>
       <Text style={globalStyles.whiteTitle}> {timerData.location}</Text>
     </TouchableOpacity>
   );
@@ -17,15 +19,16 @@ export default function TimersDropdown({ timerData }) {
   return (
     <View>
       {locationTab}
-      {timerItems.map((item) =>
+      {timerItems.map(item => (
         <TimerItem
           key={item.deviceID}
           deviceName={item.deviceType + ' ' + item.deviceID}
           setTime={item.setTime}
-          setDates={item.setDates}/>
-      )}
+          setDates={item.setDates}
+        />
+      ))}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -33,4 +36,4 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     backgroundColor: 'rgb(36, 48, 94)',
   },
-})
+});

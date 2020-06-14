@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 
-export default function NavigationTab({ selected, pressHandler, imageSrc }) {
+export default function NavigationTab({selected, pressHandler, imageSrc}) {
   return (
     <View style={styles.bottomButtonContainer}>
       <TouchableOpacity
-        style={selected? styles.bottomButtonSelected : styles.bottomButton}
+        style={selected ? styles.bottomButtonSelected : styles.bottomButton}
         onPress={() => pressHandler()}>
-        <Image
-          style={styles.image}
-          source={imageSrc}
-        />
+        <Image style={styles.image} source={imageSrc} />
       </TouchableOpacity>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   bottomButtonContainer: {
-    flex: 1
+    flex: 1,
   },
   image: {
     width: 'auto',

@@ -36,7 +36,6 @@ function readUserData() {
 }
 
 const AppNavigator = createStackNavigator();
-
 const App = () => {
   readUserData();
   return (

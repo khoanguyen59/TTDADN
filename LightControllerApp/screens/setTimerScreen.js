@@ -11,6 +11,8 @@ import {
 import WeekDayComponent from '../components/dayItem';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
+import {setTimer} from '../components/dayItem.js';
+
 const weekDays = [
   {
     day: 'Mon',
@@ -42,6 +44,8 @@ const weekDays = [
   },
 ];
 
+export var selectedTime;
+
 class setTimerScreen extends React.Component {
   state = {
     showControlMode: false,
@@ -49,6 +53,11 @@ class setTimerScreen extends React.Component {
     pickedTime: '00 : 00',
     isTimeRender: true,
     switchVal: false,
+  };
+
+  onConfirm = () => {
+    setTimer();
+    this.props.navigation.navigate('Device');
   };
 
   hideDatePicker = () => {
@@ -59,9 +68,9 @@ class setTimerScreen extends React.Component {
     const mdate = date.toString().split(' ');
     const time = mdate[4].split(':');
     this.setState({
-      pickedTime: time[0] + ' : ' + time[1],
+      pickedTime: time[0] + ':' + time[1],
     });
-    console.log(mdate[4]);
+    selectedTime = this.state.pickedTime;
     this.hideDatePicker();
   };
 
@@ -108,7 +117,9 @@ class setTimerScreen extends React.Component {
             value={this.state.switchVal}
           />
         </View>
-        <TouchableOpacity style={styles.saveButton}>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={() => this.onConfirm()}>
           <Text style={styles.saveText}>Save</Text>
         </TouchableOpacity>
         {/*Footer Navigation*/}

@@ -3,6 +3,7 @@ import {SafeAreaView, Button, FlatList, StyleSheet, Text} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import AppNavigator from '../App';
 
+<<<<<<< Updated upstream
 const RoomList = [
   {
     roomID: '101',
@@ -29,6 +30,25 @@ const RoomList = [
     roomName: 'Rest Room',
   },
 ];
+=======
+import {eraseList} from '../components/deviceItem';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
+  authDomain: 'lightappdemo-dc252.firebaseapp.com',
+  databaseURL: 'https://lightappdemo-dc252.firebaseio.com',
+  projectId: 'lightappdemo-dc252',
+  storageBucket: 'lightappdemo-dc252.appspot.com',
+  messagingSenderId: '670980151251',
+  appId: '1:670980151251:web:245ac428bec24de86a0126',
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
+export var selectedRoom;
+>>>>>>> Stashed changes
 
 class homeScreen extends React.Component {
   renderItem = ({item}) => {
@@ -36,9 +56,23 @@ class homeScreen extends React.Component {
     return (
       <TouchableOpacity
         style={styles.item}
+<<<<<<< Updated upstream
         onPress={() => this.props.navigation.navigate('Device')}>
         <Text style={styles.title}>{item.roomID}</Text>
         <Text style={styles.name}>{item.roomName}</Text>
+=======
+        onPress={() => {
+          selectedRoom = item.roomName;
+          this.props.navigation.navigate('Device');
+          eraseList();
+        }}>
+        <Text style={styles.title} pointerEvents="none">
+          {item.roomID}
+        </Text>
+        <Text style={styles.name} pointerEvents="none">
+          {item.roomName}
+        </Text>
+>>>>>>> Stashed changes
       </TouchableOpacity>
     );
   };

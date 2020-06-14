@@ -11,96 +11,81 @@ import {
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import SummaryItem from '../components/summaryItem';
 
-const DeviceList = [
-  {
-    summaryID: '01',
-    summaryAction: 'Off',
-    summaryRoom: '101',
-    summaryAuto: false,
-    summaryTime: '7:00',
-  },
-  {
-    summaryID: '01',
-    summaryAction: 'On',
-    summaryRoom: '102',
-    summaryAuto: false,
-    summaryTime: '19:00',
-  },
-  {
-    summaryID: '02',
-    summaryAction: 'Off',
-    summaryRoom: '103',
-    summaryAuto: true,
-    summaryTime: '0:10',
-  },
-  {
-    summaryID: '03',
-    summaryAction: 'On',
-    summaryRoom: '103',
-    summaryAuto: true,
-    summaryTime: '8:00',
-  },
-  {
-    summaryID: '04',
-    summaryAction: 'Off',
-    summaryRoom: '201',
-    summaryAuto: false,
-    summaryTime: '17:00',
-  },
-  {
-    summaryID: '01',
-    summaryAction: 'Off',
-    summaryRoom: '101',
-    summaryAuto: false,
-    summaryTime: '7:00',
-  },
-  {
-    summaryID: '01',
-    summaryAction: 'On',
-    summaryRoom: '102',
-    summaryAuto: false,
-    summaryTime: '19:00',
-  },
-  {
-    summaryID: '02',
-    summaryAction: 'Off',
-    summaryRoom: '103',
-    summaryAuto: true,
-    summaryTime: '0:10',
-  },
-  {
-    summaryID: '03',
-    summaryAction: 'On',
-    summaryRoom: '103',
-    summaryAuto: true,
-    summaryTime: '8:00',
-  },
-  {
-    summaryID: '04',
-    summaryAction: 'Off',
-    summaryRoom: '201',
-    summaryAuto: false,
-    summaryTime: '17:00',
-  },
-];
+import * as firebase from 'firebase';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
+  authDomain: 'lightappdemo-dc252.firebaseapp.com',
+  databaseURL: 'https://lightappdemo-dc252.firebaseio.com',
+  projectId: 'lightappdemo-dc252',
+  storageBucket: 'lightappdemo-dc252.appspot.com',
+  messagingSenderId: '670980151251',
+  appId: '1:670980151251:web:245ac428bec24de86a0126',
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 class historyScreen extends React.Component {
   state = {
     isDatePickerVisible: false,
-    pickedDate: new Date().toDateString,
+    pickedDate: '',
     isTimeRender: false,
+    logList: [],
+  };
+
+  readLogData = () => {
+    firebase
+      .database()
+      .ref('logList/' + this.state.pickedDate)
+      .once('value')
+      .then(snapshot => {
+        this.setState({logList: snapshot.val()});
+        //console.log(JSON.stringify(this.state.pickedDate));
+      });
   };
 
   hideDatePicker = () => {
     this.setState({isDatePickerVisible: false, isTimeRender: true});
   };
 
+  monthNumber = month => {
+    switch (month) {
+      case 'Jan':
+        return '1';
+      case 'Feb':
+        return '2';
+      case 'Mar':
+        return '3';
+      case 'Apr':
+        return '4';
+      case 'May':
+        return '5';
+      case 'Jun':
+        return '6';
+      case 'Jul':
+        return '7';
+      case 'Aug':
+        return '8';
+      case 'Sep':
+        return '9';
+      case 'Oct':
+        return '10';
+      case 'Nov':
+        return '11';
+      case 'Dec':
+        return '12';
+    }
+  };
+
   handleDatePicked = date => {
     const mdate = date.toString().split(' ');
 
     this.setState({
-      pickedDate: mdate[0] + ', ' + mdate[1] + ' ' + mdate[2] + ', ' + mdate[3],
+      pickedDate: mdate[2] + '-' + this.monthNumber(mdate[1]) + '-' + mdate[3],
     });
+    console.log(this.state.pickedDate);
     this.hideDatePicker();
   };
 
@@ -116,8 +101,10 @@ class historyScreen extends React.Component {
     if (this.state.isTimeRender) {
       return (
         <FlatList
-          data={DeviceList}
-          keyExtractor={item => item.deviceID}
+          data={this.state.logList}
+          keyExtractor={item => {
+            item.deviceID.toString();
+          }}
           style={{marginBottom: 40}}
           renderItem={({item, index}) => {
             return <SummaryItem {...[item, index]} />;
@@ -130,6 +117,7 @@ class historyScreen extends React.Component {
   };
 
   render = () => {
+    this.readLogData();
     return (
       <View style={styles.container}>
         <View style={styles.headContainer}>

@@ -7,8 +7,17 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+<<<<<<< Updated upstream
 
 import FlatListComponent from '../components/deviceItem.js';
+=======
+import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import * as firebase from 'firebase';
+
+import FlatListComponent from '../components/deviceItem.js';
+import {selectedRoom} from './homeScreen.js';
+import {eraseDayList} from '../components/dayItem';
+>>>>>>> Stashed changes
 
 var DeviceList = [
   {
@@ -82,7 +91,10 @@ class deviceScreen extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.timerButton}
-            onPress={() => this.props.navigation.navigate('SetTimer')}>
+            onPress={() => {
+              this.props.navigation.navigate('SetTimer');
+              eraseDayList();
+            }}>
             <Image
               source={require('../icons/timerIcon.png')}
               style={styles.image}

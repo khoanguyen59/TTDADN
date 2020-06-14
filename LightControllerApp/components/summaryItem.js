@@ -6,13 +6,13 @@ class FlatListComponent extends Component {
     return (
       <TouchableOpacity
         style={this.props[1] % 2 === 0 ? styles.item : styles.oddItem}>
-        <Text style={styles.title}>Light {this.props[0].summaryID}</Text>
-        <Text style={styles.title}>{this.props[0].summaryRoom}</Text>
-        <Text style={styles.title}>{this.props[0].summaryAction}</Text>
-        <Text style={styles.title}>
-          {this.props[0].summaryAuto ? 'Auto' : 'Manual'}
+        <Text style={styles.title}>Light {this.props[0].deviceID}</Text>
+        <Text style={styles.title1}>{this.props[0].room}</Text>
+        <Text style={styles.title}>{this.props[0].action}</Text>
+        <Text style={styles.title1}>
+          {this.props[0].autoControlled ? 'Auto' : 'Manual'}
         </Text>
-        <Text style={styles.title}>{this.props[0].summaryTime}</Text>
+        <Text style={styles.title}>{this.props[0].time}</Text>
       </TouchableOpacity>
     );
   };
@@ -35,6 +35,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 16,
   },
   title: {
+    flex: 0.6,
+    fontSize: 15,
+    marginLeft: 8,
+  },
+  title1: {
     flex: 1,
     fontSize: 15,
     marginLeft: 8,

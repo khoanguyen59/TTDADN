@@ -14,6 +14,17 @@ class settingScreen extends React.Component {
     switchVal1: false,
     switchVal2: false,
   };
+<<<<<<< Updated upstream
+=======
+
+  onConfirm = () => {
+    if (this.state.switchVal2) {
+      toggleState();
+      this.props.navigation.navigate('Device');
+    }
+  };
+
+>>>>>>> Stashed changes
   render = () => {
     return (
       <View style={styles.container}>
