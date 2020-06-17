@@ -19,6 +19,7 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
+<<<<<<< HEAD
 // readDeviceData = () => {
 //   firebase
 //     .database()
@@ -28,6 +29,10 @@ if (!firebase.apps.length) {
 //       this.setState({TimingList: snapshot.val()});
 //     });
 // };
+=======
+
+
+>>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
 
 export default function TimersDropdown({timerData}) {
   const [timerItems, setTimerItems] = useState([]);
@@ -38,7 +43,11 @@ export default function TimersDropdown({timerData}) {
       <Text style={globalStyles.whiteTitle}> {timerData[0].room} </Text>
     </TouchableOpacity>
   );
+<<<<<<< HEAD
   // console.log(169, timerItems);
+=======
+  console.log(169, timerItems);
+>>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
 
   // delete function
   function deleteTimer(item){
@@ -50,18 +59,31 @@ export default function TimersDropdown({timerData}) {
       }
       i = i+ 1;
     }
+<<<<<<< HEAD
     // console.log(i);
     Alert.alert(
       'Alert',
       'Are you sure?',
+=======
+    console.log(i);
+    Alert.alert(
+      'Delete timer',
+      'Are you sure to delete this timer?',
+>>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
       [
         {text: 'No', onPress:()=> console.log('cancelled')},
         {text:'Yes', onPress:()=>{
           firebase.database().ref('timingList').child(item.room).child(i).remove();
+<<<<<<< HEAD
           // timerData.splice(i,1);
           firebase.database().ref('timingList').child(item.room).set(timerData);
           alert('deleted');
           setTimerItems(timerItems.filter((item,index) => index != i));
+=======
+          timerData.splice(i,1);
+          firebase.database().ref('timingList').child(item.room).set(timerData)
+          alert('deleted');
+>>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
           // TimersDropdown({timerData});
         }}
       ]
