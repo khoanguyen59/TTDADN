@@ -89,7 +89,7 @@ class deviceScreen extends React.Component {
           <FlatList
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
-            keyExtractor={item => item.deviceID}
+            keyExtractor={item => item.deviceID.toString()}
             style={{marginBottom: 50}}
             renderItem={({item}) => {
               return <FlatListComponent {...item} />;

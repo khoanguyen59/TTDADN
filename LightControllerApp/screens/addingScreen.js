@@ -66,7 +66,7 @@ export default function addingScreen({navigation}) {
 
   const deviceList = (
     <FlatList
-      keyExtractor={item => item.deviceID}
+      keyExtractor={item => item.deviceID.toString()}
       data={testDeviceList}
       renderItem={({item}) => <DeviceListItem item={item} />}
     />

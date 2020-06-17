@@ -66,7 +66,7 @@ class homeScreen extends React.Component {
           navigation={navigation}
           data={this.state.RoomList}
           renderItem={this.renderItem}
-          keyExtractor={item => item.roomID}
+          keyExtractor={item => item.roomID.toString()}
         />
       </View>
     );
