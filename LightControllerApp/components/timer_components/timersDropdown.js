@@ -51,9 +51,10 @@ export default function TimersDropdown({timerData}) {
         {text: 'No', onPress:()=> console.log('cancelled')},
         {text:'Yes', onPress:()=>{
           firebase.database().ref('timingList').child(item.room).child(i).remove();
-          timerData.splice(i,1);
+          //timerData.splice(i,1);
           firebase.database().ref('timingList').child(item.room).set(timerData)
           alert('deleted');
+          setTimerItems(timerItems.filter((timer, index) => index != i);
           // TimersDropdown({timerData});
         }}
       ]
@@ -74,12 +75,12 @@ export default function TimersDropdown({timerData}) {
             setTime={item.time}
             setDates={Object.values(item.day)}
           />
-        </TouchableOpacity> 
+        </TouchableOpacity>
         // timerItems.map()
       ))}
     </View>
   );
-  
+
 }
 
 const styles = StyleSheet.create({
