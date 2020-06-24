@@ -95,12 +95,11 @@ export default function TimersDropdown({timerData}) {
             //convert day of item
             setDates={Object.values(convertDay(item.day))}
           />
-        </TouchableOpacity> 
-        // timerItems.map()
+        </TouchableOpacity>
       ))}
     </View>
   );
-  
+
 }
 
 const styles = StyleSheet.create({
