@@ -19,20 +19,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-<<<<<<< HEAD
-// readDeviceData = () => {
-//   firebase
-//     .database()
-//     .ref('timingList/')
-//     .once('value')
-//     .then(snapshot => {
-//       this.setState({TimingList: snapshot.val()});
-//     });
-// };
-=======
-
-
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
 
 export default function TimersDropdown({timerData}) {
   const [timerItems, setTimerItems] = useState([]);
@@ -43,12 +29,8 @@ export default function TimersDropdown({timerData}) {
       <Text style={globalStyles.whiteTitle}> {timerData[0].room} </Text>
     </TouchableOpacity>
   );
-<<<<<<< HEAD
   // console.log(169, timerItems);
-=======
-  console.log(169, timerItems);
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
-
+  
   // delete function
   function deleteTimer(item){
     var i = 0;
@@ -59,35 +41,43 @@ export default function TimersDropdown({timerData}) {
       }
       i = i+ 1;
     }
-<<<<<<< HEAD
     // console.log(i);
     Alert.alert(
       'Alert',
       'Are you sure?',
-=======
-    console.log(i);
-    Alert.alert(
-      'Delete timer',
-      'Are you sure to delete this timer?',
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
       [
         {text: 'No', onPress:()=> console.log('cancelled')},
         {text:'Yes', onPress:()=>{
           firebase.database().ref('timingList').child(item.room).child(i).remove();
-<<<<<<< HEAD
+          setTimerItems(timerItems.filter((item,index) => index != i));
           // timerData.splice(i,1);
           firebase.database().ref('timingList').child(item.room).set(timerData);
           alert('deleted');
-          setTimerItems(timerItems.filter((item,index) => index != i));
-=======
-          timerData.splice(i,1);
-          firebase.database().ref('timingList').child(item.room).set(timerData)
-          alert('deleted');
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
+          
           // TimersDropdown({timerData});
         }}
       ]
     )
+  }
+  // day in database follow ABC's so must convert to 2-S
+  function convertDay(item){
+    var date = {
+      Monday:'true',
+      Tuesday:'true',
+      Wednesday:'true',
+      Thursday:'true',
+      Friday:'true',
+      Saturday:'true',
+      Sunday:'true',
+    }
+    date.Monday = item.Monday;
+    date.Tuesday = item.Tuesday;
+    date.Wednesday = item.Wednesday;
+    date.Thursday = item.Thursday;
+    date.Friday = item.Friday;
+    date.Saturday = item.Saturday;
+    date.Sunday = item.Sunday;
+    return date;
   }
   // touch able item
   return (
@@ -102,7 +92,8 @@ export default function TimersDropdown({timerData}) {
             key={item.deviceID}
             deviceName={item.deviceName}
             setTime={item.time}
-            setDates={Object.values(item.day)}
+            //convert day of item
+            setDates={Object.values(convertDay(item.day))}
           />
         </TouchableOpacity> 
         // timerItems.map()
