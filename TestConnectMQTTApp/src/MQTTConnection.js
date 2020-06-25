@@ -51,6 +51,9 @@ export default class MQTTConnection {
 
     this.mqtt.connect({
       onSuccess: this.onMQTTSuccess,
+      useSSL: false,
+      userName: 'yourUser',
+      password: 'yourPass',
       onFailure: this.onMQTTFailure,
       ...connectOptions,
     });
@@ -62,7 +65,7 @@ export default class MQTTConnection {
 
   onMQTTFailure = () => {
     console.log('App onMQTTLost');
-    this.onMQTTLost();
+    this.onMQTTLost;
   };
 
   subscribeChannel(channel) {
