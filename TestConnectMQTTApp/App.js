@@ -33,9 +33,11 @@ export default function App() {
         message.payloadString,
       );
       if (JSON.parse(message.payloadString)[0].device_id == 'Light') {
-        setIntensity(JSON.parse(message.payloadString)[0].values[0]);
-        console.log(lightIntensity);
+        setTimeout(() => {
+          setIntensity(Number(JSON.parse(message.payloadString)[0].values[0]));
+        }, 1000);
       }
+      console.log(lightIntensity);
     };
 
     onMQTTMessageDelivered = message => {
