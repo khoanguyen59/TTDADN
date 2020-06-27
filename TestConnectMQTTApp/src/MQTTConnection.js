@@ -2,6 +2,12 @@ import init from 'react_native_mqtt';
 import uuid from 'react-native-uuid';
 import {AsyncStorage} from 'react-native';
 
+const myUserName = 'yourUser';
+const myPassword = 'yourPass';
+
+//const myUserName = 'BKvm2';
+//const myPassword = 'Hcmut_CSE_2020';
+
 init({
   size: 10000,
   storageBackend: AsyncStorage,
@@ -12,7 +18,7 @@ init({
 });
 
 const defaultConnectOptions = {
-  reconnect: false,
+  reconnect: true,
   cleanSession: true,
   mqttVersion: 3,
   keepAliveInterval: 60,
@@ -41,10 +47,10 @@ export default class MQTTConnection {
     this.mqtt.onConnectionLost = res => {
       this.onMQTTLost;
     };
-    this.mqtt.onMessageArrived = message => {
+    this.mqtt.onMessageArrived = (message) => {
       this.onMQTTMessageArrived(message);
     };
-    this.mqtt.onMessageDelivered = message => {
+    this.mqtt.onMessageDelivered = (message) => {
       this.onMQTTMessageDelivered(message);
     };
     const connectOptions = options ? options : defaultConnectOptions;
@@ -52,8 +58,8 @@ export default class MQTTConnection {
     this.mqtt.connect({
       onSuccess: this.onMQTTSuccess,
       useSSL: false,
-      userName: 'yourUser',
-      password: 'yourPass',
+      userName: myUserName,
+      password: myPassword,
       onFailure: this.onMQTTFailure,
       ...connectOptions,
     });
