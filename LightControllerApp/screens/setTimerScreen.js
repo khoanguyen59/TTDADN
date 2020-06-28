@@ -11,7 +11,7 @@ import {
 import WeekDayComponent from '../components/dayItem';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
-import {setTimer} from '../components/dayItem.js';
+import { setTimer } from '../components/dayItem.js';
 
 const weekDays = [
   {
@@ -61,7 +61,7 @@ class setTimerScreen extends React.Component {
   };
 
   hideDatePicker = () => {
-    this.setState({isDatePickerVisible: false, isTimeRender: true});
+    this.setState({ isDatePickerVisible: false, isTimeRender: true });
   };
 
   handleDatePicked = date => {
@@ -75,7 +75,7 @@ class setTimerScreen extends React.Component {
   };
 
   showDatePicker = () => {
-    this.setState({isDatePickerVisible: true});
+    this.setState({ isDatePickerVisible: true });
   };
 
   renderTime = () => {
@@ -113,7 +113,7 @@ class setTimerScreen extends React.Component {
         <View style={styles.switchContainer}>
           <Switch
             style={styles.switch}
-            onValueChange={value => this.setState({switchVal: value})}
+            onValueChange={value => this.setState({ switchVal: value })}
             value={this.state.switchVal}
           />
         </View>
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   switch: {
-    transform: [{scaleX: 1.8}, {scaleY: 1.8}],
+    transform: [{ scaleX: 1.8 }, { scaleY: 1.8 }],
   },
   saveButton: {
     backgroundColor: '#2095f3',
@@ -266,3 +266,4 @@ const styles = StyleSheet.create({
 });
 
 export default setTimerScreen;
+

@@ -38,8 +38,6 @@ const styles = StyleSheet.create({
   borderText: {
     fontSize: 16,
     fontWeight: 'bold',
-    borderWidth: 2,
-    borderRadius: 20,
     margin: 3,
     padding: 3,
   },

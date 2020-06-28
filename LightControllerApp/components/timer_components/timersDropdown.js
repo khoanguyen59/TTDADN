@@ -29,37 +29,52 @@ if (!firebase.apps.length) {
 //     });
 // };
 
+//var initDropdown = true;
+//var hidden = true;
+
 export default function TimersDropdown({timerData}) {
-  const [timerItems, setTimerItems] = useState([]);
+
+  const [timerItems, setTimerItems] = useState(timerData);
+  const [displayItems, setDisplayItems] = useState([]);
+
   const locationTab = (
     <TouchableOpacity
       style={styles.locationTab}
-      onPress={() => setTimerItems(timerItems.length == 0 ? timerData : [])}>
+      onPress={
+        () => {
+          //setDisplayItems(displayItems.length == 0 ? /*(initDropdown ? timerData : timerItems)*/ timerItems : []);
+          //initDropdown = false;
+          setTimerItems(timerItems.length == 0 ? timerData : [])
+        }
+        }>
       <Text style={globalStyles.whiteTitle}> {timerData[0].room} </Text>
     </TouchableOpacity>
   );
-  // console.log(169, timerItems);
 
-  function deleteTimer(item){
-    var i = 0;
-    for(let element of timerData){
-      if(item == element){
-        console.log(i);
-        break;
-      }
-      i = i+ 1;
-    }
-    // console.log(i);
+  function deleteTimer(timerToDelete){
+    const idxToDel = timerItems.indexOf(timerItems.filter((timer) => timer == timerToDelete)[0]);
+
     Alert.alert(
       'Alert',
       'Are you sure?',
       [
-        {text: 'No', onPress:()=> console.log('cancelled')},
-        {text:'Yes', onPress:()=>{
-          firebase.database().ref('timingList').child(item.room).child(i).remove();
-          firebase.database().ref('timingList').child(item.room).set(timerData)
-          alert('deleted');
-          setTimerItems(timerItems.filter((timer, index) => index != i);
+        {text: 'No', onPress:()=> console.log('Cancelled')},
+        {text: 'Yes', onPress:()=> {
+          firebase.database().ref('timingList').child(timerToDelete.room).child(idxToDel).remove(
+            (error) => {
+                setTimerItems(prevTimerItems => prevTimerItems.filter((timerItem, index)=> index != idxToDel));
+                alert('Removed Successfully');
+              }
+          )
+          .then(
+            () => firebase.database().ref('timingList').child(timerToDelete.room).set(
+            timerItems.filter((timerItem, index) => index != idxToDel)))
+          .catch(
+            (error) => { alert("Remove Failed: " + error.message); }
+          );
+          //setTimerItems(prevTimerItems => prevTimerItems.filter((timerItem,index)=>index != idxToDel));
+          //firebase.database().ref('timingList').child(timerToDelete.room).set(timerItems);
+          // alert('deleted');         
         }}
       ]
     )
@@ -71,8 +86,7 @@ export default function TimersDropdown({timerData}) {
       {timerItems.map(item => (
         <TouchableOpacity
         style={styles.border}
-        // delete on press
-        onPress={() => deleteTimer(item)}>
+        onLongPress={() => deleteTimer(item)}>
           <TimerItem
             key={item.deviceID}
             deviceName={item.deviceName}
