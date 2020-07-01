@@ -103,7 +103,7 @@ class historyScreen extends React.Component {
         <FlatList
           data={this.state.logList}
           keyExtractor={item => {
-            item.deviceID.toString();
+            item.deviceID;
           }}
           style={{marginBottom: 40}}
           renderItem={({item, index}) => {

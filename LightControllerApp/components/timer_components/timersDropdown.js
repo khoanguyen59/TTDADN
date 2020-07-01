@@ -4,7 +4,6 @@ import TimerItem from './timerItem';
 import {globalStyles} from '../../styles/global';
 import * as firebase from 'firebase';
 
-
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
   authDomain: 'lightappdemo-dc252.firebaseapp.com',
@@ -19,7 +18,6 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-<<<<<<< HEAD
 // readDeviceData = () => {
 //   firebase
 //     .database()
@@ -29,10 +27,6 @@ if (!firebase.apps.length) {
 //       this.setState({TimingList: snapshot.val()});
 //     });
 // };
-=======
-
-
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
 
 export default function TimersDropdown({timerData}) {
   const [timerItems, setTimerItems] = useState([]);
@@ -43,51 +37,42 @@ export default function TimersDropdown({timerData}) {
       <Text style={globalStyles.whiteTitle}> {timerData[0].room} </Text>
     </TouchableOpacity>
   );
-<<<<<<< HEAD
   // console.log(169, timerItems);
-=======
-  console.log(169, timerItems);
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
 
   // delete function
-  function deleteTimer(item){
+  function deleteTimer(item) {
     var i = 0;
-    for(let element of timerData){
-      if(item == element){
+    for (let element of timerData) {
+      if (item == element) {
         console.log(i);
         break;
       }
-      i = i+ 1;
+      i = i + 1;
     }
-<<<<<<< HEAD
-    // console.log(i);
-    Alert.alert(
-      'Alert',
-      'Are you sure?',
-=======
     console.log(i);
-    Alert.alert(
-      'Delete timer',
-      'Are you sure to delete this timer?',
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
-      [
-        {text: 'No', onPress:()=> console.log('cancelled')},
-        {text:'Yes', onPress:()=>{
-          firebase.database().ref('timingList').child(item.room).child(i).remove();
-<<<<<<< HEAD
+    Alert.alert('Delete timer', 'Are you sure to delete this timer?', [
+      {text: 'No', onPress: () => console.log('cancelled')},
+      {
+        text: 'Yes',
+        onPress: () => {
+          firebase
+            .database()
+            .ref('timingList')
+            .child(item.room)
+            .child(i)
+            .remove();
           // timerData.splice(i,1);
-          firebase.database().ref('timingList').child(item.room).set(timerData);
+          firebase
+            .database()
+            .ref('timingList')
+            .child(item.room)
+            .set(timerData);
           alert('deleted');
-          setTimerItems(timerItems.filter((item,index) => index != i));
-=======
-          timerData.splice(i,1);
-          firebase.database().ref('timingList').child(item.room).set(timerData)
-          alert('deleted');
->>>>>>> 6c80307d7705990e8efde9bc059a207aa6960d26
+          setTimerItems(timerItems.filter((item, index) => index != i));
           // TimersDropdown({timerData});
-        }}
-      ]
-    )
+        },
+      },
+    ]);
   }
   // touch able item
   return (
@@ -95,21 +80,20 @@ export default function TimersDropdown({timerData}) {
       {locationTab}
       {timerItems.map(item => (
         <TouchableOpacity
-        style={styles.border}
-        // delete on press
-        onPress={() => deleteTimer(item)}>
+          style={styles.border}
+          // delete on press
+          onPress={() => deleteTimer(item)}>
           <TimerItem
             key={item.deviceID}
             deviceName={item.deviceName}
             setTime={item.time}
             setDates={Object.values(item.day)}
           />
-        </TouchableOpacity> 
+        </TouchableOpacity>
         // timerItems.map()
       ))}
     </View>
   );
-  
 }
 
 const styles = StyleSheet.create({
@@ -120,5 +104,5 @@ const styles = StyleSheet.create({
   border: {
     borderWidth: 2,
     backgroundColor: 'rgb(255, 48, 94)',
-  }
+  },
 });
