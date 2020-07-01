@@ -74,7 +74,7 @@ export default function TimersDropdown({timerData}) {
       },
     ]);
   }
-  // touch able item
+
   return (
     <View>
       {locationTab}
@@ -90,7 +90,6 @@ export default function TimersDropdown({timerData}) {
             setDates={Object.values(item.day)}
           />
         </TouchableOpacity>
-        // timerItems.map()
       ))}
     </View>
   );
