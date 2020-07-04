@@ -4,7 +4,6 @@ import TimerItem from './timerItem';
 import {globalStyles} from '../../styles/global';
 import * as firebase from 'firebase';
 
-
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
   authDomain: 'lightappdemo-dc252.firebaseapp.com',
@@ -74,7 +73,7 @@ export default function TimersDropdown({timerData}) {
           );
           //setTimerItems(prevTimerItems => prevTimerItems.filter((timerItem,index)=>index != idxToDel));
           //firebase.database().ref('timingList').child(timerToDelete.room).set(timerItems);
-          // alert('deleted');         
+          // alert('deleted');
         }}
       ]
     )
@@ -97,7 +96,6 @@ export default function TimersDropdown({timerData}) {
       ))}
     </View>
   );
-
 }
 
 const styles = StyleSheet.create({
@@ -108,5 +106,5 @@ const styles = StyleSheet.create({
   border: {
     borderWidth: 2,
     backgroundColor: 'rgb(255, 48, 94)',
-  }
+  },
 });

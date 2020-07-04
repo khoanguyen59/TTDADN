@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Image, View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {
+  Image,
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Switch,
+} from 'react-native';
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
 
@@ -31,7 +38,7 @@ async function numChildCount(date) {
   return snapshot.numChildren();
 }
 
-export async function toggleState() {
+export async function toggleState(element) {
   var today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth() + 1;
@@ -42,33 +49,30 @@ export async function toggleState() {
   var formattedTime = hh + ':' + min;
   var currentCount = await numChildCount(formattedDate);
 
-  for (let element of selectedList) {
-    firebase
-      .database()
-      .ref('deviceList/' + selectedRoom)
-      .child(element.deviceID - 1)
-      .update({
-        deviceID: element.deviceID,
-        deviceName: element.deviceName,
-        deviceState: !element.deviceState,
-        deviceType: element.deviceType,
-      });
-    console.log(element);
-    console.log(element.deviceState);
-    firebase
-      .database()
-      .ref('logList/' + formattedDate)
-      .child(currentCount)
-      .set({
-        action: element.deviceState ? 'off' : 'on',
-        autoControlled: false,
-        deviceID: element.deviceID,
-        deviceName: element.deviceName,
-        room: selectedRoom,
-        time: formattedTime,
-      });
-    currentCount += 1;
-  }
+  firebase
+    .database()
+    .ref('deviceList/' + selectedRoom)
+    .child(element.deviceID - 1)
+    .update({
+      deviceID: element.deviceID,
+      deviceName: element.deviceName,
+      deviceState: !element.deviceState,
+      deviceType: element.deviceType,
+    });
+  console.log(selectedRoom);
+  console.log(element.deviceState);
+  firebase
+    .database()
+    .ref('logList/' + formattedDate)
+    .child(currentCount)
+    .set({
+      action: element.deviceState ? 'off' : 'on',
+      autoControlled: false,
+      deviceID: element.deviceID,
+      deviceName: element.deviceName,
+      room: selectedRoom,
+      time: formattedTime,
+    });
 }
 
 //as props strictly reference to class Device Screen
@@ -92,6 +96,7 @@ function removeA(arr, what) {
 class FlatListComponent extends Component {
   state = {
     selected: false,
+    switchVal: this.props.deviceState,
   };
 
   toggleSelect = () => {
@@ -108,31 +113,29 @@ class FlatListComponent extends Component {
     console.log(selectedList);
   };
 
-  renderTick = () => {
-    if (this.state.selected) {
-      return (
-        <View>
-          <Image
-            source={require('../icons/greenTickIcon.png')}
-            style={styles.image}
-          />
-        </View>
-      );
-    } else {
-      return null;
-    }
+  switchRender = () => {
+    return (
+      <Switch
+        style={styles.switch}
+        onValueChange={value => {
+          this.setState({switchVal: value});
+          toggleState(this.props);
+        }}
+        value={this.state.switchVal}
+      />
+    );
   };
 
   render = () => {
     return (
       <TouchableOpacity
-        style={this.props.deviceState ? styles.itemOn : styles.item}
+        style={this.state.selected ? styles.itemOn : styles.item}
         onPress={() => this.toggleSelect()}>
-        <View>
+        <View style={styles.listContainer}>
           <Text style={styles.title}>
             {this.props.deviceType} {this.props.deviceID}
           </Text>
-          {this.renderTick()}
+          {this.props.deviceType === 'Light' && this.switchRender()}
           {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
         </View>
       </TouchableOpacity>
@@ -142,19 +145,29 @@ class FlatListComponent extends Component {
 
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: 'white',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 35,
+    borderWidth: 1,
+    borderColor: 'gray',
   },
   itemOn: {
-    backgroundColor: '#7cfc00',
+    backgroundColor: 'white',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 35,
+    borderWidth: 2,
+    borderColor: 'green',
   },
   title: {
-    fontSize: 32,
+    fontSize: 30,
+  },
+  listContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   name: {
     fontSize: 16,
@@ -163,9 +176,11 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     width: 60,
     height: 60,
-    top: -60,
-    left: 200,
+    left: 100,
     resizeMode: 'contain',
+  },
+  switch: {
+    transform: [{scaleX: 1.4}, {scaleY: 1.4}],
   },
 });
 

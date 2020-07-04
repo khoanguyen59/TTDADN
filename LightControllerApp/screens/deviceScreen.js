@@ -50,30 +50,18 @@ class deviceScreen extends React.Component {
   };
 
   renderControlButton = () => {
-    if (this.state.showControlMode) {
-      return (
-        <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.manualButton}
-            onPress={() => this.props.navigation.navigate('Setting')}>
-            <Image
-              source={require('../icons/manualIcon.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.timerButton}
-            onPress={() => this.props.navigation.navigate('SetTimer')}>
-            <Image
-              source={require('../icons/timerIcon.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        </View>
-      );
-    } else {
-      return null;
-    }
+    return (
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.timerButton}
+          onPress={() => this.props.navigation.navigate('SetTimer')}>
+          <Image
+            source={require('../icons/timerIcon.png')}
+            style={styles.image}
+          />
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   render = () => {
@@ -89,24 +77,14 @@ class deviceScreen extends React.Component {
           <FlatList
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
-            keyExtractor={item => item.deviceID.toString()}
-            style={{marginBottom: 50}}
+            keyExtractor={item => item.deviceName.toString()}
+            style={{marginBottom: 130}}
             renderItem={({item}) => {
               return <FlatListComponent {...item} />;
             }}
           />
         </TouchableWithoutFeedback>
         {this.renderControlButton()}
-        <View>
-          <TouchableOpacity
-            style={styles.toolButton}
-            onPress={() => this.toggleControl()}>
-            <Image
-              source={require('../icons/toolIcon.png')}
-              style={styles.image}
-            />
-          </TouchableOpacity>
-        </View>
         <View style={styles.bottomContainer}>
           <View style={styles.bottomButtonContainer}>
             <TouchableOpacity style={styles.bottomButtonOn}>
@@ -177,36 +155,14 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
   },
-  manualButton: {
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.2)',
-    position: 'absolute',
-    right: 15,
-    bottom: 200,
-    width: 45,
-    height: 45,
-    backgroundColor: '#fff',
-    borderRadius: 50,
-  },
   timerButton: {
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
     position: 'absolute',
-    right: 15,
-    bottom: 150,
-    width: 45,
-    height: 45,
-    backgroundColor: '#fff',
-    borderRadius: 50,
-  },
-  toolButton: {
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.2)',
-    position: 'absolute',
-    right: 15,
-    bottom: 80,
-    width: 60,
-    height: 60,
+    left: 15,
+    bottom: 70,
+    width: 50,
+    height: 50,
     backgroundColor: '#fff',
     borderRadius: 50,
   },

@@ -47,7 +47,8 @@ class historyScreen extends React.Component {
   };
 
   hideDatePicker = () => {
-    this.setState({isDatePickerVisible: false, isTimeRender: true});
+    this.setState({isDatePickerVisible: false});
+    this.setState({isTimeRender: true});
   };
 
   monthNumber = month => {
