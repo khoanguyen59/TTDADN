@@ -73,8 +73,10 @@ export default function App() {
   const currentTime = +new Date();
   let clientID = currentTime + uuid.v1();
   clientID = clientID.slice(0, 23);
-  console.log('clientID:', clientID);
-  
+  // console.log('clientID:', clientID);
+  const testPub = JSON.parse(JSON.stringify(`[{ "device_id": "LightD", "values": ["${switchValue ? 1 : 0}", "255"]}]`));
+  const testSub = JSON.parse(JSON.stringify(`[{ "device_id": "Light", "values": ["1023"]}]`));
+
   useEffect(() => {
     const appClient = MQTT.createClient({
       uri: uri,
@@ -82,22 +84,28 @@ export default function App() {
       user: myUserName,
       pass: myPassword,
     }).then((client) => {
-        client.on('closed', function () {
+        client.on('closed', () => {
           console.log('mqtt.event.closed');
         });
 
-        client.on('error', function (msg) {
+        client.on('error', (msg) => {
           console.log('mqtt.event.error', msg);
         });
 
-        client.on('message', function (msg) {
-          console.log('mqtt.event.message', msg);
+        client.on('message', (msg) => {
+          console.log('mqtt.event.message', msg.data);
+          
+          if (JSON.parse(msg.data)[0].device_id == 'Light') {
+            setTimeout(() => {
+              setIntensity(Number(JSON.parse(msg.data)[0].values[0]));
+            }, 100);
+          }
         });
 
-        client.on('connect', function () {
+        client.on('connect', () => {
           console.log('Connected to: ' + uri);
           client.subscribe(subscribeTopic, qos);
-          client.publish(subscribeTopic, JSON.parse(JSON.stringify(`[{ "device_id": "Nhom 3", "values": ["${switchValue ? 1 : 0}", "255"]}]`)), qos, false);
+          client.publish(publishTopic, testPub, qos, false);
         });
 
         client.connect();
@@ -110,13 +118,13 @@ export default function App() {
     return (
       <ProgressCircle
         style={styles.circle}
-        percent={lightIntensity / 1024 * 100}
+        percent={lightIntensity / 255 * 100}
         radius={100}
         borderWidth={8}
         color="#3399FF"
         shadowColor="#999"
         bgColor="#fff">
-        <Text style={{fontSize: 18}}>{lightIntensity}/1023</Text>
+        <Text style={{fontSize: 18}}>{lightIntensity}/255</Text>
       </ProgressCircle>
     );
   };
@@ -129,7 +137,6 @@ export default function App() {
           style={styles.switch}
           onValueChange={value => {
             setSwitch(value);
-            //client.publish(publishTopic, [{ "device_id": "Nhom 3", "values": ["${switchValue ? 0 : 1}", "255"]}], qos, false);
             // this.mqttConnect.send(
             //   publishTopic,
             //   `[{ "device_id": "Nhom 3", "values": ["${switchValue ? 0 : 1}", "255"]}]`
