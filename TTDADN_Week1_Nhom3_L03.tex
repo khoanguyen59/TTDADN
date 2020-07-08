@@ -1,0 +1,246 @@
+\documentclass[a4paper]{article}
+\usepackage[english]{babel}
+\usepackage[utf8]{vietnam}
+
+%\usepackage{vntex}
+
+%\usepackage[english,vietnam]{babel}
+%\usepackage[utf8]{inputenc}
+
+%\usepackage[utf8]{inputenc}
+%\usepackage[francais]{babel}
+\usepackage{a4wide,amssymb,epsfig,latexsym,multicol,array,hhline,fancyhdr}
+
+\usepackage{amsmath}
+\usepackage{lastpage}
+\usepackage[lined,boxed,commentsnumbered]{algorithm2e}
+\usepackage{enumerate}
+\usepackage{color}
+\usepackage{graphicx}							
+% Standard graphics package
+\usepackage{array}
+\usepackage{listings}
+\usepackage{makecell}
+\usepackage{tabularx, caption}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{rotating}
+\usepackage{graphics}
+\usepackage[a4paper,left=2cm,right=2cm,top=1.8cm,bottom=2.8cm]{geometry}
+\usepackage{setspace}
+\usepackage{epsfig}
+\usepackage{tikz}
+\usetikzlibrary{arrows,snakes,backgrounds}
+\usepackage[unicode]{hyperref}
+%can file puenc.def trong thu muc goc de option [unicode] tao ra bookmark bang tieng Viet
+\hypersetup{urlcolor=blue,linkcolor=black,citecolor=black,colorlinks=true} 
+%\usepackage{pstcol} 								
+% PSTricks with the standard color package
+
+\newtheorem{theorem}{{\bf Theorem}}
+\newtheorem{property}{{\bf Property}}
+\newtheorem{proposition}{{\bf Proposition}}
+\newtheorem{corollary}[proposition]{{\bf Corollary}}
+\newtheorem{lemma}[proposition]{{\bf Lemma}}
+
+
+%\usepackage{fancyhdr}
+\setlength{\headheight}{40pt}
+\pagestyle{fancy}
+\fancyhead{} % clear all header fields
+\fancyhead[L]{
+ \begin{tabular}{rl}
+    \begin{picture}(25,15)(0,0)
+    \put(0,-8){\includegraphics[width=8mm, height=8mm]{hcmut.png}}
+    %\put(0,-8){\epsfig{width=10mm,figure=hcmut.eps}}
+   \end{picture}&
+	%\includegraphics[width=8mm, height=8mm]{hcmut.png} & %
+	\begin{tabular}{l}
+		\textbf{\bf \ttfamily Trường Đại học Bách Khoa - ĐHQG TP.HCM}\\
+		\textbf{\bf \ttfamily Khoa Khoa học \& Kỹ thuật Máy tính}
+	\end{tabular} 	
+ \end{tabular}
+}
+\fancyhead[R]{
+	\begin{tabular}{l}
+		\tiny \bf \\
+		\tiny \bf 
+	\end{tabular}  }
+\fancyfoot{} % clear all footer fields
+\fancyfoot[L]{\scriptsize \ttfamily Thực tập đồ án đa ngành, 2019-2020}
+\fancyfoot[R]{\scriptsize \ttfamily Page {\thepage}/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+
+%%%
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{3}
+\makeatletter
+\newcounter {subsubsubsection}[subsubsection]
+\renewcommand\thesubsubsubsection{\thesubsubsection .\@alph\c@subsubsubsection}
+\newcommand\subsubsubsection{\@startsection{subsubsubsection}{4}{\z@}%
+                                     {-3.25ex\@plus -1ex \@minus -.2ex}%
+                                     {1.5ex \@plus .2ex}%
+                                     {\normalfont\normalsize\bfseries}}
+\newcommand*\l@subsubsubsection{\@dottedtocline{3}{10.0em}{4.1em}}
+\newcommand*{\subsubsubsectionmark}[1]{}
+\makeatother
+\makeatletter
+\DeclareRobustCommand{\textsupsub}[2]{{%
+		\m@th\ensuremath{%
+			^{\mbox{\fontsize\sf@size\z@#1}}%
+			_{\mbox{\fontsize\sf@size\z@#2}}%
+		}%
+}}
+\makeatother
+
+\large
+\begin{document}
+
+\begin{titlepage}
+
+\begin{center}
+TRƯỜNG ĐẠI HOC BÁCH KHOA, ĐHQG TPHCM
+
+KHOA KHOA HỌC VÀ KỸ THUẬT MÁY TÍNH
+\end{center}
+
+\vspace{1cm}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=3cm]{hcmut.png}
+\end{center}
+\end{figure}
+
+\vspace{1cm}
+
+
+\begin{center}
+\begin{tabular}{c}
+\multicolumn{1}{l}{\textbf{{}}}\\
+~~\\
+\hline
+\\
+\multicolumn{1}{l}{\textbf{{\Large Báo cáo nội dung Tuần 1+2}}}\\
+\\
+\textbf{\Huge THỰC TẬP ĐỒ ÁN ĐA NGÀNH}\\
+\\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{3cm}
+
+\begin{table}[h]
+\begin{tabular}{rrlr}
+
+\hspace{4 cm} & GVHD: & ThS Trần Thị Quế Nguyệt \\
+& Lớp: L03, & Nhóm: 3 \\
+& Danh sách thành viên: & Cao Minh Khải & 1710136 \\
+& & Võ An Khang & 1711700 \\
+& & Nguyễn Trần Phương Khoa & 1711790 \\
+& & Cao Minh Khôi & 1710148 \\
+& & Trần Chí Kiệt & 1710158 \\
+
+
+\end{tabular}
+\end{table}
+
+\begin{center}
+{\footnotesize Ho Chi Minh, 5/2020}
+\end{center}
+\end{titlepage}
+
+
+%\thispagestyle{empty}
+\selectlanguage{english}
+\newpage
+\tableofcontents
+\newpage
+
+\large
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Chủ đề lựa chọn}
+$\indent$
+Phát triển hệ thống theo dõi cường độ ánh sáng tại các phòng trong một toà nhà, bật tắt thiết bị chiếu sáng phù hợp khi ánh sáng thưc tế không đủ theo thiết lập cho phép. Ghi nhận hoạt động.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Tổng quan}
+\subsection{Công nghệ hiện thực}
+
+$\quad$
+Đối với đồ án này, nhóm chúng em quyết định sử dụng React Native làm công nghệ hiện thực.
+
+\subsubsection{Giới thiệu}
+
+$\quad$
+React Native là một framework do Facebook phát triển hướng đến tối ưu hóa hiệu năng Hybrid và tối giản số lượng ngôn ngữ Native di động.
+
+\subsubsection{Nguyên tắc hoạt động}
+
+$\quad$
+Các nguyên tắc hoạt động của React Native gần như giống hệt với React ngoại trừ việc React Native không thao tác với DOM thông qua DOM ảo. Nó chạy một quá trình xử lý nền (phiên dịch JavaScript viết bởi các nhà phát triển) trực tiếp trên thiết bị đầu cuối và giao tiếp với nền tảng gốc qua một cầu trung gian, bất đông bộ và theo đợt.
+
+Các thành phần React bao bọc mã gốc và tương tác với API gốc qua mô hình UI khai báo và Javascript của React. Điều này giúp việc phát triển ứng dụng cho nhiều nền tảng nhanh hơn.
+
+React Native không sử dụng HTML. Thay vào đó, nó sử dụng các thành phần khác từ luồng Javascript.
+\subsection{Giao thức MQTT và kiến trúc giao tiếp}
+\subsubsection{Giao thức MQTT}
+
+$\quad$
+Đây là một giao thức truyền thông điệp (message) theo mô hình publish/subscribe (xuất bản – theo dõi), sử dụng băng thông thấp, độ tin cậy cao và có khả năng hoạt động trong điều kiện đường truyền không ổn định.
+
+Kiến trúc mức cao (high-level) của MQTT gồm 2 phần chính là Broker và Clients.
+
+Trong đó, broker được coi như trung tâm, nó là điểm giao của tất cả các kết nối đến từ client. Nhiệm vụ chính của broker là nhận mesage từ publisher, xếp các message theo hàng đợi rồi chuyển chúng tới một địa chỉ cụ thể. Nhiệm vụ phụ của broker là nó có thể đảm nhận thêm một vài tính năng liên quan tới quá trình truyền thông như: bảo mật message, lưu trữ message, logs,...
+
+Client thì được chia thành 2 nhóm là publisher và subscriber. Client là các software components hoạt động tại edge device  nên chúng được thiết kế để có thể hoạt động một cách linh hoạt (lightweight). Client chỉ làm ít nhất một trong 2 việc là publish các message lên một topic cụ thể hoặc subscribe một topic nào đó để nhận message từ topic này.
+
+MQTT Clients tương thích với hầu hết các nền tảng hệ điều hành hiện có: MAC OS, Windows, Linux, Android, iOS...
+
+\newpage
+\textbf{QoS}
+
+Ở đây có 3 tuỳ chọn QoS (Qualities of service) khi "publish" và "subscribe":
+\begin{center}
+	\begin{itemize}
+	\item QoS0: Broker/client sẽ gởi dữ liệu đúng 1 lần, quá trình gởi được xác nhận bởi chỉ giao thức TCP/IP.
+	\item QoS1: Broker/client sẽ gởi dữ liệu với ít nhất 1 lần xác nhận từ đầu kia, nghĩa là có thể có nhiều hơn 1 lần xác nhận đã nhận được dữ liệu.
+	\item QoS2: Broker/client đảm bảm khi gởi dữ liệu thì phía nhận chỉ nhận được đúng 1 lần, quá trình này phải trải qua 4 bước bắt tay.
+	\end{itemize}
+\end{center}
+
+\subsubsection{Kiến trúc giao tiếp giữa thiết bị, IoT Gateway, server và ứng dụng}
+
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[width=10cm]{IotArchitecture2.png}
+	\end{center}
+\end{figure}
+
+IoT Gateway đóng vai trò là điểm kết nối giữa đám mây và các thiết bị điều khiển, cảm biến và các thiết bị thông minh,… Tất cả dữ liệu di chuyển lên đám mây hoặc ngược lại sẽ đi qua gateway này.
+
+\newpage
+\subsection{Usecase hệ thống}
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[width=10cm]{usecase.png}
+	\end{center}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{thebibliography}{80}
+
+
+\bibitem{} wikipedia.
+``\textbf{link: https://vi.wikipedia.org/wiki/React$\_$Native}'',
+\textit{}, last access: 02/05/2020.
+
+\bibitem{} smartfactoryvn.
+``\textbf{link: https://smartfactoryvn.com/technology/internet-of-things/giao-thuc-mqtt-la-gi-nhung-ung-dung-cua-mqtt-nhu-the-nao/}'', \textit{Louis}, last access: 02/05/2020.
+
+\end{thebibliography}
+\end{document}
+
