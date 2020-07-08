@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, Component} from 'react';
 import {
   StyleSheet,
   TextInput,
@@ -7,12 +7,17 @@ import {
   TouchableOpacity,
   Image,
   ToastAndroid,
+  Picker,
+  Slider,
+  Dimensions,
+  Alert,
 } from 'react-native';
 import ScreenTemplate from './screenTemplate';
 import NavigationTab from '../components/navigationTab';
 import DeviceListItem from '../custom_components/deviceListItem';
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
+
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -43,6 +48,8 @@ export default function addingScreen({navigation}) {
   const [nameError, setNameErr] = useState(false);
   const [stateError, setStateErr] = useState(false);
   const [typeError, setTypeErr] = useState(false);
+  const [seletedType, setseletedType] = useState('');
+  const [seletedState, setseletedState] = useState('');
 
   async function onConfirm() {
     var currentCount = await numChildCount(selectedRoom);
@@ -81,22 +88,94 @@ export default function addingScreen({navigation}) {
   function typeErrorRender() {
     return (
       <Text style={styles.errorText}>
-        Kiểu thiết bị chỉ có thể là Light hoặc Sensor
+        vui lòng chọn loại thiết bị Đèn/Cảm biến
       </Text>
     );
   }
 
   function stateErrorRender() {
-    return (
-      <Text style={styles.errorText}>
-        Nhập số nguyên trong khoảng 0-1023 nếu kiểu thiết bị là Sensor,
-        true/false nếu kiểu thiết bị là Light
-      </Text>
-    );
+    if(deviceType === 'Light'){
+      return (
+        <Text style={styles.errorText}>
+          vui lòng chọn giá trị ban đầu của đèn
+        </Text>
+      );
+    }// truong hop sensor luon tao default value 500
+    // else if(deviceType === 'Sensor'){
+    //   return (
+    //     <Text style={styles.errorText}>
+    //       vui lòng chọn giá trị ban đầu của cảm biến
+    //     </Text>
+        
+    //   );
+    // }
+    
   }
-
+  function setTypeDevice(value){
+    setType(value);
+    setseletedType(value);
+    // if(value === 'Light'){setState(false)}else{setState(500)}
+  }
+  function setStageDevice(value){
+    setState(value);
+    setseletedState(value);
+  }
+  function renderType(){
+    return(
+      <View style={styles.textInputContainer}>
+        <Picker
+          selectedValue = {seletedType}
+          onValueChange = {setTypeDevice.bind()}
+        >
+          <Picker.Item label = "chose device type" value = "0" color='red'></Picker.Item>
+          <Picker.Item label = "Light" value = "Light"></Picker.Item>
+          <Picker.Item label = "Sensor" value = "Sensor"></Picker.Item>
+        </Picker>
+        {typeError && typeErrorRender()}
+      </View>
+    )
+  }
+  function renderState(){
+    switch(deviceType){
+    case 'Light':{
+      return(
+        <View style={styles.textInputContainer}>
+          <Picker
+            selectedValue = {seletedState}
+            onValueChange = {setStageDevice.bind()}
+          >
+            <Picker.Item label = "pick light state" value = "0" color = 'red'></Picker.Item>
+            <Picker.Item label = "On state" value = "true"></Picker.Item>
+            <Picker.Item label = "Off state" value = "false"></Picker.Item>
+          </Picker>
+          {stateError && stateErrorRender()}
+        </View>
+      )
+    }
+    case 'Sensor':{
+      return(
+        <View style={styles.textInputContainer}>
+          <Text style ={styles.textsensorvalue}>pick Sensor value : {seletedState}</Text>
+          <Slider
+            style = {styles.slidesensorvalue}
+            step = {1}
+            maximumValue = {1023}
+            value = {500}
+            onValueChange = {setStageDevice.bind()}
+          ></Slider>
+          {stateError && stateErrorRender()}
+        </View>
+      )
+    }
+    default:{<View style={styles.textInputContainer}></View>}
+  }
+  }
+  
   return (
     <View style={styles.searchContainer}>
+      
+      {renderType()}
+      {renderState()}
       <View style={styles.textInputContainer}>
         <TextInput
           style={styles.textInput}
@@ -104,22 +183,6 @@ export default function addingScreen({navigation}) {
           placeholder="Device Name"
         />
         {nameError && nameErrorRender()}
-      </View>
-      <View style={styles.textInputContainer}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={state => setState(state)}
-          placeholder="Device State"
-        />
-        {stateError && stateErrorRender()}
-      </View>
-      <View style={styles.textInputContainer}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={type => setType(type)}
-          placeholder="Device Type"
-        />
-        {typeError && typeErrorRender()}
       </View>
       <TouchableOpacity style={styles.saveButton}>
         <Text style={styles.saveText} onPress={() => onConfirm()}>
@@ -166,4 +229,14 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
   },
+  textsensorvalue:{
+    padding: 10, 
+    width : 200,
+    fontSize: 16
+  },
+  slidesensorvalue:{
+    width: Dimensions.get('window').width - 200, 
+    alignSelf : 'flex-end',
+    bottom: 25,
+  }
 });
