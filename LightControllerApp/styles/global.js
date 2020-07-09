@@ -14,6 +14,9 @@ export const globalStyles = StyleSheet.create({
   primaryColor: {
     backgroundColor: '#2095f3',
   },
+  alternativeColor: {
+    backgroundColor: '#e58e00',
+  },
   secondaryColor: {
     backgroundColor: '#333',
   }
