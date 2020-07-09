@@ -120,6 +120,7 @@ class addRoom extends React.Component {
  const styles = StyleSheet.create({
     container: {
        paddingTop: 23,
+       bottom: -90
     },
     input: {
        margin: 15,

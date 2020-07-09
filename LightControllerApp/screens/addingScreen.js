@@ -17,6 +17,8 @@ import NavigationTab from '../components/navigationTab';
 import DeviceListItem from '../custom_components/deviceListItem';
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
+import {NativeModules} from 'react-native';
+const {ToastModule} = NativeModules;
 
 
 const firebaseConfig = {
@@ -75,6 +77,7 @@ export default function addingScreen({navigation}) {
           deviceState: deviceType === 'Sensor' ? deviceState : deviceState === 'true',
           deviceType: deviceType,
         });
+      ToastModule.showText(`add success`, ToastModule.LENGTH_LONG);
       navigation.navigate('Device');
     }
   }
@@ -127,9 +130,9 @@ export default function addingScreen({navigation}) {
           selectedValue = {seletedType}
           onValueChange = {setTypeDevice.bind()}
         >
-          <Picker.Item label = "chose device type" value = "0" color='red'></Picker.Item>
-          <Picker.Item label = "Light" value = "Light"></Picker.Item>
-          <Picker.Item label = "Sensor" value = "Sensor"></Picker.Item>
+          <Picker.Item label = "Choose Device Type" value = "0" color='red'></Picker.Item>
+          <Picker.Item label = "LIGHT" value = "Light"></Picker.Item>
+          <Picker.Item label = "SENSOR" value = "Sensor"></Picker.Item>
         </Picker>
         {typeError && typeErrorRender()}
       </View>
@@ -144,9 +147,9 @@ export default function addingScreen({navigation}) {
             selectedValue = {seletedState}
             onValueChange = {setStageDevice.bind()}
           >
-            <Picker.Item label = "pick light state" value = "0" color = 'red'></Picker.Item>
-            <Picker.Item label = "On state" value = "true"></Picker.Item>
-            <Picker.Item label = "Off state" value = "false"></Picker.Item>
+            <Picker.Item label = "Pick Light State" value = "0" color = 'red'></Picker.Item>
+            <Picker.Item label = "ON state" value = "true"></Picker.Item>
+            <Picker.Item label = "OFF state" value = "false"></Picker.Item>
           </Picker>
           {stateError && stateErrorRender()}
         </View>
@@ -155,7 +158,7 @@ export default function addingScreen({navigation}) {
     case 'Sensor':{
       return(
         <View style={styles.textInputContainer}>
-          <Text style ={styles.textsensorvalue}>pick Sensor value : {seletedState}</Text>
+          <Text style ={styles.textsensorvalue}>PICK VALUE : {seletedState ? seletedState : 500}</Text>
           <Slider
             style = {styles.slidesensorvalue}
             step = {1}
@@ -172,28 +175,38 @@ export default function addingScreen({navigation}) {
   }
   
   return (
-    <View style={styles.searchContainer}>
-      
-      {renderType()}
-      {renderState()}
-      <View style={styles.textInputContainer}>
-        <TextInput
-          style={styles.textInput}
-          onChangeText={name => setName(name)}
-          placeholder="Device Name"
+        <ScreenTemplate
+          screenIndex={2}
+          navigation={navigation}
+          bodyComponents = {
+            <View style = {styles.searchContainer}>
+              {renderType()}
+              {renderState()}
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={name => setName(name)}
+                  placeholder="Device Name"
+                />
+                {nameError && nameErrorRender()}
+              </View>
+              <TouchableOpacity style={styles.saveButton}>
+                <Text style={styles.saveText} onPress={() => onConfirm()}>
+                  Add New Device
+                </Text>
+              </TouchableOpacity>
+            </View>
+          }
         />
-        {nameError && nameErrorRender()}
-      </View>
-      <TouchableOpacity style={styles.saveButton}>
-        <Text style={styles.saveText} onPress={() => onConfirm()}>
-          Add New Device
-        </Text>
-      </TouchableOpacity>
-    </View>
+    
+    
   );
 }
 
 const styles = StyleSheet.create({
+  searchContainer:{
+    bottom: -20
+  },
   textInputContainer: {
     marginTop: 20,
     height: 50,
@@ -235,7 +248,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   slidesensorvalue:{
-    width: Dimensions.get('window').width - 200, 
+    width: Dimensions.get('window').width - 150, 
     alignSelf : 'flex-end',
     bottom: 25,
   }
