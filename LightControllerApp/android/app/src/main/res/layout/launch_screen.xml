@@ -24,8 +24,8 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/chewy"
         android:text="@string/light_controller_app"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="#14808E"
-        android:textSize="40sp"
         android:textStyle="bold" />
 
 </RelativeLayout>
