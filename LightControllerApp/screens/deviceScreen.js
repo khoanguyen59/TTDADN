@@ -13,6 +13,7 @@ import FlatListComponent from '../components/deviceItem.js';
 import {selectedRoom} from './homeScreen.js';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import { globalStyles } from '../styles/global.js';
+import MovableView from 'react-native-movable-view';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -53,14 +54,19 @@ class deviceScreen extends React.Component {
   renderControlButton = () => {
     return (
       <View style={styles.actionButtonContainer}>
-        <TouchableOpacity
-          style={styles.timerButton}
-          onPress={() => this.props.navigation.navigate('SetTimer')}>
-          <Image
-            source={require('../icons/timerIcon.png')}
-            style={styles.image}
-          />
-        </TouchableOpacity>
+        <MovableView
+          disabled={false}
+          onMove={ values => console.log(values) }
+        >
+          <TouchableOpacity
+            style={styles.timerButton}
+            onPress={() => this.props.navigation.navigate('SetTimer')}>
+            <Image
+              source={require('../icons/timerIcon.png')}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+        </MovableView>
       </View>
     );
   };
@@ -78,6 +84,7 @@ class deviceScreen extends React.Component {
           <FlatList
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
+            style= {{marginBottom: 72}}
             keyExtractor={item => item.deviceID.toString()}
             renderItem={({item}) => {
               return <FlatListComponent {...item} />;

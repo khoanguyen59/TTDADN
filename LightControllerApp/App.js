@@ -96,6 +96,7 @@ if (Platform.OS === 'android') {
 
 //-------------------------------------------------------------------------------
 const AppNavigator = createStackNavigator();
+console.disableYellowBox = true;
 const App = () => {
   useEffect(()=>{
     SplashScreen.hide();
