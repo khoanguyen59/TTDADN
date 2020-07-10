@@ -86,9 +86,9 @@ class setTimerScreen extends React.Component {
     return (
       <View style={styles.container}>
         {/*Header Navigation*/}
-        <View style={styles.headContainer}>
+        {/* <View style={styles.headContainer}>
           <Button title="Set Timer" />
-        </View>
+        </View> */}
         {/*Select Weekday*/}
         <View style={styles.dayList}>
           <WeekDayComponent {...weekDays[0]} />
