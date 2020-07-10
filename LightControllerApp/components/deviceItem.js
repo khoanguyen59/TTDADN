@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Switch,
 } from 'react-native';
+import {ListItem} from 'react-native-elements'
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
 
@@ -129,25 +130,35 @@ class FlatListComponent extends Component {
   };
 
   render = () => {
-    var icon = this.props.deviceType == 'Light'
-      ? require('../icons/light-on.png')
-      : require('../icons/light-sensor.png');
+    var avatar_url = this.props.deviceType == 'Light'
+      ? require("../icons/light-on.png")
+      : require("../icons/light-sensor.png")
     return (
-      <TouchableOpacity
-        style={this.state.selected ? (this.state.statusState ? styles.itemOn1 : styles.itemOn2) : (this.state.statusState? styles.item1 : styles.item2)}
-        onPress={() => this.toggleSelect()}>
-        <View style={styles.listContainer}>
-          <Image 
-            source={icon}
-            style = {styles.image}
-          />
-          <Text style={styles.title}>
-            {this.props.deviceName} {this.props.deviceID}
-          </Text>
-          {this.props.deviceType === 'Light' && this.switchRender()}
-          {/*<Text style={styles.name}>{title.devicePosition}</Text>*/}
-        </View>
-      </TouchableOpacity>
+      this.props.deviceType == 'Light' ?
+      <ListItem
+        style={this.state.selected ? styles.itemOn : styles.item1}
+        leftAvatar = {{ source : avatar_url }} 
+        title = {this.props.deviceName}
+        subtitle = {this.props.deviceState == true ? 'State: On' : 'State: Off'}
+        onPress={() => this.toggleSelect()}
+        switch = {{
+        onValueChange: (value) =>{
+          this.setState({switchVal: value});
+          toggleState(this.props);
+          this.setState({statusState: !this.state.statusState})
+        },
+        value: this.state.switchVal}}
+
+        /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+      />
+      :
+      <ListItem
+        style={styles.item2}
+        leftAvatar = {{ source :avatar_url}} 
+        title = {this.props.deviceName}
+        onPress={() => this.toggleSelect()}
+        /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+      />
     );
   };
 }
@@ -155,41 +166,23 @@ class FlatListComponent extends Component {
 const styles = StyleSheet.create({
   item1: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: 5,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 35,
-    borderWidth: 1,
-    borderColor: 'gray',
   },
   item2: {
     backgroundColor: 'gray',
-    padding: 20,
+    padding: 5,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 35,
-    borderWidth: 1,
-    borderColor: 'gray',
   },
-  itemOn1: {
-    backgroundColor: 'white',
-    padding: 20,
+  itemOn: {
+    backgroundColor: 'green',
+    padding: 5,
     marginVertical: 8,
     marginHorizontal: 16,
-    borderRadius: 35,
-    borderWidth: 2,
-    borderColor: 'green',
   },
 
-  itemOn2: {
-    backgroundColor: 'gray',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 35,
-    borderWidth: 2,
-    borderColor: 'green',
-  },
   title: {
     fontSize: 30,
   },
