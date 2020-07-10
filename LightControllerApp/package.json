@@ -25,6 +25,7 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal-datetime-picker": "^8.7.1",
+    "react-native-mqtt-angelos3lex": "^0.4.26",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.2",
     "react-native-screens": "^2.8.0",
