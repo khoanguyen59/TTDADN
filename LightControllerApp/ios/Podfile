@@ -77,6 +77,11 @@ target 'LightControllerApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
+<<<<<<< HEAD
+=======
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
+>>>>>>> AddDevice_homescreen_fix
   target 'LightControllerAppTests' do
     inherit! :complete
     # Pods for testing

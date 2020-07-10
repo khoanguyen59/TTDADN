@@ -1,16 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
-  SafeAreaView,
   View,
-  FlatList,
   StyleSheet,
-  Text,
-  Button,
-  TouchableOpacity,
-  Image,
-  ToastAndroid,
 } from 'react-native';
-import {TouchableHighlight} from 'react-native-gesture-handler';
 import NavigationTab from '../components/navigationTab';
 
 export default function ScreenTemplate({
@@ -22,12 +14,8 @@ export default function ScreenTemplate({
   const tabInfos = [
     {tabName: 'Device', imageSrc: require('../icons/deviceIcon.png'), key: '1'},
     {tabName: 'Adding', imageSrc: require('../icons/addingIcon.png'), key: '2'},
-    {
-      tabName: 'History',
-      imageSrc: require('../icons/historyIcon.png'),
-      key: '3',
-    },
-    {tabName: 'Timer', imageSrc: require('../icons/timerIcon.png'), key: '4'},
+    {tabName: 'History', imageSrc: require('../icons/historyIcon.png'), key: '3',},
+    {tabName: 'Timer', imageSrc: require('../icons/timerListIcon.png'), key: '4',},
   ];
 
   const tabPressHandler = tabToNav => () => navigation.navigate(tabToNav);
@@ -46,17 +34,6 @@ export default function ScreenTemplate({
       <View style={styles.headContainer}>{headComponents}</View>
       <View style={styles.bodyContainer}>{bodyComponents}</View>
       <View style={styles.bottomContainer}>
-        {/*legacy code*/
-        /*<View style={styles.bottomButtonContainer}>
-            <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={tabPressHandler('Setting')}>
-              <Image
-                source={require('../icons/settingIcon.png')}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-          </View>*/}
         {displayTabs}
       </View>
     </View>
@@ -85,6 +62,8 @@ const styles = StyleSheet.create({
     height: 36,
     width: '100%',
     maxWidth: 450,
+    borderTopWidth: 1,
+    borderTopColor: 'lightgrey',
   },
   bottomButtonContainer: {
     flex: 1,

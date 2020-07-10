@@ -1,4 +1,5 @@
 import React from 'react';
+import {globalStyles} from '../styles/global';
 import {StyleSheet, View, TouchableOpacity, Image} from 'react-native';
 
 export default function NavigationTab({selected, pressHandler, imageSrc}) {
@@ -29,9 +30,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   bottomButtonSelected: {
+    ...globalStyles.primaryColor,
     flex: 1,
     paddingTop: 2,
     paddingBottom: 2,
-    backgroundColor: '#2095f3',
   },
 });

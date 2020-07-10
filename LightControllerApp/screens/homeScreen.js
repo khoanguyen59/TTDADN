@@ -1,7 +1,8 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Text} from 'react-native';
+import {View, FlatList, StyleSheet, Text,Button, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
+import {globalStyles} from '../styles/global';
 import {eraseList} from '../components/deviceItem.js';
 
 const firebaseConfig = {
@@ -63,11 +64,19 @@ class homeScreen extends React.Component {
       <View style={styles.container} pointerEvents="box-none">
         <FlatList
           pointerEvents="none"
+          style = {styles.container_flatlist}
+          numColumns= {2}
           navigation={navigation}
           data={this.state.RoomList}
           renderItem={this.renderItem}
           keyExtractor={item => item.roomID.toString()}
         />
+          <Button
+          style = {styles.addButton}
+          title = "Add room"
+          onPress = {() => {this.props.navigation.navigate('AddRoom');}
+          }
+          />
       </View>
     );
   };
@@ -75,20 +84,41 @@ class homeScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
+    justifyContent: 'center',
+    flex: 1,
+  },
+  container_flatlist:{
+    flex: 1,
+    marginVertical: 20,
+  },
+  list: {
     flex: 1,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    alignItems: 'center',
+    backgroundColor: '#2095f3',
     padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    marginVertical: 10,
+    marginHorizontal: 10,
+    width: Dimensions.get('window').width / 2 - 20,
+    borderRadius: 15,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   title: {
     fontSize: 32,
+    color: 'white'
   },
   name: {
     fontSize: 16,
+    color: 'white'
   },
+  addButton: {
+    ...globalStyles.alternativeColor,
+    position: 'absolute',
+    bottom:0,
+    left:0,
+  }
 });
 
 export default homeScreen;

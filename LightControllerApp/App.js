@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import {NavigationContainer, DarkTheme, DefaultTheme} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import homeScreen from './screens/homeScreen';
 import deviceScreen from './screens/deviceScreen';
@@ -9,6 +9,9 @@ import setTimerScreen from './screens/setTimerScreen';
 import historyScreen from './screens/historyScreen';
 import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
+import addRoom from './screens/addRoomScreen';
+import SplashScreen from 'react-native-splash-screen';
+
 
 import * as firebase from 'firebase';
 
@@ -34,20 +37,36 @@ function readUserData() {
       console.log(snapshot.val());
     });
 }
-
+const MyTheme = {
+  dark: false,
+  colors: {
+    primary: '#ffffff',
+    background: '#ffffff',
+    card: '#2095f3',
+    text: '#ffffff',
+    border: '#ffffff',
+  },
+};
 const AppNavigator = createStackNavigator();
 const App = () => {
+  useEffect(()=>{
+    SplashScreen.hide();
+  },[])
   readUserData();
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme = {MyTheme}
+      >
       <AppNavigator.Navigator>
         <AppNavigator.Screen name="Home" component={homeScreen} />
+        <AppNavigator.Screen name="AddRoom" component={addRoom} />
         <AppNavigator.Screen name="Device" component={deviceScreen} />
         <AppNavigator.Screen name="Setting" component={settingScreen} />
         <AppNavigator.Screen name="SetTimer" component={setTimerScreen} />
         <AppNavigator.Screen name="History" component={historyScreen} />
         <AppNavigator.Screen name="Adding" component={addingScreen} />
         <AppNavigator.Screen name="Timer" component={timerScreen} />
+        
       </AppNavigator.Navigator>
     </NavigationContainer>
   );

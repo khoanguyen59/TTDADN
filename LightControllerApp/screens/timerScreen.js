@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet,
-  View,
-  ScrollView,
-  VirtualizedList,
   FlatList,
 } from 'react-native';
 import ScreenTemplate from './screenTemplate';
-import { globalStyles } from '../styles/global';
 import TimersDropdown from '../components/timer_components/timersDropdown';
 import * as firebase from 'firebase';
 
@@ -46,35 +41,28 @@ if (!firebase.apps.length) {
     ],
   },
 ];*/
-var timerDataList;
-
-async function readTimerData() {
-  var snapshot = await firebase
-    .database()
-    .ref('/timingList')
-    .once('value');
-  return snapshot.val();
-}
-timerDataList = readTimerData();
 
 export default function timerScreen({ navigation }) {
-  var customizedList = [];
-  for (let element of Object.keys(timerDataList._55)) {
-    timerDataList._55[element] = timerDataList._55[element].filter(function (x) {
-      return x !== undefined;
-    });
-    timerDataList._55[element].map(e => {
-      e.room = element;
-    });
-    customizedList.push(timerDataList._55[element]);
+
+  const [roomList, setRoomList] = useState([]);
+
+  const readRoomData = () => {
+    firebase
+      .database()
+      .ref('roomList')
+      .once('value')
+      .then(snapshot => {setRoomList(snapshot.val());});
   }
+
+  useEffect(() => readRoomData());
 
   const timersDropdowns = (
     <FlatList
+      keyExtractor={item => item.roomID.toString()}
       style={{ marginBottom: 50, marginTop: -50 }}
-      data={customizedList}
+      data={roomList}
       renderItem={({ item }) => (
-        <TimersDropdown key={item[0].deviceID} timerData={item} />
+        <TimersDropdown key={item.roomID.toString()} roomName={item.roomName} />
       )}
     />
   );

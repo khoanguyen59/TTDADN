@@ -12,6 +12,7 @@ import * as firebase from 'firebase';
 import FlatListComponent from '../components/deviceItem.js';
 import {selectedRoom} from './homeScreen.js';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
+import { globalStyles } from '../styles/global.js';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -51,7 +52,7 @@ class deviceScreen extends React.Component {
 
   renderControlButton = () => {
     return (
-      <View style={styles.container}>
+      <View style={styles.actionButtonContainer}>
         <TouchableOpacity
           style={styles.timerButton}
           onPress={() => this.props.navigation.navigate('SetTimer')}>
@@ -70,15 +71,14 @@ class deviceScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.headButton}>
-            <Button title={selectedRoom} />
+            <Button title={selectedRoom} style = {{backgroundColor: '#edf6fe'}}/>
           </View>
         </View>
         <TouchableWithoutFeedback>
           <FlatList
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
-            keyExtractor={item => item.deviceName.toString()}
-            style={{marginBottom: 130}}
+            keyExtractor={item => item.deviceID.toString()}
             renderItem={({item}) => {
               return <FlatListComponent {...item} />;
             }}
@@ -119,7 +119,7 @@ class deviceScreen extends React.Component {
               style={styles.bottomButton}
               onPress={() => this.props.navigation.navigate('Timer')}>
               <Image
-                source={require('../icons/timerIcon.png')}
+                source={require('../icons/timerListIcon.png')}
                 style={styles.image}
               />
             </TouchableOpacity>
@@ -135,13 +135,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
+  actionButtonContainer: {
+    
+    flex: 1,
+    justifyContent: 'space-between',
+  },
   headContainer: {
     flexDirection: 'row',
+    backgroundColor: '#f9c2ff',
   },
   headButton: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#2095f3',
+    backgroundColor: '#f9c2ff',
   },
   item: {
     backgroundColor: '#f9c2ff',
@@ -156,17 +162,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   timerButton: {
+    ...globalStyles.alternativeColor,
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
     position: 'absolute',
-    left: 15,
+    marginBottom: 50,
+    padding: 10,
+    right: 15,
     bottom: 70,
     width: 50,
     height: 50,
-    backgroundColor: '#fff',
     borderRadius: 50,
   },
   bottomContainer: {
+    flex: 1,
+    justifyContent: 'center',
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
@@ -174,22 +184,28 @@ const styles = StyleSheet.create({
     height: 36,
     width: '100%',
     maxWidth: 450,
+    borderTopWidth: 1,
+    borderTopColor: 'lightgrey',
   },
   bottomButtonContainer: {
     flex: 1,
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
+    //...StyleSheet.absoluteFillObject,
     width: 'auto',
     height: '100%',
     resizeMode: 'contain',
   },
   bottomButtonOn: {
+    ...globalStyles.primaryColor,
     flex: 1,
-    backgroundColor: '#2095f3',
+    paddingTop: 2,
+    paddingBottom: 2,
   },
   bottomButton: {
     flex: 1,
+    paddingTop: 2,
+    paddingBottom: 2,
     backgroundColor: 'white',
   },
 });

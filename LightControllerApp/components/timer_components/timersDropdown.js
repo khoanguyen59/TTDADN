@@ -28,13 +28,9 @@ if (!firebase.apps.length) {
 //     });
 // };
 
-//var initDropdown = true;
-//var hidden = true;
+export default function TimersDropdown({roomName}) {
 
-export default function TimersDropdown({timerData}) {
-
-  const [timerItems, setTimerItems] = useState(timerData);
-  const [displayItems, setDisplayItems] = useState([]);
+  const [timerItems, setTimerItems] = useState([]);
 
   const locationTab = (
     <TouchableOpacity
@@ -42,11 +38,15 @@ export default function TimersDropdown({timerData}) {
       onPress={
         () => {
           //setDisplayItems(displayItems.length == 0 ? /*(initDropdown ? timerData : timerItems)*/ timerItems : []);
-          //initDropdown = false;
-          setTimerItems(timerItems.length == 0 ? timerData : [])
-        }
+          // setTimerItems(timerItems.length == 0 ? timerData : [])
+          if (timerItems.length === 0) {
+            firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+              setTimerItems(snapshot.val());});
+          }
+          else setTimerItems([]);
+          }
         }>
-      <Text style={globalStyles.whiteTitle}> {timerData[0].room} </Text>
+      <Text style={globalStyles.whiteTitle}> {roomName} </Text>
     </TouchableOpacity>
   );
 
@@ -54,31 +54,48 @@ export default function TimersDropdown({timerData}) {
     const idxToDel = timerItems.indexOf(timerItems.filter((timer) => timer == timerToDelete)[0]);
 
     Alert.alert(
-      'Alert',
+      'Delete',
       'Are you sure?',
       [
         {text: 'No', onPress:()=> console.log('Cancelled')},
         {text: 'Yes', onPress:()=> {
-          firebase.database().ref('timingList').child(timerToDelete.room).child(idxToDel).remove(
+          firebase.database().ref('timingList/' + roomName).child(idxToDel).remove(
             (error) => {
                 setTimerItems(prevTimerItems => prevTimerItems.filter((timerItem, index)=> index != idxToDel));
                 alert('Removed Successfully');
               }
           )
           .then(
-            () => firebase.database().ref('timingList').child(timerToDelete.room).set(
+            () => firebase.database().ref('timingList/' + roomName).set(
             timerItems.filter((timerItem, index) => index != idxToDel)))
           .catch(
             (error) => { alert("Remove Failed: " + error.message); }
           );
-          //setTimerItems(prevTimerItems => prevTimerItems.filter((timerItem,index)=>index != idxToDel));
-          //firebase.database().ref('timingList').child(timerToDelete.room).set(timerItems);
-          // alert('deleted');
         }}
       ]
     )
   }
-
+  // day in database follow ABC's so must convert to 2-S
+  function convertDay(item){
+    var date = {
+      Monday:'true',
+      Tuesday:'true',
+      Wednesday:'true',
+      Thursday:'true',
+      Friday:'true',
+      Saturday:'true',
+      Sunday:'true',
+    }
+    date.Monday = item.Monday;
+    date.Tuesday = item.Tuesday;
+    date.Wednesday = item.Wednesday;
+    date.Thursday = item.Thursday;
+    date.Friday = item.Friday;
+    date.Saturday = item.Saturday;
+    date.Sunday = item.Sunday;
+    return date;
+  }
+  // touch able item
   return (
     <View>
       {locationTab}
@@ -90,7 +107,9 @@ export default function TimersDropdown({timerData}) {
             key={item.deviceID}
             deviceName={item.deviceName}
             setTime={item.time}
-            setDates={Object.values(item.day)}
+            //convert day of item
+            setDates={Object.values(convertDay(item.day))}
+            action={item.off}
           />
         </TouchableOpacity>
       ))}
@@ -100,11 +119,9 @@ export default function TimersDropdown({timerData}) {
 
 const styles = StyleSheet.create({
   locationTab: {
-    borderWidth: 2,
-    backgroundColor: 'rgb(36, 48, 94)',
-  },
-  border: {
-    borderWidth: 2,
-    backgroundColor: 'rgb(255, 48, 94)',
+    ...globalStyles.primaryColor,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    textAlign: 'center',
   },
 });

@@ -7,5 +7,17 @@ export const globalStyles = StyleSheet.create({
   whiteTitle: {
     fontSize: 32,
     color: 'white'
+  },
+  regularText: {
+    fontSize: 16,
+  },
+  primaryColor: {
+    backgroundColor: '#2095f3',
+  },
+  alternativeColor: {
+    backgroundColor: '#e58e00',
+  },
+  secondaryColor: {
+    backgroundColor: '#333',
   }
 })

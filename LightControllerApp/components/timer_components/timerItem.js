@@ -2,21 +2,26 @@ import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import {globalStyles} from '../../styles/global';
 
-const daysOfWeek = ['2', '3', '4', '5', '6', '7', 'S'];
+const daysOfWeek = ['M', 'T', 'W', 'Th', 'F', 'Sa', 'Su'];
+const actionTxt = { on: 'ON', off: 'OFF'};
 
-export default function TimerItem({deviceName, setTime, setDates}) {
+export default function TimerItem({deviceName, setTime, setDates, action}) {
   return (
     <View style={styles.timerItemContainer}>
       <View style={styles.itemContainer}>
         <Text style={globalStyles.title}>{deviceName}</Text>
         <Text style={styles.boldText}>{setTime}</Text>
       </View>
-      <View style={styles.datesContainer}>
-        {setDates.map((date, index) => (
-          <Text key={index} style={styles.borderText}>
-            {date ? daysOfWeek[index] : '  '}
-          </Text>
-        ))}
+      <View style={styles.rightContainer}>
+        <Text style={styles.boldText}>{action ? actionTxt.off : actionTxt.on}</Text>
+        <View style={styles.datesContainer}>
+          {setDates.map((date, index) => (
+            <Text key={index} style={date ? styles.boldText : styles.fadedText}>
+              {' ' + daysOfWeek[index] + ' '}
+            </Text>
+          )
+          )}
+        </View>
       </View>
     </View>
   );
@@ -25,21 +30,18 @@ export default function TimerItem({deviceName, setTime, setDates}) {
 const styles = StyleSheet.create({
   timerItemContainer: {
     flexDirection: 'row',
-    backgroundColor: 'rgb(172, 213, 56)',
+    backgroundColor: 'white',
     justifyContent: 'space-around',
-    height: 100,
-    margin: 10,
-    borderRadius: 10,
+    borderColor: 'lightgrey',
+    borderWidth: 1
+  },
+  fadedText: {
+    ...globalStyles.regularText,
+    color: 'lightgrey',
   },
   boldText: {
-    fontSize: 32,
+    ...globalStyles.regularText,
     fontWeight: 'bold',
-  },
-  borderText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    margin: 3,
-    padding: 3,
   },
   itemContainer: {
     margin: 5,
@@ -49,6 +51,12 @@ const styles = StyleSheet.create({
   datesContainer: {
     margin: 5,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rightContainer:{
+    margin: 5,
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },

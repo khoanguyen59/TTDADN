@@ -37,7 +37,6 @@ async function numChildCount(room) {
 
 export async function setTimer() {
   var currentCount = await numChildCount(selectedRoom);
-
   for (let element of selectedList) {
     firebase
       .database()
