@@ -59,7 +59,7 @@ export default function timerScreen({ navigation }) {
       .then(snapshot => {setRoomList(snapshot.val());});
   }
 
-  useEffect(() => readRoomData(),[]);
+  useEffect(() => readRoomData());
 
   const timersDropdowns = (
     <FlatList

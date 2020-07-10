@@ -6,6 +6,7 @@ import {
   Text,
   Button,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import SummaryItem from '../components/summaryItem';
@@ -97,7 +98,7 @@ export default function historyScreen({ navigation }){
   
   const title = (
     <View style={styles.headContainer}>
-      <Button title={"Log Summary " + pickedDate}/>
+      <Text style={styles.title}>{pickedDate}</Text>
     </View>
   );
 
@@ -125,11 +126,10 @@ export default function historyScreen({ navigation }){
       {logList ? logListComponent : noEventImage}
       <View style={styles.datePickButtonContainer}>
         <View style={styles.datePickButton}>
-          <Button 
-            color={globalStyles.alternativeColor.backgroundColor}
-            title={"PICK A DATE"}
-            onPress={onButtonPress}
-            />  
+          <TouchableOpacity 
+            onPress={onButtonPress}>
+              <Text style={styles.buttonText}>PICK A DATE</Text>
+          </TouchableOpacity>  
           <DateTimePicker
             mode="date"
             isVisible={isDatePickerVisible}
@@ -161,8 +161,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headContainer: {
+    ...globalStyles.alternativeColor,
     width: '100%',
     maxWidth: 450,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    ...globalStyles.title,
+    color: "white",
   },
   datePickButtonContainer: {
     flex: 1, 
@@ -171,9 +179,18 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   datePickButton: {
+    ...globalStyles.alternativeColor,
     alignItems: 'center',
     flexDirection: 'row',
-    width: 100,
+    width: 120,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 30,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    ...globalStyles.regularText, 
+    color: '#fff',
   },
   imageContainer: {
     alignItems: 'center',
