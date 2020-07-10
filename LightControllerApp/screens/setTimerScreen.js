@@ -86,9 +86,9 @@ class setTimerScreen extends React.Component {
     return (
       <View style={styles.container}>
         {/*Header Navigation*/}
-        <View style={styles.headContainer}>
+        {/* <View style={styles.headContainer}>
           <Button title="Set Timer" />
-        </View>
+        </View> */}
         {/*Select Weekday*/}
         <View style={styles.dayList}>
           <WeekDayComponent {...weekDays[0]} />
@@ -111,11 +111,23 @@ class setTimerScreen extends React.Component {
           onCancel={this.hideDatePicker}
         />
         <View style={styles.switchContainer}>
+          <View
+            style = {styles.SwitchText}
+          >
+            <Text
+              style = {{
+                alignSelf: 'center',
+                justifyContent:'center',
+              }}
+            >{this.state.switchVal? 'ON' : 'OFF'}</Text>
+          </View>
+          <Text>     </Text>
           <Switch
             style={styles.switch}
             onValueChange={value => this.setState({switchVal: value})}
             value={this.state.switchVal}
           />
+        
         </View>
         <TouchableOpacity
           style={styles.saveButton}
@@ -188,15 +200,18 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   timeButton: {
-    backgroundColor: 'green',
+    alignItems: 'center',
+    backgroundColor: '#99cccc',
     position: 'absolute',
-    height: 50,
+    height: 45,
     width: 150,
     alignSelf: 'center',
     marginTop: 200,
     borderRadius: 10,
+    justifyContent: 'center',
   },
   switchContainer: {
+    flexDirection: 'row',
     alignSelf: 'center',
     marginTop: 300,
     position: 'absolute',
@@ -212,6 +227,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 380,
     borderRadius: 10,
+    justifyContent: 'center',
+    // padding: 10,
+    // margin: 15,
+    // height: 40,
+    // width: 150,
+    // alignSelf: 'center',
+    // borderRadius: 45,
+    // alignItems: 'center',
   },
   bottomContainer: {
     flexDirection: 'row',
@@ -263,6 +286,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
   },
+  SwitchText:{
+    width:30,
+    height:25,
+    alignSelf:'center',
+    justifyContent:'center',
+    backgroundColor:'#99cccc',
+    borderRadius: 10,
+    // borderColor: 'black',
+    // borderWidth:0.5
+  }
 });
 
 export default setTimerScreen;

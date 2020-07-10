@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DarkTheme, DefaultTheme} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import homeScreen from './screens/homeScreen';
 import deviceScreen from './screens/deviceScreen';
@@ -37,7 +37,16 @@ function readUserData() {
       console.log(snapshot.val());
     });
 }
-
+const MyTheme = {
+  dark: false,
+  colors: {
+    primary: '#ffffff',
+    background: '#ffffff',
+    card: '#2095f3',
+    text: '#ffffff',
+    border: '#ffffff',
+  },
+};
 const AppNavigator = createStackNavigator();
 const App = () => {
   useEffect(()=>{
@@ -45,7 +54,9 @@ const App = () => {
   },[])
   readUserData();
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme = {MyTheme}
+      >
       <AppNavigator.Navigator>
         <AppNavigator.Screen name="Home" component={homeScreen} />
         <AppNavigator.Screen name="AddRoom" component={addRoom} />

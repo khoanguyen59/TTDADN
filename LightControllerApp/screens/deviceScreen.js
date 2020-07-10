@@ -71,7 +71,7 @@ class deviceScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.headButton}>
-            <Button title={selectedRoom} />
+            <Button title={selectedRoom} style = {{backgroundColor: '#edf6fe'}}/>
           </View>
         </View>
         <TouchableWithoutFeedback>
@@ -142,11 +142,12 @@ const styles = StyleSheet.create({
   },
   headContainer: {
     flexDirection: 'row',
+    backgroundColor: '#f9c2ff',
   },
   headButton: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#2095f3',
+    backgroundColor: '#f9c2ff',
   },
   item: {
     backgroundColor: '#f9c2ff',
