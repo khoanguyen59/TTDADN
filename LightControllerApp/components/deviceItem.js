@@ -60,8 +60,10 @@ export async function toggleState(element) {
       deviceState: !element.deviceState,
       deviceType: element.deviceType,
     });
-  console.log(selectedRoom);
-  console.log(element.deviceState);
+
+  console.log("Selected room: " + selectedRoom);
+  console.log("Device State: " + element.deviceState);
+
   firebase
     .database()
     .ref('logList/' + formattedDate)
@@ -130,7 +132,7 @@ class FlatListComponent extends Component {
   };
 
   render = () => {
-    var avatar_url = this.props.deviceType == 'Light'
+    const avatar_url = this.props.deviceType == 'Light'
       ? require("../icons/light-on.png")
       : require("../icons/light-sensor.png")
     return (
