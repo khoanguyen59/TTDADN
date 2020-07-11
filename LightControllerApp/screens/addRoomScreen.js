@@ -94,6 +94,7 @@ class addRoom extends React.Component {
              <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
                 placeholder = "Room ID here,     e.g., 101"
+                placeholderTextColor = 'white'
                //  placeholderTextColor = "black"
                 autoCapitalize = "none"
                 onChangeText = {this.handleRoomID}/>
@@ -101,6 +102,7 @@ class addRoom extends React.Component {
              <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
                 placeholder = "Room Name Here,     e.g., Classroom"
+                placeholderTextColor = 'white'
                //  placeholderTextColor = "black"
                 autoCapitalize = "none"
                 onChangeText = {this.handleRoomName}/>
@@ -119,18 +121,20 @@ class addRoom extends React.Component {
 
  const styles = StyleSheet.create({
     container: {
+       flex: 1,
        paddingTop: 23,
     },
     input: {
        margin: 15,
        paddingLeft: 10,
-       height: 40,
+       height: 60,
        borderColor: 'black',
-       borderWidth: 1,
+       borderWidth: 2,
        borderRadius: 20,
+       backgroundColor: '#00ffff'
     },
     submitButton: {
-       backgroundColor: '#2095f3',
+       backgroundColor: '#8a2be2',
        padding: 10,
        margin: 15,
        height: 40,
