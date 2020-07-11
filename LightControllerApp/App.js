@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
-import {NavigationContainer, DarkTheme, DefaultTheme} from '@react-navigation/native';
+import React, { useEffect, Component } from 'react';
+import {NavigationContainer,} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import homeScreen from './screens/homeScreen';
 import deviceScreen from './screens/deviceScreen';
@@ -11,6 +11,9 @@ import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
 import addRoom from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native'
+
+
 
 
 import * as firebase from 'firebase';
@@ -101,23 +104,27 @@ const App = () => {
   useEffect(()=>{
     SplashScreen.hide();
   },[])
+  
   readUserData();
+  
   return (
-    <NavigationContainer
-      theme = {MyTheme}
-      >
-      <AppNavigator.Navigator>
-        <AppNavigator.Screen name="Home" component={homeScreen} />
-        <AppNavigator.Screen name="AddRoom" component={addRoom} />
-        <AppNavigator.Screen name="Device" component={deviceScreen} />
-        <AppNavigator.Screen name="Setting" component={settingScreen} />
-        <AppNavigator.Screen name="SetTimer" component={setTimerScreen} />
-        <AppNavigator.Screen name="History" component={historyScreen} />
-        <AppNavigator.Screen name="Adding" component={addingScreen} />
-        <AppNavigator.Screen name="Timer" component={timerScreen} />
-        
-      </AppNavigator.Navigator>
-    </NavigationContainer>
+    <View style = {{flex:1}}>
+      <NavigationContainer
+        theme = {MyTheme}
+        >
+        <AppNavigator.Navigator>
+          <AppNavigator.Screen name="Home" component={homeScreen} />
+          <AppNavigator.Screen name="AddRoom" component={addRoom} />
+          <AppNavigator.Screen name="Device" component={deviceScreen} />
+          <AppNavigator.Screen name="Setting" component={settingScreen} />
+          <AppNavigator.Screen name="SetTimer" component={setTimerScreen} />
+          <AppNavigator.Screen name="History" component={historyScreen} />
+          <AppNavigator.Screen name="Adding" component={addingScreen} />
+          <AppNavigator.Screen name="Timer" component={timerScreen} />
+          
+        </AppNavigator.Navigator>
+      </NavigationContainer>
+    </View>
   );
 };
 export default App;

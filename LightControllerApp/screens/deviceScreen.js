@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   Image,
+  Animated,
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -77,7 +78,7 @@ class deviceScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.headButton}>
-            <Button title={selectedRoom} style = {{backgroundColor: '#edf6fe'}}/>
+            <Button title={selectedRoom.toString()} style = {{backgroundColor: '#edf6fe'}}/>
           </View>
         </View>
         <TouchableWithoutFeedback>

@@ -1,9 +1,12 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Text,Button, Dimensions} from 'react-native';
+import {View, FlatList, StyleSheet, Text,Button, Dimensions, Image,
+        Animated} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
 import {eraseList} from '../components/deviceItem.js';
+import Swiper from 'react-native-swiper'
+import MovableView from 'react-native-movable-view';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -24,6 +27,8 @@ export var selectedRoom;
 class homeScreen extends React.Component {
   state = {
     RoomList: [],
+    Guidestate : false,
+    animated: new Animated.Value(1)
   };
 
   readRoomData = () => {
@@ -35,7 +40,45 @@ class homeScreen extends React.Component {
         this.setState({RoomList: snapshot.val()});
       });
   };
-
+  renderguide = ()=>{
+      return (
+        <Animated.View style = {{
+          flex :1,
+          // position:'absolute',
+          transform: [{
+            scale: this.state.animated.interpolate({
+              inputRange:[0,1],
+              outputRange:[0,1]
+            })
+          }]
+        }}>
+          <Swiper style = {{}} showsButtons={true}>
+            <View style={styles.slide}>
+              <Text style={styles.text}>Hello Swiper</Text>
+            </View>
+            <View style={styles.slide}>
+              <Text style={styles.text}>Beautiful</Text>
+            </View>
+            <View style={styles.slide}>
+              <Text style={styles.text}>And simple</Text>
+              <View style = {styles.closeGuidecontain}>
+                <TouchableOpacity 
+                  style={styles.bottomContainer}
+                  onPress = {()=>{
+                    this.setState({Guidestate : false})
+                  }}>
+                <Text style={{color: '#ffffff',
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                            }}>Close Guide</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Swiper>
+        </Animated.View>
+      )
+    
+  }
   renderItem = ({item}) => {
     const {navigation} = this.props.navigation;
     return (
@@ -56,10 +99,46 @@ class homeScreen extends React.Component {
       </TouchableOpacity>
     );
   };
+  rendershowGuidebtn =()=>{
+    return(
+        <MovableView style={{
+          position:'absolute',
+          // backgroundColor:'red',
+          height:60, 
+          width:60,
+          borderRadius:30,
+        }}>
+          <TouchableOpacity
+            style={{
+              ...globalStyles.alternativeColor,
+              alignItems: 'center',
+              justifyContent:'center',
+              padding: 10,
+              height:60,
+              width:60,
+              borderRadius:30,
+            }}
+            activeOpacity = {0}
+            onPress = {()=>{
+              this.setState({Guidestate : true}),
+              this.state.animated.setValue(0),
+              Animated.spring(this.state.animated,{
+                toValue:1,
+                duration:2000,
+                useNativeDriver: true,
+              }).start();
+            }}
+          >
+            <Image source = {require('../icons/Guide.png') } style = {styles.image} ></Image>
+          </TouchableOpacity>
+        </MovableView>
+    );
+  }
 
   render = () => {
     this.readRoomData();
     const {navigation} = this.props.navigation;
+    if (this.state.Guidestate) {return this.renderguide();}
     return (
       <View style={styles.container} pointerEvents="box-none">
         <FlatList
@@ -71,15 +150,18 @@ class homeScreen extends React.Component {
           renderItem={this.renderItem}
           keyExtractor={item => item.roomID.toString()}
         />
+        {this.rendershowGuidebtn()}
+        <View style = {styles.addButton}>
           <Button
-          style = {styles.addButton}
-          title = "Add room"
-          onPress = {() => {this.props.navigation.navigate('AddRoom');}
-          }
+            style = {{flex:1}}
+            title = "Add room"
+            onPress = {() => {this.props.navigation.navigate('AddRoom');}
+            }
           />
+        </View>
       </View>
     );
-  };
+  }   
 }
 
 const styles = StyleSheet.create({
@@ -114,11 +196,40 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   addButton: {
-    ...globalStyles.alternativeColor,
+    // ...globalStyles.alternativeColor,
     position: 'absolute',
+    flexDirection: 'column',
     bottom:0,
-    left:0,
-  }
+    right:0,
+    width :'100%',
+  },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#97CAE5'
+  },
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  closeGuidecontain:{
+    flex: 1,
+    position :'absolute',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    bottom: 0,
+    right: 0,
+    height: '8%',
+    width: '50%',
+  },
+  image: {
+    // ...StyleSheet.absoluteFillObject,
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+  },
 });
 
 export default homeScreen;
