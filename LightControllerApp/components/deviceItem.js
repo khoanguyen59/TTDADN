@@ -7,9 +7,10 @@ import {
   TouchableOpacity,
   Switch,
 } from 'react-native';
-import {ListItem} from 'react-native-elements'
+import {ListItem} from 'react-native-elements';
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
+import MQTTConnection from '../mqtt/mqttConnection';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -20,10 +21,24 @@ const firebaseConfig = {
   messagingSenderId: '670980151251',
   appId: '1:670980151251:web:245ac428bec24de86a0126',
 };
+const subscribeTopic = 'Topic/Light';
+const publishTopic = 'Topic/LightD';
+const myUserName = 'BKvm';
+const myPassword = 'Hcmut_CSE_2020';
+
+//const uri = 'mqtt://52.230.26.121:1883';
+const uri = 'mqtt://52.187.125.59:1883';
+
+/*MQTTConnection.create('kiet', subscribeTopic, publishTopic,
+  {
+    uri: uri,
+    user: myUserName,
+    pass: myPassword,
+  });
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
-}
+}*/
 
 export var selectedList = [];
 
@@ -61,9 +76,6 @@ export async function toggleState(element) {
       deviceType: element.deviceType,
     });
 
-  console.log("Selected room: " + selectedRoom);
-  console.log("Device State: " + element.deviceState);
-
   firebase
     .database()
     .ref('logList/' + formattedDate)
@@ -76,6 +88,13 @@ export async function toggleState(element) {
       room: selectedRoom,
       time: formattedTime,
     });
+
+  var message = {
+    device_id: element.deviceID.toString(),
+    values: [element.deviceState ? '0' : '1', '255'],
+    room: selectedRoom,
+  };
+  await MQTTConnection.publish(publishTopic, JSON.stringify(message), 2, false);
 }
 
 //as props strictly reference to class Device Screen
@@ -100,7 +119,8 @@ class FlatListComponent extends Component {
   state = {
     selected: false,
     switchVal: this.props.deviceState,
-    statusState: this.props.deviceType == 'Light' ? this.props.deviceState : false,
+    statusState:
+      this.props.deviceType == 'Light' ? this.props.deviceState : false,
   };
 
   toggleSelect = () => {
@@ -124,7 +144,7 @@ class FlatListComponent extends Component {
         onValueChange={value => {
           this.setState({switchVal: value});
           toggleState(this.props);
-          this.setState({statusState: !this.state.statusState})
+          this.setState({statusState: !this.state.statusState});
         }}
         value={this.state.switchVal}
       />
@@ -132,32 +152,33 @@ class FlatListComponent extends Component {
   };
 
   render = () => {
-    const avatar_url = this.props.deviceType == 'Light'
-      ? require("../icons/light-on.png")
-      : require("../icons/light-sensor.png")
-    return (
-      this.props.deviceType == 'Light' ?
+    const avatar_url =
+      this.props.deviceType == 'Light'
+        ? require('../icons/light-on.png')
+        : require('../icons/light-sensor.png');
+    return this.props.deviceType == 'Light' ? (
       <ListItem
         style={this.state.selected ? styles.itemOn : styles.item1}
-        leftAvatar = {{ source : avatar_url }} 
-        title = {this.props.deviceName}
-        subtitle = {this.props.deviceState == true ? 'State: On' : 'State: Off'}
+        leftAvatar={{source: avatar_url}}
+        title={this.props.deviceName}
+        subtitle={this.props.deviceState == true ? 'State: On' : 'State: Off'}
         onPress={() => this.toggleSelect()}
-        switch = {{
-        onValueChange: (value) =>{
-          this.setState({switchVal: value});
-          toggleState(this.props);
-          this.setState({statusState: !this.state.statusState})
-        },
-        value: this.state.switchVal}}
+        switch={{
+          onValueChange: value => {
+            this.setState({switchVal: value});
+            toggleState(this.props);
+            this.setState({statusState: !this.state.statusState});
+          },
+          value: this.state.switchVal,
+        }}
 
         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
       />
-      :
+    ) : (
       <ListItem
         style={styles.item2}
-        leftAvatar = {{ source :avatar_url}} 
-        title = {this.props.deviceName}
+        leftAvatar={{source: avatar_url}}
+        title={this.props.deviceName}
         onPress={() => this.toggleSelect()}
         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
       />

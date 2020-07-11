@@ -135,8 +135,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
-  actionButtonContainer: {
-    
+  actionButtonContainer: {  
     flex: 1,
     justifyContent: 'space-between',
   },
