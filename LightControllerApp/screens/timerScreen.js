@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import {
-  StyleSheet,
-  View,
-  ScrollView,
-  VirtualizedList,
   FlatList,
 } from 'react-native';
 import ScreenTemplate from './screenTemplate';
-import { globalStyles } from '../styles/global';
 import TimersDropdown from '../components/timer_components/timersDropdown';
 import * as firebase from 'firebase';
 
@@ -59,7 +54,7 @@ export default function timerScreen({ navigation }) {
       .then(snapshot => {setRoomList(snapshot.val());});
   }
 
-  useEffect(() => readRoomData(),[]);
+  useEffect(() => readRoomData());
 
   const timersDropdowns = (
     <FlatList

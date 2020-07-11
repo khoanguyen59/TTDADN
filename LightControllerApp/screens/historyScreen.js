@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   FlatList,
   StyleSheet,
   Text,
   Button,
-  TouchableOpacity,
   Image,
+  TouchableOpacity
 } from 'react-native';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import SummaryItem from '../components/summaryItem';
-
+import ScreenTemplate from './screenTemplate';
+import {globalStyles} from '../styles/global';
 import * as firebase from 'firebase';
 
 const firebaseConfig = {
@@ -27,160 +28,132 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-class historyScreen extends React.Component {
-  state = {
-    isDatePickerVisible: false,
-    pickedDate: '',
-    isTimeRender: false,
-    logList: [],
-  };
+const screenIdx = 3;
 
-  readLogData = () => {
+function convertMonthToNumber(month) 
+{
+  switch (month) {
+    case 'Jan':
+      return '1';
+    case 'Feb':
+      return '2';
+    case 'Mar':
+      return '3';
+    case 'Apr':
+      return '4';
+    case 'May':
+      return '5';
+    case 'Jun':
+      return '6';
+    case 'Jul':
+      return '7';
+    case 'Aug':
+      return '8';
+    case 'Sep':
+      return '9';
+    case 'Oct':
+      return '10';
+    case 'Nov':
+      return '11';
+    case 'Dec':
+      return '12';
+  }
+};
+
+function formatDate(date) 
+{
+  return (date[2].startsWith("0") ? date[2][1] : date[2]) + '-' + convertMonthToNumber(date[1]) + '-' + date[3];
+}
+
+function getCurrentDate() 
+{
+  const currentDate = new Date().toString().split(' ');
+  return formatDate(currentDate);
+}
+
+export default function historyScreen({ navigation }){
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [pickedDate, setPickedDate] = useState(getCurrentDate());
+  const [logList, setLogList] = useState([]);
+
+  const readLogData = () => {
     firebase
-      .database()
-      .ref('logList/' + this.state.pickedDate)
-      .once('value')
-      .then(snapshot => {
-        this.setState({logList: snapshot.val()});
-        //console.log(JSON.stringify(this.state.pickedDate));
-      });
+    .database()
+    .ref('logList/' + pickedDate)
+    .once('value')
+    .then(snapshot => {
+      setLogList(snapshot.val());
+    })
   };
 
-  hideDatePicker = () => {
-    this.setState({isDatePickerVisible: false, isTimeRender: true});
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
   };
-
-  monthNumber = month => {
-    switch (month) {
-      case 'Jan':
-        return '1';
-      case 'Feb':
-        return '2';
-      case 'Mar':
-        return '3';
-      case 'Apr':
-        return '4';
-      case 'May':
-        return '5';
-      case 'Jun':
-        return '6';
-      case 'Jul':
-        return '7';
-      case 'Aug':
-        return '8';
-      case 'Sep':
-        return '9';
-      case 'Oct':
-        return '10';
-      case 'Nov':
-        return '11';
-      case 'Dec':
-        return '12';
-    }
-  };
-
-  handleDatePicked = date => {
+    
+  const handleDatePicked = (date) => {
     const mdate = date.toString().split(' ');
-
-    this.setState({
-      pickedDate: mdate[2] + '-' + this.monthNumber(mdate[1]) + '-' + mdate[3],
-    });
-    console.log(this.state.pickedDate);
-    this.hideDatePicker();
+    setPickedDate(mdate[2] + '-' + convertMonthToNumber(mdate[1]) + '-' + mdate[3]);
+    //hideDatePicker();
   };
+  
+  const title = (
+    <View style={styles.headContainer}>
+      <Text style={styles.title}>{pickedDate}</Text>
+    </View>
+  );
 
-  showDatePicker = () => {
-    this.setState({isDatePickerVisible: true});
-  };
+  const onButtonPress = () => setDatePickerVisibility(true);
 
-  renderDate = () => {
-    return <Text>{this.state.pickedDate}</Text>;
-  };
+  const logListComponent = (
+    <View style={{flex: 8}}>
+      <FlatList
+      data={logList}
+      keyExtractor={item => { item.deviceID.toString() + item.time }}
+      renderItem={({item, index}) => <SummaryItem {...[item, index]} />}
+    />
+    </View>
+  );
 
-  renderList = () => {
-    if (this.state.isTimeRender) {
-      return (
-        <FlatList
-          data={this.state.logList}
-          keyExtractor={item => {
-            item.deviceID;
-          }}
-          style={{marginBottom: 40}}
-          renderItem={({item, index}) => {
-            return <SummaryItem {...[item, index]} />;
-          }}
-        />
-      );
-    } else {
-      return null;
-    }
-  };
+  const noEventImage = (
+    <View style={{...styles.imageContainer, flex: 8}}>
+      <Image style={styles.image} source={require('../icons/eventIcon.png')}/>
+      <Text style={styles.noEventText}>{"No activity have been recorded\n that day."}</Text>
+    </View>
+  )
 
-  render = () => {
-    this.readLogData();
-    return (
-      <View style={styles.container}>
-        <View style={styles.headContainer}>
-          <Button title="Log Summary" />
-        </View>
-        <View style={styles.dateContainer}>
-          <Text style={styles.dateText}>Select Date</Text>
-          <TouchableOpacity
-            onPress={() => this.showDatePicker()}
-            style={styles.timeButton}>
-            {this.state.isTimeRender && this.renderDate()}
-          </TouchableOpacity>
-        </View>
-        <DateTimePicker
-          mode="date"
-          isVisible={this.state.isDatePickerVisible}
-          onConfirm={this.handleDatePicked}
-          onCancel={this.hideDatePicker}
-        />
-        {this.renderList()}
-        <View style={styles.bottomContainer}>
-          <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('Device')}>
-              <Image
-                source={require('../icons/deviceIcon.png')}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('Adding')}>
-              <Image
-                source={require('../icons/addingIcon.png')}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity style={styles.bottomButtonOn}>
-              <Image
-                source={require('../icons/historyIcon.png')}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.bottomButtonContainer}>
-            <TouchableOpacity
-              style={styles.bottomButton}
-              onPress={() => this.props.navigation.navigate('Timer')}>
-              <Image
-                source={require('../icons/timerIcon.png')}
-                style={styles.image}
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
+  const body = (
+    <View style={{flex:1}}>
+      {logList ? logListComponent : noEventImage}
+      <View style={styles.datePickButtonContainer}>
+        <View style={styles.datePickButton}>
+          <TouchableOpacity 
+            onPress={onButtonPress}>
+              <Text style={styles.buttonText}>PICK A DATE</Text>
+          </TouchableOpacity>  
+          <DateTimePicker
+            mode="date"
+            isVisible={isDatePickerVisible}
+            onConfirm={handleDatePicked}
+            onCancel={hideDatePicker}
+          />
+        </View>  
       </View>
-    );
-  };
+    </View>
+  );
+
+  useEffect(() => {
+    hideDatePicker();
+    readLogData();
+  }, [pickedDate]);
+
+  return (
+    <ScreenTemplate
+      screenIndex={screenIdx}
+      navigation={navigation}
+      headComponents={title}
+      bodyComponents={body}
+    />
+  );
 }
 
 const styles = StyleSheet.create({
@@ -188,63 +161,49 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headContainer: {
+    ...globalStyles.alternativeColor,
     width: '100%',
     maxWidth: 450,
-  },
-  dateContainer: {
-    flexDirection: 'row',
-    marginTop: 20,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  dateText: {
-    fontSize: 20,
-    flex: 0.5,
-  },
-  timeButton: {
-    backgroundColor: 'white',
-    flex: 0.8,
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 15,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 32,
+    ...globalStyles.title,
+    color: "white",
   },
-  name: {
-    fontSize: 16,
+  datePickButtonContainer: {
+    flex: 1, 
+    flexDirection: 'row', 
+    justifyContent: 'center',
+    marginBottom: 40,
   },
-  bottomContainer: {
+  datePickButton: {
+    ...globalStyles.alternativeColor,
+    alignItems: 'center',
     flexDirection: 'row',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    height: 36,
-    width: '100%',
-    maxWidth: 450,
+    width: 120,
+    height: 40,
+    alignSelf: 'center',
+    borderRadius: 30,
+    justifyContent: 'center',
   },
-  bottomButtonContainer: {
-    flex: 1,
+  buttonText: {
+    ...globalStyles.regularText, 
+    color: '#fff',
+  },
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   image: {
-    ...StyleSheet.absoluteFillObject,
-    width: 'auto',
-    height: '100%',
+    width: 150,
+    height: 150,
     resizeMode: 'contain',
+    marginBottom: 20,
   },
-  bottomButton: {
-    flex: 1,
-    backgroundColor: 'white',
-  },
-  bottomButtonOn: {
-    flex: 1,
-    backgroundColor: '#2095f3',
-  },
+  noEventText: {
+    ...globalStyles.regularText,
+    textAlign: 'center',
+  }
 });
-
-export default historyScreen;

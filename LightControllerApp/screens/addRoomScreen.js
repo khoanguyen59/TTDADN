@@ -123,6 +123,7 @@ class addRoom extends React.Component {
     container: {
        flex: 1,
        paddingTop: 23,
+       bottom: -90
     },
     input: {
        margin: 15,

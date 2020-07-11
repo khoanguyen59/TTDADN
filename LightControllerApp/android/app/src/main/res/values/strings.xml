@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">LightControllerApp</string>
+    <string name="light_controller_app">Light Controller App</string>
+    <string name="todo">TODO</string>
 </resources>

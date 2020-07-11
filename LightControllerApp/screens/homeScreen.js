@@ -2,6 +2,7 @@ import React from 'react';
 import {View, FlatList,TouchableHighlight ,StyleSheet, Text,Button,Modal, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
+import {globalStyles} from '../styles/global';
 import {eraseList} from '../components/deviceItem.js';
 
 const firebaseConfig = {
@@ -19,9 +20,6 @@ if (!firebase.apps.length) {
 }
 
 export var selectedRoom;
-
-
-
 
 class homeScreen extends React.Component {
   state = {
@@ -136,6 +134,7 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   addButton: {
+    ...globalStyles.alternativeColor,
     position: 'absolute',
     bottom:0,
     left:0,
