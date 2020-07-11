@@ -14,7 +14,7 @@ import timerScreen from './screens/timerScreen';
 import addRoom from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import MQTTConnection from './mqtt/mqttConnection';
 
 import * as firebase from 'firebase';
 
@@ -31,6 +31,50 @@ const firebaseConfig = {
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
+
+const subscribeTopic = 'Topic/Light';
+const publishTopic = 'Topic/LightD';
+const myUserName = 'BKvm';
+const myPassword = 'Hcmut_CSE_2020';
+
+//const uri = 'mqtt://52.230.26.121:1883';
+const uri = 'mqtt://52.187.125.59:1883';
+
+MQTTConnection.create('kiet', subscribeTopic, publishTopic, 
+  {
+    uri: uri,
+    user: myUserName,
+    pass: myPassword,
+  });
+
+MQTTConnection.attachCallbacks(
+  () => {
+    console.log('MQTT onConnectionOpened');
+    MQTTConnection.subscribe(subscribeTopic, 0);
+    //this.client.publish(this.publishTopic, messagePublishFormat(this.switchValue), qos, false);
+  },
+  (err) => {
+    console.log(`MQTT onConnectionClosed ${err}`);
+  },
+  (message) => {
+    if (!message) return;
+    const element = JSON.parse(message.data);
+    firebase
+    .database()
+    .ref('deviceList/' + element.room)
+    .child(element.device_id - 1)
+    .update({
+      deviceState: parseInt(element.values),
+      deviceID : 7,
+      deviceName : "Sensor Test",
+      deviceType : "Sensor",
+    });
+    console.log(`MQTT New message: ${element.values}`);
+  },
+  (error) => {
+    console.error(`MQTT onError: ${error}`);
+  },
+);
 
 const _setTimeout = global.setTimeout;
 const _clearTimeout = global.clearTimeout;

@@ -57,7 +57,7 @@ class deviceScreen extends React.Component {
           style={styles.timerButton}
           onPress={() => this.props.navigation.navigate('SetTimer')}>
           <Image
-            source={require('../icons/timerIcon.png')}
+            source={require('../icons/timerIcon_white.png')}
             style={styles.image}
           />
         </TouchableOpacity>
@@ -71,7 +71,7 @@ class deviceScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.headButton}>
-            <Button title={selectedRoom} style = {{backgroundColor: '#edf6fe'}}/>
+            <Button title={selectedRoom} color={globalStyles.alternativeColor}/>
           </View>
         </View>
         <TouchableWithoutFeedback>
@@ -141,13 +141,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   headContainer: {
+    
     flexDirection: 'row',
-    backgroundColor: '#f9c2ff',
   },
   headButton: {
+    ...globalStyles.alternativeColor,
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#f9c2ff',
   },
   item: {
     backgroundColor: '#f9c2ff',
@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
     position: 'absolute',
-    marginBottom: 50,
     padding: 10,
     right: 15,
     bottom: 70,
