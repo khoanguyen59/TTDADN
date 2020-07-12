@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   Image,
+  Animated,
 } from 'react-native';
 import * as firebase from 'firebase';
 

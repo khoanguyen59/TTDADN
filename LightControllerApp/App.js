@@ -1,9 +1,8 @@
 /* eslint-disable prettier/prettier */
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
-import {Platform, InteractionManager, StyleSheet, Image} from 'react-native';
-import {NavigationContainer, DarkTheme, DefaultTheme} from '@react-navigation/native';
-import {createStackNavigator, HeaderTitle} from '@react-navigation/stack';
+import React, { useEffect, Component } from 'react';
+import {NavigationContainer,} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import homeScreen from './screens/homeScreen';
 import deviceScreen from './screens/deviceScreen';
 import settingScreen from './screens/settingScreen';
@@ -13,8 +12,7 @@ import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
 import addRoomScreen from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native'
 
 import * as firebase from 'firebase';
 
@@ -112,7 +110,9 @@ const App = () => {
   useEffect(()=>{
     SplashScreen.hide();
   },[])
+  
   readUserData();
+  
   return (
     <NavigationContainer theme = {MyTheme}>
       <AppNavigator.Navigator>
