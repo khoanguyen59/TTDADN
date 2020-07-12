@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, Text,Button, Dimensions, Image,
         Animated} from 'react-native';
+import {View, FlatList,TouchableHighlight ,StyleSheet, Text,Button,Modal, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
@@ -28,7 +29,8 @@ class homeScreen extends React.Component {
   state = {
     RoomList: [],
     Guidestate : false,
-    animated: new Animated.Value(1)
+    animated: new Animated.Value(1),
+    show: true,
   };
 
   readRoomData = () => {
@@ -150,15 +152,31 @@ class homeScreen extends React.Component {
           renderItem={this.renderItem}
           keyExtractor={item => item.roomID.toString()}
         />
-        {this.rendershowGuidebtn()}
-        <View style = {styles.addButton}>
-          <Button
-            style = {{flex:1}}
-            title = "Add room"
-            onPress = {() => {this.props.navigation.navigate('AddRoom');}
-            }
-          />
-        </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.show}
+        >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Pick a room!</Text>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={() => {
+                  this.setState({show: !this.state.show})
+                  }}
+                >
+                  <Text style={styles.textStyle}>Close</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+        </Modal>
+        <Button
+          style = {styles.addButton}
+          title = "Add room"
+          onPress = {() => {this.props.navigation.navigate('AddRoom');}
+          }
+        />
       </View>
     );
   }   
@@ -200,36 +218,44 @@ const styles = StyleSheet.create({
     position: 'absolute',
     flexDirection: 'column',
     bottom:0,
-    right:0,
-    width :'100%',
+    left:0,
   },
-  slide: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#97CAE5'
+  centeredView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Dimensions.get('window').height / 4
   },
-  text: {
-    color: '#fff',
-    fontSize: 30,
-    fontWeight: 'bold',
+  modalView: {
+    margin: 20,
+    width: Dimensions.get('window').width - 20 ,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
   },
-  closeGuidecontain:{
-    flex: 1,
-    position :'absolute',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    bottom: 0,
-    right: 0,
-    height: '8%',
-    width: '50%',
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
   },
-  image: {
-    // ...StyleSheet.absoluteFillObject,
-    width: 50,
-    height: 50,
-    resizeMode: 'contain',
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
   },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
 
 export default homeScreen;

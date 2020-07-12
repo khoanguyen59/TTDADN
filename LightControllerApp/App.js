@@ -1,6 +1,8 @@
+/* eslint-disable prettier/prettier */
 import 'react-native-gesture-handler';
-import React, { useEffect, Component } from 'react';
-import {NavigationContainer,} from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import {Platform, InteractionManager, StyleSheet, Image} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import homeScreen from './screens/homeScreen';
 import deviceScreen from './screens/deviceScreen';
@@ -9,11 +11,11 @@ import setTimerScreen from './screens/setTimerScreen';
 import historyScreen from './screens/historyScreen';
 import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
-import addRoom from './screens/addRoomScreen';
+import addRoomScreen from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native'
 
 
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 
 import * as firebase from 'firebase';
@@ -50,7 +52,6 @@ const MyTheme = {
     border: '#ffffff',
   },
 };
-import {Platform, InteractionManager} from 'react-native';
 
 const _setTimeout = global.setTimeout;
 const _clearTimeout = global.clearTimeout;
@@ -99,7 +100,16 @@ if (Platform.OS === 'android') {
 
 //-------------------------------------------------------------------------------
 const AppNavigator = createStackNavigator();
-console.disableYellowBox = true;
+const screenOption = navigation => ({
+  headerLeft: () => (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigation.navigate('Home');
+      }}>
+      <Image source={require('./icons/homeIcon.png')} style={styles.image} />
+    </TouchableOpacity>
+  ),
+});
 const App = () => {
   useEffect(()=>{
     SplashScreen.hide();
@@ -108,23 +118,27 @@ const App = () => {
   readUserData();
   
   return (
-    <View style = {{flex:1}}>
-      <NavigationContainer
-        theme = {MyTheme}
-        >
-        <AppNavigator.Navigator>
-          <AppNavigator.Screen name="Home" component={homeScreen} />
-          <AppNavigator.Screen name="AddRoom" component={addRoom} />
-          <AppNavigator.Screen name="Device" component={deviceScreen} />
-          <AppNavigator.Screen name="Setting" component={settingScreen} />
-          <AppNavigator.Screen name="SetTimer" component={setTimerScreen} />
-          <AppNavigator.Screen name="History" component={historyScreen} />
-          <AppNavigator.Screen name="Adding" component={addingScreen} />
-          <AppNavigator.Screen name="Timer" component={timerScreen} />
-          
-        </AppNavigator.Navigator>
-      </NavigationContainer>
-    </View>
+    <NavigationContainer theme = {MyTheme}>
+      <AppNavigator.Navigator>
+        <AppNavigator.Screen name="Home" component={homeScreen} />
+        <AppNavigator.Screen options={screenOption} name="AddRoom" component={addRoomScreen} />
+        <AppNavigator.Screen options={screenOption} name="Device" component={deviceScreen} />
+        <AppNavigator.Screen options={screenOption} name="Setting" component={settingScreen} />
+        <AppNavigator.Screen options={screenOption} name="SetTimer" component={setTimerScreen} />
+        <AppNavigator.Screen options={screenOption} name="History" component={historyScreen} />
+        <AppNavigator.Screen options={screenOption} name="Adding" component={addingScreen} />
+        <AppNavigator.Screen options={screenOption} name="Timer" component={timerScreen} />
+      </AppNavigator.Navigator>
+    </NavigationContainer>
   );
 };
 export default App;
+
+const styles = StyleSheet.create({
+  image: {
+    width: 20,
+    height: 20,
+    resizeMode: 'contain',
+    marginStart: 15,
+  },
+});
