@@ -15,6 +15,7 @@ import addRoom from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import MQTTConnection from './mqtt/mqttConnection';
+import mqttSubject from './mqtt/mqttSubject';
 
 import * as firebase from 'firebase';
 
@@ -37,8 +38,8 @@ const publishTopic = 'Topic/LightD';
 const myUserName = 'BKvm';
 const myPassword = 'Hcmut_CSE_2020';
 
-//const uri = 'mqtt://52.230.26.121:1883';
-const uri = 'mqtt://52.187.125.59:1883';
+const uri = 'mqtt://52.230.26.121:1883';
+//const uri = 'mqtt://52.187.125.59:1883';
 
 MQTTConnection.create('kiet', subscribeTopic, publishTopic, 
   {
@@ -50,26 +51,30 @@ MQTTConnection.create('kiet', subscribeTopic, publishTopic,
 MQTTConnection.attachCallbacks(
   () => {
     console.log('MQTT onConnectionOpened');
-    MQTTConnection.subscribe(subscribeTopic, 0);
-    //this.client.publish(this.publishTopic, messagePublishFormat(this.switchValue), qos, false);
+    MQTTConnection.subscribe(subscribeTopic, 2);
   },
   (err) => {
     console.log(`MQTT onConnectionClosed ${err}`);
   },
   (message) => {
     if (!message) return;
+
+    console.log("Message data: " + message.data);
     const element = JSON.parse(message.data);
-    firebase
-    .database()
-    .ref('deviceList/' + element.room)
-    .child(element.device_id - 1)
-    .update({
-      deviceState: parseInt(element.values),
-      deviceID : 7,
-      deviceName : "Sensor Test",
-      deviceType : "Sensor",
-    });
-    console.log(`MQTT New message: ${element.values}`);
+    console.log("Element[0]: " + JSON.stringify(element[0]));
+    mqttSubject.notifyObservers(element[0]);
+
+    // firebase
+    // .database()
+    // .ref('deviceList/' + element[0].room)
+    // .child(element[0].device_id - 1)
+    // .update({
+    //   deviceState: parseInt(element[0].values),
+    //   deviceID : 7,
+    //   deviceName : "Sensor Test",
+    //   deviceType : "Sensor",
+    // });
+    // console.log(`MQTT New message: ${element[0].values}`);
   },
   (error) => {
     console.error(`MQTT onError: ${error}`);
@@ -153,7 +158,7 @@ const App = () => {
   useEffect(()=>{
     SplashScreen.hide();
   },[])
-  readUserData();
+  //readUserData();
   return (
     <NavigationContainer theme = {MyTheme}>
       <AppNavigator.Navigator>

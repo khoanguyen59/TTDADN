@@ -13,6 +13,7 @@ import FlatListComponent from '../components/deviceItem.js';
 import {selectedRoom} from './homeScreen.js';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import { globalStyles } from '../styles/global.js';
+import MQTTConnection from '../mqtt/mqttConnection';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -80,7 +81,7 @@ class deviceScreen extends React.Component {
             data={this.state.DeviceList}
             keyExtractor={item => item.deviceID.toString()}
             renderItem={({item}) => {
-              return <FlatListComponent {...item} />;
+              return <FlatListComponent deviceData={item} />;
             }}
           />
         </TouchableWithoutFeedback>

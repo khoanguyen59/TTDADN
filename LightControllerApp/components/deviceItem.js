@@ -1,16 +1,13 @@
-import React, {Component} from 'react';
+import React, {Component, useState, useEffect } from 'react';
 import {
-  Image,
-  View,
   StyleSheet,
-  Text,
-  TouchableOpacity,
-  Switch,
 } from 'react-native';
 import {ListItem} from 'react-native-elements';
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
 import MQTTConnection from '../mqtt/mqttConnection';
+import MQTTObserver from '../mqtt/mqttObserver';
+import mqttSubject from '../mqtt/mqttSubject.js';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -21,24 +18,8 @@ const firebaseConfig = {
   messagingSenderId: '670980151251',
   appId: '1:670980151251:web:245ac428bec24de86a0126',
 };
-const subscribeTopic = 'Topic/Light';
+
 const publishTopic = 'Topic/LightD';
-const myUserName = 'BKvm';
-const myPassword = 'Hcmut_CSE_2020';
-
-//const uri = 'mqtt://52.230.26.121:1883';
-const uri = 'mqtt://52.187.125.59:1883';
-
-/*MQTTConnection.create('kiet', subscribeTopic, publishTopic,
-  {
-    uri: uri,
-    user: myUserName,
-    pass: myPassword,
-  });
-
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}*/
 
 export var selectedList = [];
 
@@ -115,75 +96,131 @@ function removeA(arr, what) {
   return arr;
 }
 
-class FlatListComponent extends Component {
-  state = {
-    selected: false,
-    switchVal: this.props.deviceState,
-    statusState:
-      this.props.deviceType == 'Light' ? this.props.deviceState : false,
-  };
+// class FlatListComponent extends Component {
+//   state = {
+//     selected: false,
+//     switchVal: this.props.deviceState,
+//     statusState:
+//       this.props.deviceType == 'Light' ? this.props.deviceState : false,
+//     observer: this.props.deviceType == 'Light' ? null : new MQTTObserver(0),
+//   };
 
-  toggleSelect = () => {
-    if (this.props.deviceType === 'Light') {
-      this.setState({
-        selected: !this.state.selected,
-      });
-      if (!this.state.selected) {
-        selectedList.push(this.props);
-      } else {
-        removeA(selectedList, escapeStrict(selectedList, this.props));
+//   toggleSelect = () => {
+//     if (this.props.deviceType === 'Light') {
+//       this.setState({
+//         selected: !this.state.selected,
+//       });
+//       if (!this.state.selected) {
+//         selectedList.push(this.props);
+//       } else {
+//         removeA(selectedList, escapeStrict(selectedList, this.props));
+//       }
+//     }
+//     console.log(selectedList);
+//   };
+
+//   render = () => {
+//     const avatar_url =
+//       this.props.deviceType == 'Light'
+//         ? require('../icons/light-on.png')
+//         : require('../icons/light-sensor.png');
+//     return this.props.deviceType == 'Light' ? (
+//       <ListItem
+//         style={this.state.selected ? styles.itemOn : styles.item1}
+//         leftAvatar={{source: avatar_url}}
+//         title={this.props.deviceName}
+//         subtitle={this.props.deviceState == true ? 'State: On' : 'State: Off'}
+//         onPress={() => this.toggleSelect()}
+//         switch={{
+//           onValueChange: value => {
+//             this.setState({switchVal: value});
+//             toggleState(this.props);
+//             this.setState({statusState: !this.state.statusState});
+//           },
+//           value: this.state.switchVal,
+//         }}
+
+//         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+//       />
+//     ) : (
+//       <ListItem
+//         style={styles.item2}
+//         leftAvatar={{source: avatar_url}}
+//         title={this.props.deviceName}
+//         onPress={() => this.toggleSelect()}
+//         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+//       />
+//     );
+//   };
+// }
+
+function FlatListComponent({ deviceData }) {
+  const [selected, setSelected] = useState(false);
+  const [switchVal, setSwitchVal] = useState(deviceData.deviceState);
+  const [statusState, setStatusState] = useState(deviceData.deviceState);
+  const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
+  
+  const onValuesUpdate = (values) => { 
+    if (deviceData.deviceType != 'Sensor') return;
+    
+    setStatusState(values);
+  }
+
+  useEffect(() => {
+    mqttSubject.registerObserver(observer);
+
+    return () => mqttSubject.removeObserver(observer);
+  }, []);
+
+  const toggleSelect = () => {
+    if (deviceData.deviceType === 'Light') {
+      setSelected(!selected);
+
+      if (!selected) {
+        selectedList.push(deviceData);
+      } 
+      else {
+        removeA(selectedList, escapeStrict(selectedList, deviceData));
       }
     }
-    console.log(selectedList);
+
+    console.log("Selected list: " + selectedList);
   };
 
-  switchRender = () => {
-    return (
-      <Switch
-        style={styles.switch}
-        onValueChange={value => {
-          this.setState({switchVal: value});
-          toggleState(this.props);
-          this.setState({statusState: !this.state.statusState});
-        }}
-        value={this.state.switchVal}
-      />
-    );
-  };
-
-  render = () => {
-    const avatar_url =
-      this.props.deviceType == 'Light'
-        ? require('../icons/light-on.png')
-        : require('../icons/light-sensor.png');
-    return this.props.deviceType == 'Light' ? (
-      <ListItem
-        style={this.state.selected ? styles.itemOn : styles.item1}
-        leftAvatar={{source: avatar_url}}
-        title={this.props.deviceName}
-        subtitle={this.props.deviceState == true ? 'State: On' : 'State: Off'}
-        onPress={() => this.toggleSelect()}
-        switch={{
-          onValueChange: value => {
-            this.setState({switchVal: value});
-            toggleState(this.props);
-            this.setState({statusState: !this.state.statusState});
-          },
-          value: this.state.switchVal,
-        }}
-
+  const avatar_url =
+  deviceData.deviceType == 'Light'
+      ? require('../icons/light-on.png')
+      : require('../icons/light-sensor.png');
+  
+  const lightComponent = (
+    <ListItem
+      style={selected ? styles.itemOn : styles.item1}
+      leftAvatar={{source: avatar_url}}
+      title={deviceData.deviceName}
+      subtitle={deviceData.deviceState == true ? 'State: On' : 'State: Off'}
+      onPress={() => toggleSelect()}
+      switch={{
+        onValueChange: value => {
+          setSwitchVal(value);
+          toggleState(deviceData);
+          setStatusState(!statusState);
+        },
+          value: switchVal,
+      }}
         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
-      />
-    ) : (
-      <ListItem
-        style={styles.item2}
-        leftAvatar={{source: avatar_url}}
-        title={this.props.deviceName}
-        onPress={() => this.toggleSelect()}
-        /*<Text style={styles.name}>{title.devicePosition}</Text>*/
-      />
-    );
-  };
+  />);
+
+  const sensorComponent = (
+    <ListItem
+    style={styles.item2}
+    leftAvatar={{source: avatar_url}}
+    title={deviceData.deviceName}
+    onPress={() => toggleSelect()}
+    /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+    />
+  );
+
+  return deviceData.deviceType == 'Light' ? lightComponent : sensorComponent;
 }
 
 const styles = StyleSheet.create({
