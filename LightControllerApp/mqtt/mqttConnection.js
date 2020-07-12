@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import MQTT from 'react-native-mqtt-angelos3lex';
 import uuid from 'react-native-uuid';
 import {Buffer} from 'buffer';

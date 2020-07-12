@@ -9,9 +9,6 @@ class FlatListComponent extends Component {
         <Text style={styles.title}>Light {this.props[0].deviceID}</Text>
         <Text style={styles.title1}>{this.props[0].room}</Text>
         <Text style={styles.title}>{this.props[0].action}</Text>
-        <Text style={styles.title1}>
-          {this.props[0].autoControlled ? 'Auto' : 'Manual'}
-        </Text>
         <Text style={styles.title}>{this.props[0].time}</Text>
       </TouchableOpacity>
     );
@@ -23,7 +20,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     backgroundColor: '#f9c2ff',
-    padding: 5,
+    padding: 10,
     marginVertical: 8,
     marginHorizontal: 16,
   },
@@ -31,7 +28,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flex: 1,
     backgroundColor: 'gainsboro',
-    padding: 5,
+    padding: 10,
     marginHorizontal: 16,
   },
   title: {
