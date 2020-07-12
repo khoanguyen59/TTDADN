@@ -56,11 +56,10 @@ class deviceScreen extends React.Component {
     return (
       <View style={styles.actionButtonContainer}>
         <MovableView
-          disabled={false}
-          onMove={ values => console.log(values) }
-        >
+          disabled={false}>
           <TouchableOpacity
             style={styles.timerButton}
+            activeOpacity = {0}
             onPress={() => this.props.navigation.navigate('SetTimer')}>
             <Image
               source={require('../icons/timerIcon_white.png')}

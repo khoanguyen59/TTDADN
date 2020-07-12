@@ -1,6 +1,15 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Text,Button, Dimensions, Image,
-        Animated} from 'react-native';
+import {
+  View, 
+  FlatList,
+  TouchableHighlight,
+  StyleSheet, 
+  Text,
+  Button,
+  Modal, 
+  Dimensions,
+  Image,
+  Animated } from 'react-native';     
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
@@ -27,6 +36,7 @@ export var selectedRoom;
 class homeScreen extends React.Component {
   state = {
     RoomList: [],
+    //show: true,
     Guidestate : false,
     animated: new Animated.Value(1)
   };
@@ -40,47 +50,47 @@ class homeScreen extends React.Component {
         this.setState({RoomList: snapshot.val()});
       });
   };
-  renderguide = ()=>{
-      return (
-        <Animated.View style = {{
-          flex :1,
-          // position:'absolute',
-          transform: [{
-            scale: this.state.animated.interpolate({
-              inputRange:[0,1],
-              outputRange:[0,1]
-            })
-          }]
-        }}>
-          <Swiper style = {{}} showsButtons={true}>
-            <View style={styles.slide}>
-              <Text style={styles.text}>Hello Swiper</Text>
+
+  renderguide = () => {
+    return (
+      <Animated.View style = {{
+        flex :1,
+        transform: [{
+          scale: this.state.animated.interpolate({
+            inputRange:[0,1],
+            outputRange:[0,1]
+          })
+        }]
+      }}>
+        <Swiper style = {{}} showsButtons={true}>
+          <View style={styles.slide}>
+            <Text style={styles.text}>Hello Swiper</Text>
+          </View>
+          <View style={styles.slide}>
+            <Text style={styles.text}>Beautiful</Text>
+          </View>
+          <View style={styles.slide}>
+            <Text style={styles.text}>And simple</Text>
+            <View style = {styles.closeGuidecontain}>
+              <TouchableOpacity 
+                style={styles.bottomContainer}
+                onPress = {()=>{
+                  this.setState({Guidestate : false})
+                }}>
+              <Text style={{color: '#ffffff',
+                            fontSize: 20,
+                            fontWeight: 'bold',
+                          }}>Close Guide</Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.slide}>
-              <Text style={styles.text}>Beautiful</Text>
-            </View>
-            <View style={styles.slide}>
-              <Text style={styles.text}>And simple</Text>
-              <View style = {styles.closeGuidecontain}>
-                <TouchableOpacity 
-                  style={styles.bottomContainer}
-                  onPress = {()=>{
-                    this.setState({Guidestate : false})
-                  }}>
-                <Text style={{color: '#ffffff',
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                            }}>Close Guide</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Swiper>
-        </Animated.View>
-      )
-    
-  }
+          </View>
+        </Swiper>
+      </Animated.View>
+    )
+  };
+
   renderItem = ({item}) => {
-    const {navigation} = this.props.navigation;
+    //const {navigation} = this.props.navigation;
     return (
       <TouchableOpacity
         pointerEvents="none"
@@ -99,39 +109,38 @@ class homeScreen extends React.Component {
       </TouchableOpacity>
     );
   };
-  rendershowGuidebtn =()=>{
-    return(
-        <MovableView style={{
-          position:'absolute',
-          // backgroundColor:'red',
-          height:60, 
-          width:60,
-          borderRadius:30,
-        }}>
-          <TouchableOpacity
-            style={{
-              ...globalStyles.alternativeColor,
-              alignItems: 'center',
-              justifyContent:'center',
-              padding: 10,
-              height:60,
-              width:60,
-              borderRadius:30,
-            }}
-            activeOpacity = {0}
-            onPress = {()=>{
-              this.setState({Guidestate : true}),
-              this.state.animated.setValue(0),
-              Animated.spring(this.state.animated,{
-                toValue:1,
-                duration:2000,
-                useNativeDriver: true,
-              }).start();
-            }}
-          >
-            <Image source = {require('../icons/Guide.png') } style = {styles.image} ></Image>
-          </TouchableOpacity>
-        </MovableView>
+
+  rendershowGuidebtn = () => {
+    return (
+      <MovableView style={{
+        position:'absolute',
+        height:60, 
+        width:60,
+        borderRadius:30,
+      }}>
+        <TouchableOpacity
+          style={{
+            ...globalStyles.alternativeColor,
+            alignItems: 'center',
+            justifyContent:'center',
+            height:60,
+            width:60,
+            borderRadius:30,
+          }}
+          activeOpacity = {0}
+          onPress = {()=>{
+            this.setState({Guidestate : true}),
+            this.state.animated.setValue(0),
+            Animated.spring(this.state.animated,{
+              toValue:1,
+              duration:2000,
+              useNativeDriver: true,
+            }).start();
+          }}
+        >
+          <Image source = {require('../icons/Guide.png') } style = {styles.image} ></Image>
+        </TouchableOpacity>
+      </MovableView>
     );
   }
 
@@ -150,18 +159,33 @@ class homeScreen extends React.Component {
           renderItem={this.renderItem}
           keyExtractor={item => item.roomID.toString()}
         />
+
         {this.rendershowGuidebtn()}
-        <View style = {styles.addButton}>
-          <Button
-            style = {{flex:1}}
-            title = "Add room"
-            onPress = {() => {this.props.navigation.navigate('AddRoom');}
-            }
-          />
-        </View>
+
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.show}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>PICK A ROOM</Text>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={() => this.setState({show: !this.state.show})}>
+                  <Text style={styles.textStyle}>Close</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+        </Modal>
+        <Button
+          style = {styles.addButton}
+          title = "Add room"
+          onPress = {() => {this.props.navigation.navigate('AddRoom');}
+          }
+        />
       </View>
     );
-  }   
+  };
 }
 
 const styles = StyleSheet.create({
@@ -196,12 +220,46 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   addButton: {
-    // ...globalStyles.alternativeColor,
+    ...globalStyles.alternativeColor,
     position: 'absolute',
-    flexDirection: 'column',
     bottom:0,
-    right:0,
-    width :'100%',
+    left:0,
+  },
+  centeredView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Dimensions.get('window').height / 4
+  },
+  modalView: {
+    margin: 20,
+    width: Dimensions.get('window').width - 20 ,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   },
   slide: {
     flex: 1,
@@ -226,8 +284,8 @@ const styles = StyleSheet.create({
   },
   image: {
     // ...StyleSheet.absoluteFillObject,
-    width: 50,
-    height: 50,
+    width: 30,
+    height: 30,
     resizeMode: 'contain',
   },
 });
