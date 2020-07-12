@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Text,Button, Dimensions} from 'react-native';
+import {View, FlatList,TouchableHighlight ,StyleSheet, Text,Button,Modal, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
@@ -24,6 +24,7 @@ export var selectedRoom;
 class homeScreen extends React.Component {
   state = {
     RoomList: [],
+    show: true,
   };
 
   readRoomData = () => {
@@ -71,12 +72,31 @@ class homeScreen extends React.Component {
           renderItem={this.renderItem}
           keyExtractor={item => item.roomID.toString()}
         />
-          <Button
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.show}
+        >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Pick a room!</Text>
+                <TouchableHighlight
+                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+                  onPress={() => {
+                  this.setState({show: !this.state.show})
+                  }}
+                >
+                  <Text style={styles.textStyle}>Close</Text>
+                </TouchableHighlight>
+              </View>
+            </View>
+        </Modal>
+        <Button
           style = {styles.addButton}
           title = "Add room"
           onPress = {() => {this.props.navigation.navigate('AddRoom');}
           }
-          />
+        />
       </View>
     );
   };
@@ -118,6 +138,42 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom:0,
     left:0,
+  },
+  centeredView: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: Dimensions.get('window').height / 4
+  },
+  modalView: {
+    margin: 20,
+    width: Dimensions.get('window').width - 20 ,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 });
 

@@ -1,10 +1,6 @@
 import React, {Component} from 'react';
 import {
-  Image,
-  View,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   Switch,
 } from 'react-native';
 import {ListItem} from 'react-native-elements'
