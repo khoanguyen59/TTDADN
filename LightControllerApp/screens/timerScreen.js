@@ -55,17 +55,18 @@ export default function timerScreen({ navigation }) {
   }
 
   useEffect(() => readRoomData());
-
+  
   const timersDropdowns = (
     <FlatList
       keyExtractor={item => item.roomID.toString()}
       style={{ marginBottom: 50, marginTop: -50 }}
       data={roomList}
       renderItem={({ item }) => (
-        <TimersDropdown key={item.roomID.toString()} roomName={item.roomName} />
+        <TimersDropdown key={item.roomID.toString()} roomName={item.roomName} firstRoomName = {roomList[0].roomName}/>
       )}
     />
   );
+  // console.log(roomList[0])
 
   return (
     <ScreenTemplate

@@ -151,7 +151,7 @@ class homeScreen extends React.Component {
           navigation={navigation}
           data={this.state.RoomList}
           renderItem={this.renderItem}
-          keyExtractor={item => item.roomID.toString()}
+          keyExtractor={item => item.roomID}
         />
         {this.rendershowGuidebtn()}
         <Modal
@@ -173,12 +173,17 @@ class homeScreen extends React.Component {
               </View>
             </View>
         </Modal>
-        <Button
-          style = {styles.addButton}
-          title = "Add room"
-          onPress = {() => {this.props.navigation.navigate('AddRoom');}
-          }
-        />
+        <View
+          style = {styles.containAddbtn}
+        >
+          <TouchableHighlight
+            style = {styles.addButton}
+            onPress={() => {
+              this.props.navigation.navigate('AddRoom');
+            }}>
+            <Text style = {styles.textStyle}>Add Room</Text>
+          </TouchableHighlight>
+        </View>
       </View>
     );
   }   
@@ -214,11 +219,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white'
   },
+  containAddbtn:{
+    height : 35,
+    width : '100%',
+    backgroundColor : 'red',
+    justifyContent:'center',
+    alignItems:'center',
+  },
   addButton: {
     ...globalStyles.alternativeColor,
-    position: 'absolute',
-    bottom:0,
-    left:0,
+    flex:1,
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center',
   },
   centeredView: {
     justifyContent: "center",
@@ -279,8 +292,8 @@ const styles = StyleSheet.create({
   },
   image: {
     // ...StyleSheet.absoluteFillObject,
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
   },
 });

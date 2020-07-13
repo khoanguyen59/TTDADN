@@ -19,7 +19,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 
 
 import * as firebase from 'firebase';
-
+console.disableYellowBox = true;
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
   authDomain: 'lightappdemo-dc252.firebaseapp.com',
