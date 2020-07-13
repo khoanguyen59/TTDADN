@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, FlatList, StyleSheet, Text,Button, Dimensions, Image,
         Animated} from 'react-native';
-import {View, FlatList,TouchableHighlight ,StyleSheet, Text,Button,Modal, Dimensions} from 'react-native';
+import {TouchableHighlight, Modal} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
@@ -113,6 +113,7 @@ class homeScreen extends React.Component {
           <TouchableOpacity
             style={{
               ...globalStyles.alternativeColor,
+              // backgroundColor: 'red',
               alignItems: 'center',
               justifyContent:'center',
               padding: 10,
@@ -152,6 +153,7 @@ class homeScreen extends React.Component {
           renderItem={this.renderItem}
           keyExtractor={item => item.roomID.toString()}
         />
+        {this.rendershowGuidebtn()}
         <Modal
           animationType="slide"
           transparent={true}
@@ -181,7 +183,6 @@ class homeScreen extends React.Component {
     );
   }   
 }
-
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
@@ -214,9 +215,8 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   addButton: {
-    // ...globalStyles.alternativeColor,
+    ...globalStyles.alternativeColor,
     position: 'absolute',
-    flexDirection: 'column',
     bottom:0,
     left:0,
   },
@@ -255,7 +255,33 @@ const styles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#97CAE5'
+  },
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  closeGuidecontain:{
+    flex: 1,
+    position :'absolute',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    bottom: 0,
+    right: 0,
+    height: '8%',
+    width: '50%',
+  },
+  image: {
+    // ...StyleSheet.absoluteFillObject,
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
+  },
 });
-
 export default homeScreen;
