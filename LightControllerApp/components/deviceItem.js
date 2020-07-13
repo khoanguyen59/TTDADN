@@ -1,6 +1,7 @@
 import React, {Component, useState, useEffect } from 'react';
 import {
   StyleSheet,
+  Text,
 } from 'react-native';
 import {ListItem} from 'react-native-elements';
 import {selectedRoom} from '../screens/homeScreen.js';
@@ -8,6 +9,7 @@ import * as firebase from 'firebase';
 import MQTTConnection from '../mqtt/mqttConnection';
 import MQTTObserver from '../mqtt/mqttObserver';
 import mqttSubject from '../mqtt/mqttSubject.js';
+import ProgressCircle from 'react-native-progress-circle'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -216,6 +218,18 @@ function FlatListComponent({ deviceData }) {
     leftAvatar={{source: avatar_url}}
     title={deviceData.deviceName}
     onPress={() => toggleSelect()}
+    rightElement = {
+      <ProgressCircle
+            percent={statusState}
+            radius={20}
+            borderWidth={8}
+            color="#3399FF"
+            shadowColor="#999"
+            bgColor="#fff"
+        >
+            <Text style={{ fontSize: 10 }}>{Math.round(statusState/1028*100).toString()+'%'}</Text>
+        </ProgressCircle>
+    }
     /*<Text style={styles.name}>{title.devicePosition}</Text>*/
     />
   );
