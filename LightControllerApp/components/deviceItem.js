@@ -160,13 +160,21 @@ function FlatListComponent({ deviceData }) {
   const [selected, setSelected] = useState(false);
   const [switchVal, setSwitchVal] = useState(deviceData.deviceState);
   const [statusState, setStatusState] = useState(deviceData.deviceState);
-  const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
-  
   const onValuesUpdate = (values) => { 
     if (deviceData.deviceType != 'Sensor') return;
-    
-    setStatusState(values);
+    firebase
+    .database()
+    .ref('deviceList/' + selectedRoom)
+    .child(deviceData.deviceID - 1)
+    .update({
+      deviceID: deviceData.deviceID,
+      deviceName: deviceData.deviceName,
+      deviceState: parseInt(values.values),
+      deviceType: deviceData.deviceType,
+    });
+    setStatusState(parseInt(values.values));
   }
+  const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
 
   useEffect(() => {
     mqttSubject.registerObserver(observer);
@@ -220,7 +228,7 @@ function FlatListComponent({ deviceData }) {
     onPress={() => toggleSelect()}
     rightElement = {
       <ProgressCircle
-            percent={statusState}
+            percent={Math.round(statusState/1028*100)}
             radius={20}
             borderWidth={8}
             color="#3399FF"
