@@ -28,10 +28,18 @@ if (!firebase.apps.length) {
 //     });
 // };
 
-export default function TimersDropdown({roomName}) {
+export default function TimersDropdown({roomName,firstRoomName}) {
 
   const [timerItems, setTimerItems] = useState([]);
+  const [firsttimeshow, setfirsttimeshow] = useState([true]);
 
+
+  if (roomName === firstRoomName&&firsttimeshow){
+    firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+      setTimerItems(snapshot.val());});
+    setfirsttimeshow(false);
+  }
+  
   const locationTab = (
     <TouchableOpacity
       style={styles.locationTab}

@@ -77,7 +77,7 @@ class deviceScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.headButton}>
-            <Button title={selectedRoom} color={globalStyles.alternativeColor}/>
+            <Button title={selectedRoom.toString()} color={globalStyles.alternativeColor}/>
           </View>
         </View>
         <TouchableWithoutFeedback>

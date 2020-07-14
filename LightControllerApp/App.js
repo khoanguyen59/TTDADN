@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import 'react-native-gesture-handler';
-import React, { useEffect, Component } from 'react';
-import {NavigationContainer,} from '@react-navigation/native';
+import React, { useEffect } from 'react';
+import {Platform, InteractionManager, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import homeScreen from './screens/homeScreen';
 import deviceScreen from './screens/deviceScreen';
@@ -12,10 +13,9 @@ import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
 import addRoomScreen from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
-import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native'
 
 import * as firebase from 'firebase';
-
+//console.disableYellowBox = true;
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
   authDomain: 'lightappdemo-dc252.firebaseapp.com',
@@ -35,7 +35,7 @@ function readUserData() {
     .database()
     .ref('deviceList/Bedroom/0')
     .once('value', function(snapshot) {
-      console.log(snapshot.val());
+      //console.log(snapshot.val());
     });
 }
 const MyTheme = {

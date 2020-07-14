@@ -5,7 +5,6 @@ import {
   TouchableHighlight,
   StyleSheet, 
   Text,
-  Button,
   Modal, 
   Dimensions,
   Image,
@@ -36,9 +35,9 @@ export var selectedRoom;
 class homeScreen extends React.Component {
   state = {
     RoomList: [],
-    //show: true,
     Guidestate : false,
-    animated: new Animated.Value(1)
+    animated: new Animated.Value(1),
+    show: true,
   };
 
   readRoomData = () => {
@@ -109,38 +108,40 @@ class homeScreen extends React.Component {
       </TouchableOpacity>
     );
   };
-
-  rendershowGuidebtn = () => {
-    return (
-      <MovableView style={{
-        position:'absolute',
-        height:60, 
-        width:60,
-        borderRadius:30,
-      }}>
-        <TouchableOpacity
-          style={{
-            ...globalStyles.alternativeColor,
-            alignItems: 'center',
-            justifyContent:'center',
-            height:60,
-            width:60,
-            borderRadius:30,
-          }}
-          activeOpacity = {0}
-          onPress = {()=>{
-            this.setState({Guidestate : true}),
-            this.state.animated.setValue(0),
-            Animated.spring(this.state.animated,{
-              toValue:1,
-              duration:2000,
-              useNativeDriver: true,
-            }).start();
-          }}
-        >
-          <Image source = {require('../icons/Guide.png') } style = {styles.image} ></Image>
-        </TouchableOpacity>
-      </MovableView>
+  rendershowGuidebtn =()=>{
+    return(
+        <MovableView style={{
+          position:'absolute',
+          // backgroundColor:'red',
+          height:60, 
+          width:60,
+          borderRadius:30,
+        }}>
+          <TouchableOpacity
+            style={{
+              ...globalStyles.alternativeColor,
+              // backgroundColor: 'red',
+              alignItems: 'center',
+              justifyContent:'center',
+              padding: 10,
+              height:60,
+              width:60,
+              borderRadius:30,
+            }}
+            activeOpacity = {0}
+            onPress = {()=>{
+              this.setState({Guidestate : true}),
+              this.state.animated.setValue(0),
+              Animated.spring(this.state.animated,{
+                toValue:1,
+                duration:2000,
+                useNativeDriver: true,
+              }).start();
+            }}
+          >
+            <Image source = {require('../icons/Guide.png') } style = {styles.image} ></Image>
+          </TouchableOpacity>
+        </MovableView>
     );
   }
 
@@ -157,11 +158,9 @@ class homeScreen extends React.Component {
           navigation={navigation}
           data={this.state.RoomList}
           renderItem={this.renderItem}
-          keyExtractor={item => item.roomID.toString()}
+          keyExtractor={item => item.roomID}
         />
-
         {this.rendershowGuidebtn()}
-
         <Modal
           animationType="slide"
           transparent={true}
@@ -177,24 +176,26 @@ class homeScreen extends React.Component {
               </View>
             </View>
         </Modal>
-        <Button
-          style = {styles.addButton}
-          title = "Add room"
-          onPress = {() => {this.props.navigation.navigate('AddRoom');}
-          }
-        />
+        <View style = {styles.containAddbtn}>
+          <TouchableHighlight
+            style = {styles.addButton}
+            onPress={() => {
+              this.props.navigation.navigate('AddRoom');
+            }}>
+            <Text style = {styles.textStyle}>Add a Room</Text>
+          </TouchableHighlight>
+        </View>
       </View>
     );
   };
 }
-
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     flex: 1,
   },
   container_flatlist:{
-    flex: 1,
+    flex: 9,
     marginVertical: 20,
   },
   list: {
@@ -219,11 +220,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'white'
   },
+  containAddbtn:{
+    height: 40,
+    width : '100%',
+    justifyContent:'center',
+    alignItems:'center',
+  },
   addButton: {
     ...globalStyles.alternativeColor,
-    position: 'absolute',
-    bottom:0,
-    left:0,
+    ...globalStyles.regularText,
+    flex: 1,
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center',
   },
   centeredView: {
     justifyContent: "center",
@@ -284,10 +293,9 @@ const styles = StyleSheet.create({
   },
   image: {
     // ...StyleSheet.absoluteFillObject,
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
     resizeMode: 'contain',
   },
 });
-
 export default homeScreen;
