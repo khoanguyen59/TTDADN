@@ -28,16 +28,15 @@ if (!firebase.apps.length) {
 //     });
 // };
 
-export default function TimersDropdown({roomName,firstRoomName}) {
+export default function TimersDropdown({roomName, firstRoomName}) {
 
   const [timerItems, setTimerItems] = useState([]);
-  const [firsttimeshow, setfirsttimeshow] = useState([true]);
+  const [firstRender, setFirstRender] = useState([true]);
 
-
-  if (roomName === firstRoomName&&firsttimeshow){
+  if (roomName === firstRoomName&&firstRender){
     firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
       setTimerItems(snapshot.val());});
-    setfirsttimeshow(false);
+    setFirstRender(false);
   }
   
   const locationTab = (
@@ -45,8 +44,6 @@ export default function TimersDropdown({roomName,firstRoomName}) {
       style={styles.locationTab}
       onPress={
         () => {
-          //setDisplayItems(displayItems.length == 0 ? /*(initDropdown ? timerData : timerItems)*/ timerItems : []);
-          // setTimerItems(timerItems.length == 0 ? timerData : [])
           if (timerItems.length === 0) {
             firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
               setTimerItems(snapshot.val());});
@@ -83,7 +80,7 @@ export default function TimersDropdown({roomName,firstRoomName}) {
       ]
     )
   }
-  // day in database follow ABC's so must convert to 2-S
+  
   function convertDay(item){
     var date = {
       Monday:'true',
@@ -103,7 +100,7 @@ export default function TimersDropdown({roomName,firstRoomName}) {
     date.Sunday = item.Sunday;
     return date;
   }
-  // touch able item
+  
   return (
     <View>
       {locationTab}
@@ -112,10 +109,9 @@ export default function TimersDropdown({roomName,firstRoomName}) {
         style={styles.border}
         onLongPress={() => deleteTimer(item)}>
           <TimerItem
-            key={item.deviceID}
+            key={item.deviceName + item.deviceID.toString() + item.time}
             deviceName={item.deviceName}
             setTime={item.time}
-            //convert day of item
             setDates={Object.values(convertDay(item.day))}
             action={item.off}
           />

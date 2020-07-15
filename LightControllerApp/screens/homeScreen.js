@@ -12,7 +12,7 @@ import {
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
-import {eraseList} from '../components/deviceItem.js';
+//import {eraseList} from '../components/deviceItem.js';
 import Swiper from 'react-native-swiper'
 import MovableView from 'react-native-movable-view';
 
@@ -97,7 +97,7 @@ class homeScreen extends React.Component {
         onPress={() => {
           selectedRoom = item.roomName;
           this.props.navigation.navigate('Device');
-          eraseList();
+          //eraseList();
         }}>
         <Text style={styles.title} pointerEvents="none">
           {item.roomID}
@@ -108,6 +108,7 @@ class homeScreen extends React.Component {
       </TouchableOpacity>
     );
   };
+
   rendershowGuidebtn =()=>{
     return(
         <MovableView style={{

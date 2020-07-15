@@ -36,13 +36,22 @@ class deviceScreen extends React.Component {
     DeviceList: [],
   };
 
+  // readDeviceData = () => {
+  //   firebase
+  //     .database()
+  //     .ref('deviceList/' + selectedRoom)
+  //     .once('value')
+  //     .then(snapshot => {
+  //       this.setState({DeviceList: snapshot.val()});
+  //     });
+  // };
+
   readDeviceData = () => {
     firebase
       .database()
       .ref('deviceList/' + selectedRoom)
-      .once('value')
-      .then(snapshot => {
-        this.setState({DeviceList: snapshot.val()});
+      .on('value', snapshot => {
+        this.setState({ DeviceList: snapshot.val() });
       });
   };
 

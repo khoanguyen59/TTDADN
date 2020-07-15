@@ -1,13 +1,14 @@
 import React, {useState, useEffect } from 'react';
 import {
   StyleSheet,
+  Text,
 } from 'react-native';
 import {ListItem} from 'react-native-elements';
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
 import MQTTConnection from '../mqtt/mqttConnection';
 import MQTTObserver from '../mqtt/mqttObserver';
-import mqttSubject from '../mqtt/mqttSubject.js';
+import ProgressCircle from 'react-native-progress-circle'
 
 const publishTopic = 'Topic/LightD';
 
@@ -90,19 +91,29 @@ function FlatListComponent({ deviceData }) {
   const [selected, setSelected] = useState(false);
   const [switchVal, setSwitchVal] = useState(deviceData.deviceState);
   const [statusState, setStatusState] = useState(deviceData.deviceState);
-  const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
-  
-  const onValuesUpdate = (values) => { 
-    if (deviceData.deviceType != 'Sensor') return;
+
+  // const onValuesUpdate = (messageData) => { 
+  //   if (deviceData.deviceType != 'Sensor') return;
     
-    setStatusState(values);
-  }
+  //   firebase
+  //   .database()
+  //   .ref('deviceList/' + selectedRoom)
+  //   .child(deviceData.deviceID - 1)
+  //   .update({
+  //     deviceID: deviceData.deviceID,
+  //     deviceName: deviceData.deviceName,
+  //     deviceState: parseInt(messageData.values),
+  //     deviceType: deviceData.deviceType,
+  //   });
+  //   setStatusState(parseInt(messageData.values));
+  // }
+  // const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
 
-  useEffect(() => {
-    mqttSubject.registerObserver(observer);
+  // useEffect(() => {
+  //   mqttSubject.registerObserver(observer);
 
-    return () => mqttSubject.removeObserver(observer);
-  }, []);
+  //   return () => mqttSubject.removeObserver(observer);
+  // }, []);
 
   const toggleSelect = () => {
     if (deviceData.deviceType === 'Light') {
@@ -133,11 +144,11 @@ function FlatListComponent({ deviceData }) {
       onPress={() => toggleSelect()}
       switch={{
         onValueChange: value => {
-          setSwitchVal(value);
-          toggleState(deviceData);
-          setStatusState(!statusState);
-        },
-          value: switchVal,
+        setSwitchVal(value);
+        toggleState(deviceData);
+        setStatusState(!statusState);
+      },
+        value: switchVal,
       }}
         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
   />);
@@ -148,6 +159,17 @@ function FlatListComponent({ deviceData }) {
     leftAvatar={{source: avatar_url}}
     title={deviceData.deviceName}
     onPress={() => toggleSelect()}
+    rightElement = {
+      <ProgressCircle
+        percent={Math.round(statusState/1028*100)}
+        radius={20}
+        borderWidth={8}
+        color="#3399FF"
+        shadowColor="#999"
+        bgColor="#fff">
+          <Text style={{ fontSize: 10 }}>{Math.round(statusState/1028*100).toString()+'%'}</Text>
+        </ProgressCircle>
+    }
     /*<Text style={styles.name}>{title.devicePosition}</Text>*/
     />
   );

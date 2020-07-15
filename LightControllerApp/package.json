@@ -29,6 +29,7 @@
     "react-native-modal-datetime-picker": "^8.7.1",
     "react-native-movable-view": "^1.0.3",
     "react-native-mqtt-angelos3lex": "^0.4.26",
+    "react-native-progress-circle": "^2.1.0",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.1.1",
     "react-native-screens": "^2.9.0",

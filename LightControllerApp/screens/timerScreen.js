@@ -51,7 +51,7 @@ export default function timerScreen({ navigation }) {
       .database()
       .ref('roomList')
       .once('value')
-      .then(snapshot => {setRoomList(snapshot.val());});
+      .then(snapshot => {setRoomList(snapshot.val())});
   }
 
   useEffect(() => { readRoomData() }, []);
@@ -66,7 +66,6 @@ export default function timerScreen({ navigation }) {
       )}
     />
   );
-  // console.log(roomList[0])
 
   return (
     <ScreenTemplate
