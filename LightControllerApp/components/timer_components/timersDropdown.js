@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
 import TimerItem from './timerItem';
 import {globalStyles} from '../../styles/global';
 import * as firebase from 'firebase';
+import { Badge, Icon, withBadge } from 'react-native-elements'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -31,9 +32,11 @@ if (!firebase.apps.length) {
 export default function TimersDropdown({roomName,firstRoomName}) {
 
   const [timerItems, setTimerItems] = useState([]);
+  const [temp, setTemp] = useState([]);
   const [firsttimeshow, setfirsttimeshow] = useState([true]);
-
-
+  firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+    setTemp(snapshot.val());});
+  
   if (roomName === firstRoomName&&firsttimeshow){
     firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
       setTimerItems(snapshot.val());});
@@ -47,14 +50,18 @@ export default function TimersDropdown({roomName,firstRoomName}) {
         () => {
           //setDisplayItems(displayItems.length == 0 ? /*(initDropdown ? timerData : timerItems)*/ timerItems : []);
           // setTimerItems(timerItems.length == 0 ? timerData : [])
+          // firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+          //   setTemp(snapshot.val());});
           if (timerItems.length === 0) {
-            firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
-              setTimerItems(snapshot.val());});
+            if(temp == ''){setTimerItems([]);}
+            else setTimerItems(temp);
           }
           else setTimerItems([]);
+          
           }
         }>
       <Text style={globalStyles.whiteTitle}> {roomName} </Text>
+      <Badge value={temp?temp.length:0} status="primary" containerStyle={{ position: 'absolute',right:20, top:'30%'}}/>
     </TouchableOpacity>
   );
 
@@ -120,9 +127,11 @@ export default function TimersDropdown({roomName,firstRoomName}) {
             action={item.off}
           />
         </TouchableOpacity>
-      ))}
+      ))
+      }
     </View>
   );
+  // console.log(roominTimer)
 }
 
 const styles = StyleSheet.create({
