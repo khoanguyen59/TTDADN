@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   Image,
+  Animated,
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -13,7 +14,7 @@ import FlatListComponent from '../components/deviceItem.js';
 import {selectedRoom} from './homeScreen.js';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import { globalStyles } from '../styles/global.js';
-import MQTTConnection from '../mqtt/mqttConnection';
+import MovableView from 'react-native-movable-view';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -54,14 +55,18 @@ class deviceScreen extends React.Component {
   renderControlButton = () => {
     return (
       <View style={styles.actionButtonContainer}>
-        <TouchableOpacity
-          style={styles.timerButton}
-          onPress={() => this.props.navigation.navigate('SetTimer')}>
-          <Image
-            source={require('../icons/timerIcon_white.png')}
-            style={styles.image}
-          />
-        </TouchableOpacity>
+        <MovableView
+          disabled={false}>
+          <TouchableOpacity
+            style={styles.timerButton}
+            activeOpacity = {0}
+            onPress={() => this.props.navigation.navigate('SetTimer')}>
+            <Image
+              source={require('../icons/timerIcon_white.png')}
+              style={styles.image}
+            />
+          </TouchableOpacity>
+        </MovableView>
       </View>
     );
   };
@@ -72,13 +77,14 @@ class deviceScreen extends React.Component {
       <View style={styles.container}>
         <View style={styles.headContainer}>
           <View style={styles.headButton}>
-            <Button title={selectedRoom} color={globalStyles.alternativeColor}/>
+            <Button title={selectedRoom.toString()} color={globalStyles.alternativeColor}/>
           </View>
         </View>
         <TouchableWithoutFeedback>
           <FlatList
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
+            style= {{marginBottom: 72}}
             keyExtractor={item => item.deviceID.toString()}
             renderItem={({item}) => {
               return <FlatListComponent deviceData={item} />;
@@ -172,6 +178,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
+    marginBottom: 10,
   },
   bottomContainer: {
     flex: 1,

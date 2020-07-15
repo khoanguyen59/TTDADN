@@ -1,21 +1,14 @@
 import React from 'react';
 import {
   View,
-  FlatList,
   StyleSheet,
-  Button,
   TouchableOpacity,
-  Image,
   Text,
   TextInput,
   Alert
 } from 'react-native';
-
+import { globalStyles } from '../styles/global';
 import * as firebase from 'firebase';
-
-import FlatListComponent from '../components/deviceItem.js';
-import {selectedRoom} from './homeScreen.js';
-import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -49,9 +42,6 @@ class addRoom extends React.Component {
         this.setState({RoomList: snapshot.val()});
         });
     };
-
-
-
 
     handleRoomID = (text) => {
        this.setState({ RoomID: text })
@@ -93,14 +83,16 @@ class addRoom extends React.Component {
           <View style = {styles.container}>
              <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
-                placeholder = "Room ID here,     e.g., 101"
+                placeholder = "Room ID,     e.g., 101"
+                placeholderTextColor = 'white'
                //  placeholderTextColor = "black"
                 autoCapitalize = "none"
                 onChangeText = {this.handleRoomID}/>
 
              <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
-                placeholder = "Room Name Here,     e.g., Classroom"
+                placeholder = "Room Name,     e.g., Classroom"
+                placeholderTextColor = 'white'
                //  placeholderTextColor = "black"
                 autoCapitalize = "none"
                 onChangeText = {this.handleRoomName}/>
@@ -119,19 +111,21 @@ class addRoom extends React.Component {
 
  const styles = StyleSheet.create({
     container: {
+       flex: 1,
        paddingTop: 23,
        bottom: -90
     },
     input: {
        margin: 15,
        paddingLeft: 10,
-       height: 40,
+       height: 50,
        borderColor: 'black',
        borderWidth: 1,
        borderRadius: 20,
+       backgroundColor: '#00ffff'
     },
     submitButton: {
-       backgroundColor: '#2095f3',
+       ...globalStyles.alternativeColor,
        padding: 10,
        margin: 15,
        height: 40,

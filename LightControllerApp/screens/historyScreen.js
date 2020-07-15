@@ -4,7 +4,6 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  Button,
   Image,
   TouchableOpacity
 } from 'react-native';
@@ -76,6 +75,8 @@ export default function historyScreen({ navigation }){
   const [pickedDate, setPickedDate] = useState(getCurrentDate());
   const [logList, setLogList] = useState([]);
 
+  //console.log(isDatePickerVisible);
+
   const readLogData = () => {
     firebase
     .database()
@@ -83,13 +84,13 @@ export default function historyScreen({ navigation }){
     .once('value')
     .then(snapshot => {
       setLogList(snapshot.val());
-    })
+    });
   };
 
   const hideDatePicker = () => {
     setDatePickerVisibility(false);
   };
-    
+
   const handleDatePicked = (date) => {
     const mdate = date.toString().split(' ');
     setPickedDate(mdate[2] + '-' + convertMonthToNumber(mdate[1]) + '-' + mdate[3]);
@@ -141,9 +142,13 @@ export default function historyScreen({ navigation }){
     </View>
   );
 
-  useEffect(() => {
-    hideDatePicker();
+  async function refresh() {
+    await hideDatePicker();
     readLogData();
+  }
+
+  useEffect(() => {
+    refresh();
   }, [pickedDate]);
 
   return (

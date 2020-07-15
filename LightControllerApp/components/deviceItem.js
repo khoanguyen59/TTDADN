@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
 import {
   StyleSheet,
 } from 'react-native';
@@ -8,16 +8,6 @@ import * as firebase from 'firebase';
 import MQTTConnection from '../mqtt/mqttConnection';
 import MQTTObserver from '../mqtt/mqttObserver';
 import mqttSubject from '../mqtt/mqttSubject.js';
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
-  authDomain: 'lightappdemo-dc252.firebaseapp.com',
-  databaseURL: 'https://lightappdemo-dc252.firebaseio.com',
-  projectId: 'lightappdemo-dc252',
-  storageBucket: 'lightappdemo-dc252.appspot.com',
-  messagingSenderId: '670980151251',
-  appId: '1:670980151251:web:245ac428bec24de86a0126',
-};
 
 const publishTopic = 'Topic/LightD';
 
@@ -95,64 +85,6 @@ function removeA(arr, what) {
   }
   return arr;
 }
-
-// class FlatListComponent extends Component {
-//   state = {
-//     selected: false,
-//     switchVal: this.props.deviceState,
-//     statusState:
-//       this.props.deviceType == 'Light' ? this.props.deviceState : false,
-//     observer: this.props.deviceType == 'Light' ? null : new MQTTObserver(0),
-//   };
-
-//   toggleSelect = () => {
-//     if (this.props.deviceType === 'Light') {
-//       this.setState({
-//         selected: !this.state.selected,
-//       });
-//       if (!this.state.selected) {
-//         selectedList.push(this.props);
-//       } else {
-//         removeA(selectedList, escapeStrict(selectedList, this.props));
-//       }
-//     }
-//     console.log(selectedList);
-//   };
-
-//   render = () => {
-//     const avatar_url =
-//       this.props.deviceType == 'Light'
-//         ? require('../icons/light-on.png')
-//         : require('../icons/light-sensor.png');
-//     return this.props.deviceType == 'Light' ? (
-//       <ListItem
-//         style={this.state.selected ? styles.itemOn : styles.item1}
-//         leftAvatar={{source: avatar_url}}
-//         title={this.props.deviceName}
-//         subtitle={this.props.deviceState == true ? 'State: On' : 'State: Off'}
-//         onPress={() => this.toggleSelect()}
-//         switch={{
-//           onValueChange: value => {
-//             this.setState({switchVal: value});
-//             toggleState(this.props);
-//             this.setState({statusState: !this.state.statusState});
-//           },
-//           value: this.state.switchVal,
-//         }}
-
-//         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
-//       />
-//     ) : (
-//       <ListItem
-//         style={styles.item2}
-//         leftAvatar={{source: avatar_url}}
-//         title={this.props.deviceName}
-//         onPress={() => this.toggleSelect()}
-//         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
-//       />
-//     );
-//   };
-// }
 
 function FlatListComponent({ deviceData }) {
   const [selected, setSelected] = useState(false);
