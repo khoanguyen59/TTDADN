@@ -77,6 +77,7 @@ class deviceScreen extends React.Component {
         </View>
         <TouchableWithoutFeedback>
           <FlatList
+            style={{marginBottom: 60,}}
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
             keyExtractor={item => item.deviceID.toString()}
