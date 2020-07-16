@@ -154,7 +154,7 @@ class homeScreen extends React.Component {
           keyExtractor={item => item.roomID}
         />
         {this.rendershowGuidebtn()}
-        {/* <Modal
+        <Modal
           animationType="slide"
           transparent={true}
           visible={this.state.show}
@@ -172,7 +172,7 @@ class homeScreen extends React.Component {
                 </TouchableHighlight>
               </View>
             </View>
-        </Modal> */}
+        </Modal>
         <View
           style = {styles.containAddbtn}
         >

@@ -61,7 +61,16 @@ export default function TimersDropdown({roomName,firstRoomName}) {
           }
         }>
       <Text style={globalStyles.whiteTitle}> {roomName} </Text>
-      <Badge value={temp?temp.length:0} status="primary" containerStyle={{ position: 'absolute',right:20, top:'30%'}}/>
+      <Badge value={temp?(temp.length>9?'9+':temp.length):0} 
+      badgeStyle = {
+        temp?
+        {...globalStyles.alternativeColor,}:{backgroundColor:'#BFBFBF'}
+      } 
+      containerStyle={{
+        position: 'absolute',
+        right:20,
+        top:'30%',
+      }}/>
     </TouchableOpacity>
   );
 
