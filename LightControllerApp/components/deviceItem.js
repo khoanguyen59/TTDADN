@@ -1,12 +1,10 @@
-import React, {useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-} from 'react-native';
+import React, {Component, useState, useEffect} from 'react';
+import {StyleSheet, Text} from 'react-native';
 import {ListItem} from 'react-native-elements';
 import {selectedRoom} from '../screens/homeScreen.js';
 import * as firebase from 'firebase';
 import MQTTConnection from '../mqtt/mqttConnection';
+import mqttSubject from '../mqtt/mqttSubject';
 import MQTTObserver from '../mqtt/mqttObserver';
 import ProgressCircle from 'react-native-progress-circle'
 
@@ -37,16 +35,23 @@ export async function toggleState(element) {
   var formattedTime = hh + ':' + min;
   var currentCount = await numChildCount(formattedDate);
 
-  firebase
-    .database()
-    .ref('deviceList/' + selectedRoom)
-    .child(element.deviceID - 1)
-    .update({
-      deviceID: element.deviceID,
-      deviceName: element.deviceName,
-      deviceState: !element.deviceState,
-      deviceType: element.deviceType,
+  var ref = firebase.database().ref('deviceList/' + selectedRoom);
+  var query = ref.orderByChild('deviceID').equalTo(element.deviceID);
+  query.once('value', function(snapshot) {
+    snapshot.forEach(function(child) {
+      console.log(child.key);
+      firebase
+        .database()
+        .ref('deviceList/' + selectedRoom)
+        .child(child.key)
+        .update({
+          deviceID: element.deviceID,
+          deviceName: element.deviceName,
+          deviceState: !element.deviceState,
+          deviceType: element.deviceType,
+        });
     });
+  });
 
   firebase
     .database()
@@ -64,7 +69,7 @@ export async function toggleState(element) {
   var message = {
     device_id: element.deviceID.toString(),
     values: [element.deviceState ? '0' : '1', '255'],
-    room: selectedRoom,
+    //room: selectedRoom, not necessary anymore after reindex
   };
   await MQTTConnection.publish(publishTopic, JSON.stringify(message), 2, false);
 }
@@ -87,26 +92,95 @@ function removeA(arr, what) {
   return arr;
 }
 
-function FlatListComponent({ deviceData }) {
+// class FlatListComponent extends Component {
+//   state = {
+//     selected: false,
+//     switchVal: this.props.deviceState,
+//     statusState:
+//       this.props.deviceType == 'Light' ? this.props.deviceState : false,
+//     observer: this.props.deviceType == 'Light' ? null : new MQTTObserver(0),
+//   };
+
+//   toggleSelect = () => {
+//     if (this.props.deviceType === 'Light') {
+//       this.setState({
+//         selected: !this.state.selected,
+//       });
+//       if (!this.state.selected) {
+//         selectedList.push(this.props);
+//       } else {
+//         removeA(selectedList, escapeStrict(selectedList, this.props));
+//       }
+//     }
+//     console.log(selectedList);
+//   };
+
+//   render = () => {
+//     const avatar_url =
+//       this.props.deviceType == 'Light'
+//         ? require('../icons/light-on.png')
+//         : require('../icons/light-sensor.png');
+//     return this.props.deviceType == 'Light' ? (
+//       <ListItem
+//         style={this.state.selected ? styles.itemOn : styles.item1}
+//         leftAvatar={{source: avatar_url}}
+//         title={this.props.deviceName}
+//         subtitle={this.props.deviceState == true ? 'State: On' : 'State: Off'}
+//         onPress={() => this.toggleSelect()}
+//         switch={{
+//           onValueChange: value => {
+//             this.setState({switchVal: value});
+//             toggleState(this.props);
+//             this.setState({statusState: !this.state.statusState});
+//           },
+//           value: this.state.switchVal,
+//         }}
+
+//         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+//       />
+//     ) : (
+//       <ListItem
+//         style={styles.item2}
+//         leftAvatar={{source: avatar_url}}
+//         title={this.props.deviceName}
+//         onPress={() => this.toggleSelect()}
+//         /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+//       />
+//     );
+//   };
+// }
+
+function FlatListComponent({deviceData}) {
   const [selected, setSelected] = useState(false);
   const [switchVal, setSwitchVal] = useState(deviceData.deviceState);
   const [statusState, setStatusState] = useState(deviceData.deviceState);
 
-  // const onValuesUpdate = (messageData) => { 
-  //   if (deviceData.deviceType != 'Sensor') return;
-    
-  //   firebase
-  //   .database()
-  //   .ref('deviceList/' + selectedRoom)
-  //   .child(deviceData.deviceID - 1)
-  //   .update({
-  //     deviceID: deviceData.deviceID,
-  //     deviceName: deviceData.deviceName,
-  //     deviceState: parseInt(messageData.values),
-  //     deviceType: deviceData.deviceType,
+  // const onValuesUpdate = values => {
+  //   if (
+  //     deviceData.deviceType != 'Sensor' ||
+  //     deviceData.deviceID != values.device_id
+  //   ) return;
+
+  //   var ref = firebase.database().ref('deviceList/' + selectedRoom);
+  //   var query = ref.orderByChild('deviceID').equalTo(deviceData.deviceID);
+  //   query.once('value', function(snapshot) {
+  //     snapshot.forEach(function(child) {
+  //       console.log(child.key);
+  //       firebase
+  //         .database()
+  //         .ref('deviceList/' + selectedRoom)
+  //         .child(child.key)
+  //         .update({
+  //           deviceID: deviceData.deviceID,
+  //           deviceName: deviceData.deviceName,
+  //           deviceState: parseInt(values.values),
+  //           deviceType: deviceData.deviceType,
+  //         });
+  //     });
   //   });
-  //   setStatusState(parseInt(messageData.values));
-  // }
+  //   setStatusState(parseInt(values.values));
+  // };
+
   // const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
 
   // useEffect(() => {
@@ -121,20 +195,19 @@ function FlatListComponent({ deviceData }) {
 
       if (!selected) {
         selectedList.push(deviceData);
-      } 
-      else {
+      } else {
         removeA(selectedList, escapeStrict(selectedList, deviceData));
       }
     }
 
-    console.log("Selected list: " + selectedList);
+    console.log('Selected list: ' + selectedList);
   };
 
   const avatar_url =
-  deviceData.deviceType == 'Light'
+    deviceData.deviceType == 'Light'
       ? require('../icons/light-on.png')
       : require('../icons/light-sensor.png');
-  
+
   const lightComponent = (
     <ListItem
       style={selected ? styles.itemOn : styles.item1}
@@ -144,33 +217,36 @@ function FlatListComponent({ deviceData }) {
       onPress={() => toggleSelect()}
       switch={{
         onValueChange: value => {
-        setSwitchVal(value);
-        toggleState(deviceData);
-        setStatusState(!statusState);
-      },
+          setSwitchVal(value);
+          toggleState(deviceData);
+          setStatusState(!statusState);
+        },
         value: switchVal,
       }}
-        /*<Text style={styles.name}>{title.devicePosition}</Text>*/
-  />);
+      /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+    />
+  );
 
   const sensorComponent = (
     <ListItem
-    style={styles.item2}
-    leftAvatar={{source: avatar_url}}
-    title={deviceData.deviceName}
-    onPress={() => toggleSelect()}
-    rightElement = {
-      <ProgressCircle
-        percent={Math.round(statusState/1028*100)}
-        radius={20}
-        borderWidth={8}
-        color="#3399FF"
-        shadowColor="#999"
-        bgColor="#fff">
-          <Text style={{ fontSize: 10 }}>{Math.round(statusState/1028*100).toString()+'%'}</Text>
+      style={styles.item2}
+      leftAvatar={{source: avatar_url}}
+      title={deviceData.deviceName}
+      onPress={() => toggleSelect()}
+      rightElement={
+        <ProgressCircle
+          percent={Math.round((statusState / 1028) * 100)}
+          radius={20}
+          borderWidth={8}
+          color="#3399FF"
+          shadowColor="#999"
+          bgColor="#fff">
+          <Text style={{fontSize: 10}}>
+            {Math.round((statusState / 1028) * 100).toString() + '%'}
+          </Text>
         </ProgressCircle>
-    }
-    /*<Text style={styles.name}>{title.devicePosition}</Text>*/
+      }
+      /*<Text style={styles.name}>{title.devicePosition}</Text>*/
     />
   );
 

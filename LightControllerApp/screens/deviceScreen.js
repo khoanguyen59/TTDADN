@@ -36,24 +36,24 @@ class deviceScreen extends React.Component {
     DeviceList: [],
   };
 
-  // readDeviceData = () => {
-  //   firebase
-  //     .database()
-  //     .ref('deviceList/' + selectedRoom)
-  //     .once('value')
-  //     .then(snapshot => {
-  //       this.setState({DeviceList: snapshot.val()});
-  //     });
-  // };
-
   readDeviceData = () => {
     firebase
       .database()
       .ref('deviceList/' + selectedRoom)
-      .on('value', snapshot => {
-        this.setState({ DeviceList: snapshot.val() });
+      .once('value')
+      .then(snapshot => {
+        this.setState({DeviceList: snapshot.val()});
       });
   };
+
+  // readDeviceData = () => {
+  //   firebase
+  //     .database()
+  //     .ref('deviceList/' + selectedRoom)
+  //     .on('value', snapshot => {
+  //       this.setState({ DeviceList: snapshot.val() });
+  //     });
+  // };
 
   toggleControl = () => {
     this.setState({
@@ -91,6 +91,7 @@ class deviceScreen extends React.Component {
         </View>
         <TouchableWithoutFeedback>
           <FlatList
+            style={{marginBottom: 60,}}
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
             style= {{marginBottom: 72}}
@@ -155,8 +156,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
   },
-  headContainer: {
-    
+  headContainer: {    
     flexDirection: 'row',
   },
   headButton: {

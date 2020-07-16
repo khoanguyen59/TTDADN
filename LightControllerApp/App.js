@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import 'react-native-gesture-handler';
+//import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
 import {Platform, InteractionManager, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -13,7 +13,6 @@ import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
 import addRoomScreen from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import MQTTConnection from './mqtt/mqttConnection';
 import mqttSubject from './mqtt/mqttSubject';
 
