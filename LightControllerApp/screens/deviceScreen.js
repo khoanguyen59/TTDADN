@@ -6,7 +6,6 @@ import {
   Button,
   TouchableOpacity,
   Image,
-  Animated,
 } from 'react-native';
 import * as firebase from 'firebase';
 
@@ -46,6 +45,15 @@ class deviceScreen extends React.Component {
       });
   };
 
+  // readDeviceData = () => {
+  //   firebase
+  //     .database()
+  //     .ref('deviceList/' + selectedRoom)
+  //     .on('value', snapshot => {
+  //       this.setState({ DeviceList: snapshot.val() });
+  //     });
+  // };
+
   toggleControl = () => {
     this.setState({
       showControlMode: !this.state.showControlMode,
@@ -80,18 +88,21 @@ class deviceScreen extends React.Component {
             <Button title={selectedRoom.toString()} color={globalStyles.alternativeColor}/>
           </View>
         </View>
-        <TouchableWithoutFeedback>
+        <View style={styles.bodyContainer}>
+        <TouchableWithoutFeedback >
           <FlatList
+            style={{marginBottom: 60,}}
             pointerEvents={'box-none'}
             data={this.state.DeviceList}
             style= {{marginBottom: 72}}
             keyExtractor={item => item.deviceID.toString()}
             renderItem={({item}) => {
-              return <FlatListComponent {...item} />;
+              return <FlatListComponent deviceData={item} />;
             }}
           />
         </TouchableWithoutFeedback>
         {this.renderControlButton()}
+        </View>
         <View style={styles.bottomContainer}>
           <View style={styles.bottomButtonContainer}>
             <TouchableOpacity style={styles.bottomButtonOn}>
@@ -140,20 +151,23 @@ class deviceScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-between',
+    //justifyContent: 'space-between',
   },
-  actionButtonContainer: {
-    
-    flex: 1,
-    justifyContent: 'space-between',
+  actionButtonContainer: {  
+    //flex: 1,
+    position: 'absolute',
+    bottom: -30,
+    right: -5,
   },
-  headContainer: {
-    
-    flexDirection: 'row',
+  headContainer: {   
+    flex: 1, 
+    fontWeight: 'bold'
+  },
+  bodyContainer: {
+    flex: 8,
   },
   headButton: {
     ...globalStyles.alternativeColor,
-    flex: 1,
     justifyContent: 'center',
   },
   item: {

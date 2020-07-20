@@ -129,7 +129,7 @@ export default function historyScreen({ navigation }){
         <View style={styles.datePickButton}>
           <TouchableOpacity 
             onPress={onButtonPress}>
-              <Text style={styles.buttonText}>PICK A DATE</Text>
+              <Text style={styles.buttonText}>Pick A Date</Text>
           </TouchableOpacity>  
           <DateTimePicker
             mode="date"

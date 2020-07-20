@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier */
 import MQTT from 'react-native-mqtt-angelos3lex';
-import uuid from 'react-native-uuid';
 import {Buffer} from 'buffer';
 global.Buffer = Buffer;
 
@@ -11,19 +10,12 @@ module.exports = {  // cached singleton instance
     props: null,
 
     randIdCreator() {
-        // const S4 = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-        // return `random${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}`;
-        const currentTime = +new Date();
-        let clientID = currentTime + uuid.v1();
-        return clientID.slice(0, 23);
+        const S4 = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+        return `random${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}${S4()}`;
     },
 
     create(userID, subscribeTopic, publishTopic, connectionProps = {}) {
       if (userID && connectionProps) {
-        // this.onConnectionOpened = this.onConnectionOpened.bind(this);
-        // this.onConnectionClosed = this.onConnectionClosed.bind(this);
-        // this.onError = this.onError.bind(this);
-        // this.onMessageArrived = this.onMessageArrived.bind(this);
         this.disconnect = this.disconnect.bind(this);
   
         this.subscribeTopic = subscribeTopic;
