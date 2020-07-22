@@ -56,19 +56,22 @@ class homeScreen extends React.Component {
         }}>
           <Swiper style = {{}} showsButtons={true}>
             <View style={styles.slide}>
-              <Text style={styles.text}>1</Text>
+              <Image source = {require('../images/home.png') } style = {styles.imageGuide} ></Image>
             </View>
             <View style={styles.slide}>
-              <Text style={styles.text}>2</Text>
+              <Image source = {require('../images/device.png') } style = {styles.imageGuide} ></Image>
             </View>
             <View style={styles.slide}>
-              <Text style={styles.text}>3</Text>
+              <Image source = {require('../images/AddDevice.png') } style = {styles.imageGuide} ></Image>
             </View>
             <View style={styles.slide}>
-              <Text style={styles.text}>4</Text>
+              <Image source = {require('../images/Timer.png') } style = {styles.imageGuide} ></Image>
             </View>
             <View style={styles.slide}>
-              <Text style={styles.text}>And simple</Text>
+              <Image source = {require('../images/Timerscreen.png') } style = {styles.imageGuide} ></Image>
+            </View>
+            <View style={styles.slide}>
+              <Image source = {require('../images/History.png') } style = {styles.imageGuide} ></Image>
               <View style = {styles.closeGuidecontain}>
                 <TouchableOpacity 
                   style={styles.bottomContainer}
@@ -111,8 +114,10 @@ class homeScreen extends React.Component {
   rendershowGuidebtn =()=>{
     return(
         <MovableView style={{
-          position:'absolute',
+          // position:'relative',
           // backgroundColor:'red',
+          top: 60,
+          right: 60,
           height:60, 
           width:60,
           borderRadius:30,
@@ -195,9 +200,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   guide:{
-    height : 50,
+    position:'relative',
+    height : 40,
     width : '100%',
-    backgroundColor : 'red',
+    ...globalStyles.alternativeColor,
     justifyContent:'center',
     alignItems:'center',
   },
@@ -279,6 +285,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     resizeMode: 'contain',
+  },
+  imageGuide: {
+    // ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '85%',
+    resizeMode: 'contain',
+    borderRadius:30,
   },
 });
 export default homeScreen;
