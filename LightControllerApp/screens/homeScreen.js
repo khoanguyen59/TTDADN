@@ -56,10 +56,16 @@ class homeScreen extends React.Component {
         }}>
           <Swiper style = {{}} showsButtons={true}>
             <View style={styles.slide}>
-              <Text style={styles.text}>Hello Swiper</Text>
+              <Text style={styles.text}>1</Text>
             </View>
             <View style={styles.slide}>
-              <Text style={styles.text}>Beautiful</Text>
+              <Text style={styles.text}>2</Text>
+            </View>
+            <View style={styles.slide}>
+              <Text style={styles.text}>3</Text>
+            </View>
+            <View style={styles.slide}>
+              <Text style={styles.text}>4</Text>
             </View>
             <View style={styles.slide}>
               <Text style={styles.text}>And simple</Text>
@@ -121,7 +127,6 @@ class homeScreen extends React.Component {
               height: 50,
               width: 50,
               borderRadius:30,
-              position: 'absolute',
               bottom: 5,
               right: 5,
             }}
