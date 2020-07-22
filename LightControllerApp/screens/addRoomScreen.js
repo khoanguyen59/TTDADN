@@ -84,7 +84,7 @@ class addRoom extends React.Component {
              <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
                 placeholder = "Room ID,     e.g., 101"
-                placeholderTextColor = 'white'
+                //placeholderTextColor = 'white'
                //  placeholderTextColor = "black"
                 autoCapitalize = "none"
                 onChangeText = {this.handleRoomID}/>
@@ -92,7 +92,7 @@ class addRoom extends React.Component {
              <TextInput style = {styles.input}
                 underlineColorAndroid = "transparent"
                 placeholder = "Room Name,     e.g., Classroom"
-                placeholderTextColor = 'white'
+                //placeholderTextColor = 'white'
                //  placeholderTextColor = "black"
                 autoCapitalize = "none"
                 onChangeText = {this.handleRoomName}/>
@@ -102,7 +102,7 @@ class addRoom extends React.Component {
                 onPress = {
                    () => this.SubmitRoom(parseInt(this.state.RoomID), this.state.RoomName , this.state.RoomList)
                 }>
-                <Text style = {styles.submitButtonText}> Submit </Text>
+                <Text style = {styles.submitButtonText}>Submit</Text>
              </TouchableOpacity>
           </View>
        )
@@ -122,7 +122,7 @@ class addRoom extends React.Component {
        borderColor: 'black',
        borderWidth: 1,
        borderRadius: 20,
-       backgroundColor: '#00ffff'
+       //backgroundColor: '#00ffff'
     },
     submitButton: {
        ...globalStyles.alternativeColor,

@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import 'react-native-gesture-handler';
 import React, { useEffect } from 'react';
 import {Platform, InteractionManager, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -13,9 +12,11 @@ import addingScreen from './screens/addingScreen';
 import timerScreen from './screens/timerScreen';
 import addRoomScreen from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
+import MQTTConnection from './mqtt/mqttConnection';
+//import mqttSubject from './mqtt/mqttSubject';
 
 import * as firebase from 'firebase';
-//console.disableYellowBox = true;
+console.disableYellowBox = true;
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
   authDomain: 'lightappdemo-dc252.firebaseapp.com',
@@ -30,71 +31,115 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-function readUserData() {
-  firebase
-    .database()
-    .ref('deviceList/Bedroom/0')
-    .once('value', function(snapshot) {
-      //console.log(snapshot.val());
-    });
-}
-const MyTheme = {
-  dark: false,
-  colors: {
-    primary: '#ffffff',
-    background: '#ffffff',
-    card: '#2095f3',
-    text: '#ffffff',
-    border: '#ffffff',
+const subscribeTopic = 'Topic/Light';
+const publishTopic = 'Topic/LightD';
+const myUserName = 'BKvm';
+const myPassword = 'Hcmut_CSE_2020';
+
+const uri = 'mqtt://52.230.26.121:1883';
+//const uri = 'mqtt://52.187.125.59:1883';
+
+//Establish MQTTConnection-----------------------------------
+MQTTConnection.create('kiet', subscribeTopic, publishTopic, 
+  {
+    uri: uri,
+    user: myUserName,
+    pass: myPassword,
+  });
+
+MQTTConnection.attachCallbacks(
+  () => {
+    console.log('MQTT onConnectionOpened');
+    MQTTConnection.subscribe(subscribeTopic, 2);
   },
-};
+  (err) => {
+    console.log(`MQTT onConnectionClosed ${err}`);
+  },
+  (message) => {
+    if (!message) return;
+
+    console.log("Message data: " + message.data);
+    const element = JSON.parse(message.data);
+    console.log("Element[0]: " + JSON.stringify(element[0]));
+    //mqttSubject.notifyObservers(element[0]);
+
+    // firebase
+    // .database()
+    // .ref('deviceList/' + element[0].room)
+    // .child(element[0].device_id - 1)
+    // .update({
+    //   deviceState: parseInt(element[0].values),
+    //   deviceID : 7,
+    //   deviceName : "Sensor Test",
+    //   deviceType : "Sensor",
+    // });
+    // console.log(`MQTT New message: ${element[0].values}`);
+  },
+  (error) => {
+    console.error(`MQTT onError: ${error}`);
+  },
+);
+
+//-------------------------------------------------------------------------------------
+
+
+
+
+//Fix set timer for long time issue----------------------------------------------------
 
 const _setTimeout = global.setTimeout;
 const _clearTimeout = global.clearTimeout;
 const MAX_TIMER_DURATION_MS = 60 * 1000;
-//-------------------------------------------------------------------------------
 if (Platform.OS === 'android') {
-  // Work around issue `Setting a timer for long time`
-  // see: https://github.com/firebase/firebase-js-sdk/issues/97
-  const timerFix = {};
-  const runTask = (id, fn, ttl, args) => {
-      const waitingTime = ttl - Date.now();
-      if (waitingTime <= 1) {
-          InteractionManager.runAfterInteractions(() => {
-              if (!timerFix[id]) {
-                  return;
-              }
-              delete timerFix[id];
-              fn(...args);
-          });
-          return;
-      }
+    const timerFix = {};
+    const runTask = (id, fn, ttl, args) => {
+        const waitingTime = ttl - Date.now();
+        if (waitingTime <= 1) {
+            InteractionManager.runAfterInteractions(() => {
+                if (!timerFix[id]) {
+                    return;
+                }
+                delete timerFix[id];
+                fn(...args);
+            });
+            return;
+        }
 
-      const afterTime = Math.min(waitingTime, MAX_TIMER_DURATION_MS);
-      timerFix[id] = _setTimeout(() => runTask(id, fn, ttl, args), afterTime);
-  };
+        const afterTime = Math.min(waitingTime, MAX_TIMER_DURATION_MS);
+        timerFix[id] = _setTimeout(() => runTask(id, fn, ttl, args), afterTime);
+    };
 
-  global.setTimeout = (fn, time, ...args) => {
-      if (MAX_TIMER_DURATION_MS < time) {
-          const ttl = Date.now() + time;
-          const id = '_lt_' + Object.keys(timerFix).length;
-          runTask(id, fn, ttl, args);
-          return id;
-      }
-      return _setTimeout(fn, time, ...args);
-  };
+    global.setTimeout = (fn, time, ...args) => {
+        if (MAX_TIMER_DURATION_MS < time) {
+            const ttl = Date.now() + time;
+            const id = '_lt_' + Object.keys(timerFix).length;
+            runTask(id, fn, ttl, args);
+            return id;
+        }
+        return _setTimeout(fn, time, ...args);
+    };
 
-  global.clearTimeout = id => {
-      if (typeof id === 'string' && id.startsWith('_lt_')) {
-          _clearTimeout(timerFix[id]);
-          delete timerFix[id];
-          return;
-      }
-      _clearTimeout(id);
-  };
+    global.clearTimeout = id => {
+        if (typeof id === 'string' && id.startsWith('_lt_')) {
+            _clearTimeout(timerFix[id]);
+            delete timerFix[id];
+            return;
+        }
+        _clearTimeout(id);
+    };
 }
 
 //-------------------------------------------------------------------------------
+
+// function readUserData() {
+//   firebase
+//     .database()
+//     .ref('deviceList/Bedroom/0')
+//     .once('value', function(snapshot) {
+//       //console.log(snapshot.val());
+//     });
+// }
+
 const AppNavigator = createStackNavigator();
 const screenOption = navigation => ({
   headerLeft: () => (
@@ -107,12 +152,8 @@ const screenOption = navigation => ({
   ),
 });
 const App = () => {
-  useEffect(()=>{
-    SplashScreen.hide();
-  },[])
-  
-  readUserData();
-  
+  useEffect(()=> {SplashScreen.hide()},[]);
+  //readUserData();
   return (
     <NavigationContainer theme = {MyTheme}>
       <AppNavigator.Navigator>
@@ -138,3 +179,14 @@ const styles = StyleSheet.create({
     marginStart: 15,
   },
 });
+
+const MyTheme = {
+  dark: false,
+  colors: {
+    primary: '#ffffff',
+    background: '#ffffff',
+    card: '#2095f3',
+    text: '#ffffff',
+    border: '#ffffff',
+  },
+};

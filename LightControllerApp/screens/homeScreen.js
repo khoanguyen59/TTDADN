@@ -1,18 +1,11 @@
 import React from 'react';
-import {
-  View, 
-  FlatList,
-  TouchableHighlight,
-  StyleSheet, 
-  Text,
-  Modal, 
-  Dimensions,
-  Image,
-  Animated } from 'react-native';     
+import {View, FlatList, StyleSheet, Text,Button, Dimensions, Image,
+        Animated} from 'react-native';
+import {TouchableHighlight, Modal} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
-import {eraseList} from '../components/deviceItem.js';
+//import {eraseList} from '../components/deviceItem.js';
 import Swiper from 'react-native-swiper'
 import MovableView from 'react-native-movable-view';
 
@@ -49,47 +42,47 @@ class homeScreen extends React.Component {
         this.setState({RoomList: snapshot.val()});
       });
   };
-
-  renderguide = () => {
-    return (
-      <Animated.View style = {{
-        flex :1,
-        transform: [{
-          scale: this.state.animated.interpolate({
-            inputRange:[0,1],
-            outputRange:[0,1]
-          })
-        }]
-      }}>
-        <Swiper style = {{}} showsButtons={true}>
-          <View style={styles.slide}>
-            <Text style={styles.text}>Hello Swiper</Text>
-          </View>
-          <View style={styles.slide}>
-            <Text style={styles.text}>Beautiful</Text>
-          </View>
-          <View style={styles.slide}>
-            <Text style={styles.text}>And simple</Text>
-            <View style = {styles.closeGuidecontain}>
-              <TouchableOpacity 
-                style={styles.bottomContainer}
-                onPress = {()=>{
-                  this.setState({Guidestate : false})
-                }}>
-              <Text style={{color: '#ffffff',
-                            fontSize: 20,
-                            fontWeight: 'bold',
-                          }}>Close Guide</Text>
-              </TouchableOpacity>
+  renderguide = ()=>{
+      return (
+        <Animated.View style = {{
+          flex :1,
+          // position:'absolute',
+          transform: [{
+            scale: this.state.animated.interpolate({
+              inputRange:[0,1],
+              outputRange:[0,1]
+            })
+          }]
+        }}>
+          <Swiper style = {{}} showsButtons={true}>
+            <View style={styles.slide}>
+              <Text style={styles.text}>Hello Swiper</Text>
             </View>
-          </View>
-        </Swiper>
-      </Animated.View>
-    )
-  };
-
+            <View style={styles.slide}>
+              <Text style={styles.text}>Beautiful</Text>
+            </View>
+            <View style={styles.slide}>
+              <Text style={styles.text}>And simple</Text>
+              <View style = {styles.closeGuidecontain}>
+                <TouchableOpacity 
+                  style={styles.bottomContainer}
+                  onPress = {()=>{
+                    this.setState({Guidestate : false})
+                  }}>
+                <Text style={{color: '#ffffff',
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                            }}>Close Guide</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Swiper>
+        </Animated.View>
+      )
+    
+  }
   renderItem = ({item}) => {
-    //const {navigation} = this.props.navigation;
+    const {navigation} = this.props.navigation;
     return (
       <TouchableOpacity
         pointerEvents="none"
@@ -97,7 +90,7 @@ class homeScreen extends React.Component {
         onPress={() => {
           selectedRoom = item.roomName;
           this.props.navigation.navigate('Device');
-          eraseList();
+          //eraseList();
         }}>
         <Text style={styles.title} pointerEvents="none">
           {item.roomID}
@@ -108,6 +101,7 @@ class homeScreen extends React.Component {
       </TouchableOpacity>
     );
   };
+
   rendershowGuidebtn =()=>{
     return(
         <MovableView style={{
@@ -124,9 +118,12 @@ class homeScreen extends React.Component {
               alignItems: 'center',
               justifyContent:'center',
               padding: 10,
-              height:60,
-              width:60,
+              height: 50,
+              width: 50,
               borderRadius:30,
+              position: 'absolute',
+              bottom: 5,
+              right: 5,
             }}
             activeOpacity = {0}
             onPress = {()=>{
@@ -164,30 +161,36 @@ class homeScreen extends React.Component {
         <Modal
           animationType="slide"
           transparent={true}
-          visible={this.state.show}>
+          visible={this.state.show}
+        >
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
-                <Text style={styles.modalText}>PICK A ROOM</Text>
+                <Text style={styles.modalText}>Pick a room!</Text>
                 <TouchableHighlight
                   style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                  onPress={() => this.setState({show: !this.state.show})}>
+                  onPress={() => {
+                  this.setState({show: !this.state.show})
+                  }}
+                >
                   <Text style={styles.textStyle}>Close</Text>
                 </TouchableHighlight>
               </View>
             </View>
         </Modal>
-        <View style = {styles.containAddbtn}>
+        <View
+          style = {styles.containAddbtn}
+        >
           <TouchableHighlight
             style = {styles.addButton}
             onPress={() => {
               this.props.navigation.navigate('AddRoom');
             }}>
-            <Text style = {styles.textStyle}>Add a Room</Text>
+            <Text style = {styles.textStyle}>Add Room</Text>
           </TouchableHighlight>
         </View>
       </View>
     );
-  };
+  }   
 }
 const styles = StyleSheet.create({
   container: {
@@ -195,7 +198,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   container_flatlist:{
-    flex: 9,
+    flex: 1,
     marginVertical: 20,
   },
   list: {
@@ -221,15 +224,15 @@ const styles = StyleSheet.create({
     color: 'white'
   },
   containAddbtn:{
-    height: 40,
+    height : 35,
     width : '100%',
+    backgroundColor : 'red',
     justifyContent:'center',
     alignItems:'center',
   },
   addButton: {
     ...globalStyles.alternativeColor,
-    ...globalStyles.regularText,
-    flex: 1,
+    flex:1,
     width:'100%',
     justifyContent:'center',
     alignItems:'center',

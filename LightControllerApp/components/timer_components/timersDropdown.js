@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
 import TimerItem from './timerItem';
 import {globalStyles} from '../../styles/global';
 import * as firebase from 'firebase';
+import { Badge } from 'react-native-elements'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -28,16 +29,18 @@ if (!firebase.apps.length) {
 //     });
 // };
 
-export default function TimersDropdown({roomName,firstRoomName}) {
+export default function TimersDropdown({roomName, firstRoomName}) {
 
   const [timerItems, setTimerItems] = useState([]);
-  const [firsttimeshow, setfirsttimeshow] = useState([true]);
-
-
-  if (roomName === firstRoomName&&firsttimeshow){
+  const [temp, setTemp] = useState([]);
+  const [isFirstRender, setIsFirstRender] = useState([true]);
+  firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+    setTemp(snapshot.val());});
+  
+  if (roomName === firstRoomName&&isFirstRender){
     firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
       setTimerItems(snapshot.val());});
-    setfirsttimeshow(false);
+    setIsFirstRender(false);
   }
   
   const locationTab = (
@@ -47,14 +50,27 @@ export default function TimersDropdown({roomName,firstRoomName}) {
         () => {
           //setDisplayItems(displayItems.length == 0 ? /*(initDropdown ? timerData : timerItems)*/ timerItems : []);
           // setTimerItems(timerItems.length == 0 ? timerData : [])
+          // firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+          //   setTemp(snapshot.val());});
           if (timerItems.length === 0) {
-            firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
-              setTimerItems(snapshot.val());});
+            if(temp == ''){setTimerItems([]);}
+            else setTimerItems(temp);
           }
           else setTimerItems([]);
+          
           }
         }>
       <Text style={globalStyles.whiteTitle}> {roomName} </Text>
+      <Badge value={temp?(temp.length>9?'9+':temp.length):0} 
+      badgeStyle = {
+        temp?
+        {...globalStyles.alternativeColor,}:{backgroundColor:'#BFBFBF'}
+      } 
+      containerStyle={{
+        position: 'absolute',
+        right:20,
+        top:'30%',
+      }}/>
     </TouchableOpacity>
   );
 
@@ -83,7 +99,7 @@ export default function TimersDropdown({roomName,firstRoomName}) {
       ]
     )
   }
-  // day in database follow ABC's so must convert to 2-S
+  
   function convertDay(item){
     var date = {
       Monday:'true',
@@ -103,7 +119,7 @@ export default function TimersDropdown({roomName,firstRoomName}) {
     date.Sunday = item.Sunday;
     return date;
   }
-  // touch able item
+  
   return (
     <View>
       {locationTab}
@@ -112,17 +128,18 @@ export default function TimersDropdown({roomName,firstRoomName}) {
         style={styles.border}
         onLongPress={() => deleteTimer(item)}>
           <TimerItem
-            key={item.deviceID}
+            key={item.deviceName + item.deviceID.toString() + item.time}
             deviceName={item.deviceName}
             setTime={item.time}
-            //convert day of item
             setDates={Object.values(convertDay(item.day))}
             action={item.off}
           />
         </TouchableOpacity>
-      ))}
+      ))
+      }
     </View>
   );
+  // console.log(roominTimer)
 }
 
 const styles = StyleSheet.create({
