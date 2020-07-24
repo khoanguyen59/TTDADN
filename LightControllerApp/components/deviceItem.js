@@ -6,7 +6,7 @@ import * as firebase from 'firebase';
 import MQTTConnection from '../mqtt/mqttConnection';
 import mqttSubject from '../mqtt/mqttSubject';
 import MQTTObserver from '../mqtt/mqttObserver';
-import ProgressCircle from 'react-native-progress-circle'
+import ProgressCircle from 'react-native-progress-circle';
 
 const publishTopic = 'Topic/LightD';
 
@@ -24,7 +24,7 @@ async function numChildCount(date) {
   return snapshot.numChildren();
 }
 
-export async function toggleState(element) {
+export async function toggleState(element, deviceState) {
   var today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth() + 1;
@@ -47,7 +47,8 @@ export async function toggleState(element) {
         .update({
           deviceID: element.deviceID,
           deviceName: element.deviceName,
-          deviceState: !element.deviceState,
+          //deviceState: !element.deviceState,
+          deviceState: deviceState,
           deviceType: element.deviceType,
         });
     });
@@ -58,7 +59,8 @@ export async function toggleState(element) {
     .ref('logList/' + formattedDate)
     .child(currentCount)
     .set({
-      action: element.deviceState ? 'off' : 'on',
+      //action: element.deviceState ? 'off' : 'on',
+      action: deviceState ? 'on' : 'off',
       autoControlled: false,
       deviceID: element.deviceID,
       deviceName: element.deviceName,
@@ -66,11 +68,12 @@ export async function toggleState(element) {
       time: formattedTime,
     });
 
-  var message = {
+  var message = [{
     device_id: element.deviceID.toString(),
-    values: [element.deviceState ? '0' : '1', '255'],
+    //values: [element.deviceState ? '0' : '1', '255'],
     //room: selectedRoom, not necessary anymore after reindex
-  };
+    values: [deviceState ? '1' : '0', '255'],
+  }];
   await MQTTConnection.publish(publishTopic, JSON.stringify(message), 2, false);
 }
 
@@ -154,12 +157,15 @@ function FlatListComponent({deviceData}) {
   const [selected, setSelected] = useState(false);
   const [switchVal, setSwitchVal] = useState(deviceData.deviceState);
   const [statusState, setStatusState] = useState(deviceData.deviceState);
+  const [shouldUpdate, setShouldUpdate] = useState(false);
 
-  // const onValuesUpdate = values => {
-  //   if (
-  //     deviceData.deviceType != 'Sensor' ||
-  //     deviceData.deviceID != values.device_id
-  //   ) return;
+  const onValuesUpdate = values => {
+    if (
+      deviceData.deviceType != 'Sensor' ||
+      deviceData.deviceID != values.device_id
+    ) return;
+
+    setShouldUpdate(!shouldUpdate);
 
   //   var ref = firebase.database().ref('deviceList/' + selectedRoom);
   //   var query = ref.orderByChild('deviceID').equalTo(deviceData.deviceID);
@@ -179,15 +185,15 @@ function FlatListComponent({deviceData}) {
   //     });
   //   });
   //   setStatusState(parseInt(values.values));
-  // };
+  };
 
-  // const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
+  const [observer, setObserver] = useState(new MQTTObserver(onValuesUpdate));
 
-  // useEffect(() => {
-  //   mqttSubject.registerObserver(observer);
+  useEffect(() => {
+    mqttSubject.registerObserver(observer);
 
-  //   return () => mqttSubject.removeObserver(observer);
-  // }, []);
+    return () => mqttSubject.removeObserver(observer);
+  }, []);
 
   const toggleSelect = () => {
     if (deviceData.deviceType === 'Light') {
@@ -200,7 +206,7 @@ function FlatListComponent({deviceData}) {
       }
     }
 
-    console.log('Selected list: ' + selectedList);
+    //console.log('Selected list: ' + selectedList);
   };
 
   const avatar_url =
@@ -218,7 +224,7 @@ function FlatListComponent({deviceData}) {
       switch={{
         onValueChange: value => {
           setSwitchVal(value);
-          toggleState(deviceData);
+          toggleState(deviceData, !statusState);
           setStatusState(!statusState);
         },
         value: switchVal,
@@ -235,14 +241,14 @@ function FlatListComponent({deviceData}) {
       onPress={() => toggleSelect()}
       rightElement={
         <ProgressCircle
-          percent={Math.round((statusState / 1028) * 100)}
+          percent={Math.round((statusState / 255) * 100)}
           radius={20}
           borderWidth={8}
           color="#3399FF"
           shadowColor="#999"
           bgColor="#fff">
-          <Text style={{fontSize: 10}}>
-            {Math.round((statusState / 1028) * 100).toString() + '%'}
+          <Text style={statusState > 250 ? { fontSize : 8 } : {fontSize: 10}}>
+            {Math.round((statusState / 255) * 100).toString() + '%'}
           </Text>
         </ProgressCircle>
       }

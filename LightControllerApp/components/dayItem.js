@@ -1,10 +1,10 @@
 //This file defines weekday components for setTimerScreen
 import React, {Component} from 'react';
-import {View, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, Text, TouchableOpacity, ToastAndroid } from 'react-native';
 
 import {selectedRoom} from '../screens/homeScreen.js';
 import {selectedList} from './deviceItem.js';
-import {selectedTime} from '../screens/setTimerScreen.js';
+//import {selectedTime} from '../screens/setTimerScreen.js';
 import * as firebase from 'firebase';
 
 const firebaseConfig = {
@@ -35,7 +35,7 @@ async function numChildCount(room) {
   return snapshot.numChildren();
 }
 
-export async function setTimer() {
+export async function setTimer(turnsOff, pickedTime) {
   var currentCount = await numChildCount(selectedRoom);
   for (let element of selectedList) {
     firebase
@@ -45,7 +45,9 @@ export async function setTimer() {
       .set({
         deviceID: element.deviceID,
         deviceName: element.deviceName,
-        time: selectedTime,
+        off: turnsOff,
+        //time: selectedTime,
+        time: pickedTime,
       });
     firebase
       .database()
@@ -60,7 +62,9 @@ export async function setTimer() {
         Friday: selectedDays[4],
         Saturday: selectedDays[5],
         Sunday: selectedDays[6],
-      });
+      }).then(() =>
+        ToastAndroid.show('Timer set successfully!', ToastAndroid.LONG)
+      );
     currentCount += 1;
   }
 }

@@ -13,7 +13,7 @@ import timerScreen from './screens/timerScreen';
 import addRoomScreen from './screens/addRoomScreen';
 import SplashScreen from 'react-native-splash-screen';
 import MQTTConnection from './mqtt/mqttConnection';
-//import mqttSubject from './mqtt/mqttSubject';
+import mqttSubject from './mqtt/mqttSubject';
 
 import * as firebase from 'firebase';
 console.disableYellowBox = true;
@@ -40,7 +40,7 @@ const uri = 'mqtt://52.230.26.121:1883';
 //const uri = 'mqtt://52.187.125.59:1883';
 
 //Establish MQTTConnection-----------------------------------
-MQTTConnection.create('kiet', subscribeTopic, publishTopic, 
+MQTTConnection.create('kiet', subscribeTopic, publishTopic,
   {
     uri: uri,
     user: myUserName,
@@ -62,6 +62,7 @@ MQTTConnection.attachCallbacks(
     const element = JSON.parse(message.data);
     console.log("Element[0]: " + JSON.stringify(element[0]));
     //mqttSubject.notifyObservers(element[0]);
+    mqttSubject.notifyObservers(element);
 
     // firebase
     // .database()

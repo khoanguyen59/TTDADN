@@ -56,7 +56,7 @@ class setTimerScreen extends React.Component {
   };
 
   onConfirm = () => {
-    setTimer();
+    setTimer(this.state.switchVal, this.state.pickedTime);
     this.props.navigation.navigate('Device');
   };
 
