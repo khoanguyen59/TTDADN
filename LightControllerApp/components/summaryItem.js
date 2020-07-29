@@ -8,7 +8,7 @@ class FlatListComponent extends Component {
         style={this.props[1] % 2 === 0 ? styles.item : styles.oddItem}>
         <Text style={{...styles.title, flex : 2}}>{this.props[0].deviceName}</Text>
         <Text style={{...styles.title1, flex : 2}}>{this.props[0].room}</Text>
-        <Text style={{...styles.title, flex : 1}}>{this.props[0].action}</Text>
+        <Text style={{...styles.title, flex : 1}}>{this.props[0].action.toUpperCase()}</Text>
         <Text style={{...styles.title, flex : 1}}>{this.props[0].time}</Text>
       </TouchableOpacity>
     );

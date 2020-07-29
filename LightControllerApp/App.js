@@ -62,7 +62,7 @@ MQTTConnection.attachCallbacks(
     const element = JSON.parse(message.data);
     console.log("Element[0]: " + JSON.stringify(element[0]));
     //mqttSubject.notifyObservers(element[0]);
-    mqttSubject.notifyObservers(element);
+    mqttSubject.notifyObservers(element[0]);
 
     // firebase
     // .database()

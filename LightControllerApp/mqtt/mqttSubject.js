@@ -1,4 +1,4 @@
-class MOTTSubject {
+class MQTTSubject {
     constructor() {
         this.observers = []
     }
@@ -16,6 +16,6 @@ class MOTTSubject {
     }
 }
 
-const mqttSubject = new MOTTSubject();
+const mqttSubject = new MQTTSubject();
 
 export default mqttSubject;

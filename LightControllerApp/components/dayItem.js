@@ -45,7 +45,7 @@ export async function setTimer(turnsOff, pickedTime) {
       .set({
         deviceID: element.deviceID,
         deviceName: element.deviceName,
-        off: turnsOff,
+        off: !turnsOff,
         //time: selectedTime,
         time: pickedTime,
       });
