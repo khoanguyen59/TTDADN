@@ -56,13 +56,22 @@ class homeScreen extends React.Component {
         }}>
           <Swiper style = {{}} showsButtons={true}>
             <View style={styles.slide}>
-              <Text style={styles.text}>Hello Swiper</Text>
+              <Image source = {require('../images/home.png') } style = {styles.imageGuide} ></Image>
             </View>
             <View style={styles.slide}>
-              <Text style={styles.text}>Beautiful</Text>
+              <Image source = {require('../images/device.png') } style = {styles.imageGuide} ></Image>
             </View>
             <View style={styles.slide}>
-              <Text style={styles.text}>And simple</Text>
+              <Image source = {require('../images/AddDevice.png') } style = {styles.imageGuide} ></Image>
+            </View>
+            <View style={styles.slide}>
+              <Image source = {require('../images/Timer.png') } style = {styles.imageGuide} ></Image>
+            </View>
+            <View style={styles.slide}>
+              <Image source = {require('../images/Timerscreen.png') } style = {styles.imageGuide} ></Image>
+            </View>
+            <View style={styles.slide}>
+              <Image source = {require('../images/History.png') } style = {styles.imageGuide} ></Image>
               <View style = {styles.closeGuidecontain}>
                 <TouchableOpacity 
                   style={styles.bottomContainer}
@@ -105,8 +114,10 @@ class homeScreen extends React.Component {
   rendershowGuidebtn =()=>{
     return(
         <MovableView style={{
-          position:'absolute',
+          // position:'relative',
           // backgroundColor:'red',
+          top: 60,
+          right: 60,
           height:60, 
           width:60,
           borderRadius:30,
@@ -121,7 +132,6 @@ class homeScreen extends React.Component {
               height: 50,
               width: 50,
               borderRadius:30,
-              position: 'absolute',
               bottom: 5,
               right: 5,
             }}
@@ -148,6 +158,13 @@ class homeScreen extends React.Component {
     if (this.state.Guidestate) {return this.renderguide();}
     return (
       <View style={styles.container} pointerEvents="box-none">
+        <View
+          style = {styles.guide}
+        >
+          <Text style={styles.guideText}>
+            Pick a  room
+          </Text>
+        </View>
         <FlatList
           pointerEvents="none"
           style = {styles.container_flatlist}
@@ -158,25 +175,6 @@ class homeScreen extends React.Component {
           keyExtractor={item => item.roomID}
         />
         {this.rendershowGuidebtn()}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.show}
-        >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Pick a room!</Text>
-                <TouchableHighlight
-                  style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
-                  onPress={() => {
-                  this.setState({show: !this.state.show})
-                  }}
-                >
-                  <Text style={styles.textStyle}>Close</Text>
-                </TouchableHighlight>
-              </View>
-            </View>
-        </Modal>
         <View
           style = {styles.containAddbtn}
         >
@@ -200,6 +198,19 @@ const styles = StyleSheet.create({
   container_flatlist:{
     flex: 1,
     marginVertical: 20,
+  },
+  guide:{
+    position:'relative',
+    height : 40,
+    width : '100%',
+    ...globalStyles.alternativeColor,
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  guideText:{
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
   },
   list: {
     flex: 1,
@@ -237,27 +248,6 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
   },
-  centeredView: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: Dimensions.get('window').height / 4
-  },
-  modalView: {
-    margin: 20,
-    width: Dimensions.get('window').width - 20 ,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5
-  },
   openButton: {
     backgroundColor: "#F194FF",
     borderRadius: 20,
@@ -267,10 +257,6 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
-  },
-  modalText: {
-    marginBottom: 15,
     textAlign: "center"
   },
   slide: {
@@ -299,6 +285,13 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     resizeMode: 'contain',
+  },
+  imageGuide: {
+    // ...StyleSheet.absoluteFillObject,
+    width: '100%',
+    height: '85%',
+    resizeMode: 'contain',
+    borderRadius:30,
   },
 });
 export default homeScreen;
