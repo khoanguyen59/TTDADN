@@ -43,25 +43,19 @@ export async function setTimer(turnsOff, pickedTime) {
       .ref('timingList/' + selectedRoom)
       .child(currentCount)
       .set({
+        day: {
+          Monday: selectedDays[0],
+          Tuesday: selectedDays[1],
+          Wednesday: selectedDays[2],
+          Thursday: selectedDays[3],
+          Friday: selectedDays[4],
+          Saturday: selectedDays[5],
+          Sunday: selectedDays[6],
+        },
         deviceID: element.deviceID,
         deviceName: element.deviceName,
         off: !turnsOff,
-        //time: selectedTime,
         time: pickedTime,
-      });
-    firebase
-      .database()
-      .ref('timingList/' + selectedRoom)
-      .child(currentCount)
-      .child('day')
-      .set({
-        Monday: selectedDays[0],
-        Tuesday: selectedDays[1],
-        Wednesday: selectedDays[2],
-        Thursday: selectedDays[3],
-        Friday: selectedDays[4],
-        Saturday: selectedDays[5],
-        Sunday: selectedDays[6],
       }).then(() =>
         ToastAndroid.show('Timer set successfully!', ToastAndroid.LONG)
       );

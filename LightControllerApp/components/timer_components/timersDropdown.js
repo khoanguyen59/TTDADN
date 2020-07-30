@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, View, Text, TouchableOpacity, Alert} from 'react-native';
+import {StyleSheet, View, Text, TouchableOpacity, Alert,ToastAndroid} from 'react-native';
 import TimerItem from './timerItem';
 import {globalStyles} from '../../styles/global';
 import * as firebase from 'firebase';
@@ -19,27 +19,17 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-// readDeviceData = () => {
-//   firebase
-//     .database()
-//     .ref('timingList/')
-//     .once('value')
-//     .then(snapshot => {
-//       this.setState({TimingList: snapshot.val()});
-//     });
-// };
 
 export default function TimersDropdown({roomName, firstRoomName}) {
 
   const [timerItems, setTimerItems] = useState([]);
-  const [temp, setTemp] = useState([]);
   const [isFirstRender, setIsFirstRender] = useState([true]);
-  firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
-    setTemp(snapshot.val());});
-  
-  if (roomName === firstRoomName&&isFirstRender){
+  const [count, setCount] = useState([]);
+
+  if (isFirstRender){
     firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
-      setTimerItems(snapshot.val());});
+      setTimerItems((roomName === firstRoomName)&&(snapshot.val()!=null )? snapshot.val():[]);
+      setCount(snapshot.val());});
     setIsFirstRender(false);
   }
   
@@ -48,22 +38,18 @@ export default function TimersDropdown({roomName, firstRoomName}) {
       style={styles.locationTab}
       onPress={
         () => {
-          //setDisplayItems(displayItems.length == 0 ? /*(initDropdown ? timerData : timerItems)*/ timerItems : []);
-          // setTimerItems(timerItems.length == 0 ? timerData : [])
-          // firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
-          //   setTemp(snapshot.val());});
           if (timerItems.length === 0) {
-            if(temp == ''){setTimerItems([]);}
-            else setTimerItems(temp);
+            firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+              setTimerItems(snapshot.val()!=null ? snapshot.val(): []);});
           }
           else setTimerItems([]);
           
           }
         }>
       <Text style={globalStyles.whiteTitle}> {roomName} </Text>
-      <Badge value={temp?(temp.length>9?'9+':temp.length):0} 
+      <Badge value={count?(count.length>9?'9+':count.length):0} 
       badgeStyle = {
-        temp?
+        count?
         {...globalStyles.alternativeColor,}:{backgroundColor:'#BFBFBF'}
       } 
       containerStyle={{
@@ -86,14 +72,17 @@ export default function TimersDropdown({roomName, firstRoomName}) {
           firebase.database().ref('timingList/' + roomName).child(idxToDel).remove(
             (error) => {
                 setTimerItems(prevTimerItems => prevTimerItems.filter((timerItem, index)=> index != idxToDel));
-                alert('Removed Successfully');
+                ToastAndroid.show('Removed Successfully', ToastAndroid.LONG);
+                firebase.database().ref('timingList/' + roomName).once('value').then(snapshot => {
+                  setCount(snapshot.val());});
+                console.log(count.length)
               }
           )
           .then(
             () => firebase.database().ref('timingList/' + roomName).set(
             timerItems.filter((timerItem, index) => index != idxToDel)))
           .catch(
-            (error) => { alert("Remove Failed: " + error.message); }
+            (error) => { ToastAndroid.show('Remove Failed: ' + error.message, ToastAndroid.LONG); }
           );
         }}
       ]

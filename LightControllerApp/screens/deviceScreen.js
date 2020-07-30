@@ -63,8 +63,8 @@ class deviceScreen extends React.Component {
   renderControlButton = () => {
     return (
       <View style={styles.actionButtonContainer}>
-        <MovableView
-          disabled={false}>
+        {/* <MovableView
+          disabled={false}> */}
           <TouchableOpacity
             style={styles.timerButton}
             activeOpacity = {0}
@@ -74,7 +74,7 @@ class deviceScreen extends React.Component {
               style={styles.image}
             />
           </TouchableOpacity>
-        </MovableView>
+        {/* </MovableView> */}
       </View>
     );
   };

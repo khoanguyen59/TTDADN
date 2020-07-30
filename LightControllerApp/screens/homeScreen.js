@@ -5,10 +5,10 @@ import {TouchableHighlight, Modal} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
-//import {eraseList} from '../components/deviceItem.js';
+import {eraseList} from '../components/deviceItem.js';
 import Swiper from 'react-native-swiper'
-import MovableView from 'react-native-movable-view';
-
+// import MovableView from 'react-native-movable-view';
+// import { Icon } from 'react-native-elements'
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
   authDomain: 'lightappdemo-dc252.firebaseapp.com',
@@ -99,7 +99,7 @@ class homeScreen extends React.Component {
         onPress={() => {
           selectedRoom = item.roomName;
           this.props.navigation.navigate('Device');
-          //eraseList();
+          eraseList();
         }}>
         <Text style={styles.title} pointerEvents="none">
           {item.roomID}
@@ -113,16 +113,25 @@ class homeScreen extends React.Component {
 
   rendershowGuidebtn =()=>{
     return(
-        <MovableView style={{
-          // position:'relative',
+        // <MovableView style={{
+        //   // position:'relative',
+        //   // backgroundColor:'red',
+        //   top: 60,
+        //   right: 60,
+        //   height:60, 
+        //   width:60,
+        //   borderRadius:30,
+        // }}>
+        <View style={{
+          position:'absolute',
           // backgroundColor:'red',
-          top: 60,
-          right: 60,
+          bottom: 50,
+          right: 10,
           height:60, 
           width:60,
           borderRadius:30,
         }}>
-          <TouchableOpacity
+          <TouchableOpacity 
             style={{
               ...globalStyles.alternativeColor,
               // backgroundColor: 'red',
@@ -148,7 +157,8 @@ class homeScreen extends React.Component {
           >
             <Image source = {require('../icons/Guide.png') } style = {styles.image} ></Image>
           </TouchableOpacity>
-        </MovableView>
+        </View>
+        //</MovableView>
     );
   }
 
@@ -184,6 +194,7 @@ class homeScreen extends React.Component {
               this.props.navigation.navigate('AddRoom');
             }}>
             <Text style = {styles.textStyle}>Add Room</Text>
+            {/* <Icon name='rowing' /> */}
           </TouchableHighlight>
         </View>
       </View>
