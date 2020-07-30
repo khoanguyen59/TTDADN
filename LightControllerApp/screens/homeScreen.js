@@ -1,14 +1,15 @@
 import React from 'react';
-import {View, FlatList, StyleSheet, Text,Button, Dimensions, Image,
+import {View, FlatList, StyleSheet, Text, Dimensions, Image,
         Animated} from 'react-native';
-import {TouchableHighlight, Modal} from 'react-native';
+import {TouchableHighlight} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import * as firebase from 'firebase';
 import {globalStyles} from '../styles/global';
 import {eraseList} from '../components/deviceItem.js';
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
+
 // import MovableView from 'react-native-movable-view';
-// import { Icon } from 'react-native-elements'
+
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
   authDomain: 'lightappdemo-dc252.firebaseapp.com',
@@ -172,7 +173,7 @@ class homeScreen extends React.Component {
           style = {styles.guide}
         >
           <Text style={styles.guideText}>
-            Pick a  room
+            PICK A ROOM
           </Text>
         </View>
         <FlatList
@@ -193,8 +194,7 @@ class homeScreen extends React.Component {
             onPress={() => {
               this.props.navigation.navigate('AddRoom');
             }}>
-            <Text style = {styles.textStyle}>Add Room</Text>
-            {/* <Icon name='rowing' /> */}
+            <Text style = {styles.textStyle}>ADD ROOM</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -293,8 +293,8 @@ const styles = StyleSheet.create({
   },
   image: {
     // ...StyleSheet.absoluteFillObject,
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     resizeMode: 'contain',
   },
   imageGuide: {

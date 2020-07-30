@@ -5,7 +5,9 @@ import {
   TouchableOpacity,
   Text,
   TextInput,
-  Alert
+  Alert,
+  Image,
+  ToastAndroid
 } from 'react-native';
 import { globalStyles } from '../styles/global';
 import * as firebase from 'firebase';
@@ -75,8 +77,11 @@ class addRoom extends React.Component {
         .set({
             roomID:     RoomID,
             roomName:   RoomName,
-        })
+        });/*.then(() => {
+         ToastAndroid.show('Room added successfully!', ToastAndroid.LONG);
+       });*/
     }
+
     render() {
       this.readRoomData();
        return (
@@ -102,7 +107,11 @@ class addRoom extends React.Component {
                 onPress = {
                    () => this.SubmitRoom(parseInt(this.state.RoomID), this.state.RoomName , this.state.RoomList)
                 }>
-                <Text style = {styles.submitButtonText}>Submit</Text>
+                {/* <Text style = {styles.submitButtonText}>Submit</Text> */}
+                <Image 
+                  style={{resizeMode: 'contain', width: 30, height: 30}}
+                  source={require('../icons/plusIcon.png')} 
+                  />
              </TouchableOpacity>
           </View>
        )
@@ -127,16 +136,21 @@ class addRoom extends React.Component {
     submitButton: {
        ...globalStyles.alternativeColor,
        padding: 10,
-       margin: 15,
+       margin: 30,
        height: 40,
-       width: 150,
+       width: 100,
        alignSelf: 'center',
        borderRadius: 45,
        alignItems: 'center',
+       justifyContent: 'center',
     },
     submitButtonText:{
        color: 'white',
-    }
+    },
+    image: {
+      width: 30,
+      height: 30,
+    },
  })
 
 export default addRoom

@@ -12,6 +12,7 @@ import WeekDayComponent from '../components/dayItem';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import {setTimer} from '../components/dayItem.js';
+import { globalStyles } from '../styles/global';
 
 const weekDays = [
   {
@@ -132,7 +133,11 @@ class setTimerScreen extends React.Component {
         <TouchableOpacity
           style={styles.saveButton}
           onPress={() => this.onConfirm()}>
-          <Text style={styles.saveText}>Save</Text>
+          {/* <Text style={styles.saveText}>Save</Text> */}
+          <Image 
+              style={{resizeMode: 'contain', width: 30, height: 30}}
+              source={require('../icons/addTimerIcon.png')}
+              />
         </TouchableOpacity>
         {/*Footer Navigation*/}
         <View style={styles.bottomContainer}>
@@ -220,13 +225,13 @@ const styles = StyleSheet.create({
     transform: [{scaleX: 1.8}, {scaleY: 1.8}],
   },
   saveButton: {
-    backgroundColor: '#2095f3',
+    ...globalStyles.alternativeColor,
     position: 'absolute',
-    height: 50,
+    height: 40,
     width: 100,
     alignSelf: 'center',
     marginTop: 380,
-    borderRadius: 10,
+    borderRadius: 30,
     justifyContent: 'center',
     // padding: 10,
     // margin: 15,
@@ -234,7 +239,7 @@ const styles = StyleSheet.create({
     // width: 150,
     // alignSelf: 'center',
     // borderRadius: 45,
-    // alignItems: 'center',
+    alignItems: 'center',
   },
   bottomContainer: {
     flexDirection: 'row',

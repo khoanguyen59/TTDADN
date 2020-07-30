@@ -13,7 +13,7 @@ import FlatListComponent from '../components/deviceItem.js';
 import {selectedRoom} from './homeScreen.js';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import { globalStyles } from '../styles/global.js';
-import MovableView from 'react-native-movable-view';
+//import MovableView from 'react-native-movable-view';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
   headButton: {
     ...globalStyles.alternativeColor,
     justifyContent: 'center',
+    fontWeight: 'bold',
   },
   item: {
     backgroundColor: '#f9c2ff',

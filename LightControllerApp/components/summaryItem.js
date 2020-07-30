@@ -35,11 +35,13 @@ const styles = StyleSheet.create({
     flex: 0.6,
     fontSize: 15,
     marginLeft: 8,
+    fontWeight: 'bold',
   },
   title1: {
     flex: 1,
     fontSize: 15,
     marginLeft: 8,
+    fontWeight: 'bold',
   },
   name: {
     fontSize: 16,

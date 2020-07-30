@@ -19,5 +19,5 @@ export const globalStyles = StyleSheet.create({
   },
   secondaryColor: {
     backgroundColor: '#333',
-  }
+  },
 })

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ToastAndroid,
   Dimensions,
+  Image,
 } from 'react-native';
 import { Picker } from '@react-native-community/picker';
 import Slider from '@react-native-community/slider';
@@ -14,7 +15,7 @@ import ScreenTemplate from './screenTemplate';
 import { selectedRoom } from '../screens/homeScreen.js';
 import { globalStyles } from '../styles/global';
 import * as firebase from 'firebase';
-import { set } from 'react-native-reanimated';
+//import { set } from 'react-native-reanimated';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyADawFZYkBiSUoh5bdWpescXF0V2DvDvvk',
@@ -290,7 +291,11 @@ export default function addingScreen({ navigation }) {
           <TouchableOpacity
             style={styles.saveButton}
             onPress={() => onConfirm()}>
-            <Text style={styles.saveText}>Submit</Text>
+            {/* <Text style={styles.saveText}>Submit</Text> */}
+            <Image 
+              style={{resizeMode: 'contain', width: 40, height: 40}}
+              source={require('../icons/plusIcon.png')}
+              />
           </TouchableOpacity>
         </View>
       }
@@ -318,19 +323,19 @@ const styles = StyleSheet.create({
     paddingEnd: 20,
   },
   image: {
-    width: 'auto',
-    height: '100%',
-    resizeMode: 'contain',
+    width: 30,
+    height: 30,
   },
   saveButton: {
     ...globalStyles.alternativeColor,
     position: 'absolute',
     height: 40,
-    width: 150,
+    width: 100,
     alignSelf: 'center',
     marginTop: 320,
     borderRadius: 30,
     justifyContent: 'center',
+    alignItems: 'center',
   },
   saveText: {
     ...globalStyles.regularText,
